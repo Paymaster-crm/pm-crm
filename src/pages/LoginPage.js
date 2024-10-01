@@ -19,21 +19,6 @@ function LoginPage() {
               setForgotPassword={setForgotPassword}
             />
           </div>
-
-          <div className="login-footer">
-            <p> Version: {process.env.REACT_APP_VERSION}</p>
-            <img src={alluviumLogo} width={80} alt="" />
-            <p>
-              Powered By:&nbsp;
-              <a
-                href="https://www.alluvium.in/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span>AIVision | EXIM&nbsp;</span>
-              </a>
-            </p>
-          </div>
         </Col>
       </Row>
     </Container>
