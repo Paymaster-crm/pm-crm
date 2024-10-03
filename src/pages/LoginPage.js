@@ -3,7 +3,6 @@ import { Container, Row, Col } from "react-bootstrap";
 import LoginForm from "../forms/LoginForm";
 import "../styles/login.scss";
 import logo from "../assets/images/logo.webp";
-import alluviumLogo from "../assets/images/alluvium-logo.webp";
 
 function LoginPage() {
   const [forgotPassword, setForgotPassword] = useState(false);

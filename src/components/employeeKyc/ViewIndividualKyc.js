@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Row, Col } from "react-bootstrap";
 
 function ViewIndividualKyc() {
   const { username } = useParams();
   const [data, setData] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getUser() {
@@ -251,6 +252,13 @@ function ViewIndividualKyc() {
             onClick={() => handleKycApproval(false)}
           >
             Reject
+          </button>
+          <button
+            className="btn"
+            style={{ marginLeft: "10px" }}
+            onClick={() => navigate(`/edit-employee-kyc/${data.username}`)}
+          >
+            Edit
           </button>
           <br />
           <br />

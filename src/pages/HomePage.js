@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
@@ -23,6 +23,7 @@ import Documentation from "../components/documentation/Documentation.js";
 // Employee KYC
 import EmployeeKYC from "../components/employeeKyc/EmployeeKYC.js";
 import ViewIndividualKyc from "../components/employeeKyc/ViewIndividualKyc.js";
+import EditEmployeeKyc from "../components/employeeKyc/EditEmployeeKyc.js";
 // Employee Onboarding
 import EmployeeOnboarding from "../components/employeeOnboarding/EmployeeOnboarding.js";
 // E-Sanchit
@@ -67,6 +68,10 @@ function HomePage() {
   const [tabValue, setTabValue] = useState(
     JSON.parse(localStorage.getItem("tab_value") || 0)
   );
+
+  useEffect(() => {
+    
+  }, [tabValue]);
 
   return (
     <TabValueContext.Provider value={{ tabValue, setTabValue }}>
@@ -137,6 +142,10 @@ function HomePage() {
             {/* Employee KYC */}
             <Route path="/employee-kyc" element={<EmployeeKYC />} />
             <Route path="/view-kyc/:username" element={<ViewIndividualKyc />} />
+            <Route
+              path="/edit-employee-kyc/:username"
+              element={<EditEmployeeKyc />}
+            />
 
             {/* Employee Onboarding */}
             <Route
