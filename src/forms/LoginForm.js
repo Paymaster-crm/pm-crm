@@ -74,18 +74,14 @@ function LoginPage() {
             </button>
           </form>
 
-          <a href="#" onClick={() => setResetPassword(true)}>
-            Reset Password
-          </a>
+          <p onClick={() => setResetPassword(true)}>Reset Password</p>
         </>
       )}
 
       {resetPassword && (
         <>
           <ChangePassword />
-          <a href="#" onClick={() => setResetPassword(false)}>
-            Login
-          </a>
+          <p onClick={() => setResetPassword(false)}>Login</p>
         </>
       )}
     </>

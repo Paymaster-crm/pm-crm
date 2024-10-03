@@ -98,6 +98,7 @@ function EditEmployeeKyc() {
 
   useEffect(() => {
     formik.setValues(data);
+    // eslint-disable-next-line
   }, [data]);
 
   const handleNumChildrenChange = (event) => {
@@ -229,10 +230,6 @@ function EditEmployeeKyc() {
     // Update formik values? with the updated array of family members
     formik.setFieldValue("insurance_status", updatedMembers);
   };
-
-  const employee_name = [user.first_name, user.middle_name, user.last_name]
-    .filter(Boolean)
-    .join(" ");
 
   return (
     <form onSubmit={formik.handleSubmit}>

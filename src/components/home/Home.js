@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { navigateToModule } from "../../utils/navigateToModule.js";
 import { moduleCategories } from "../../utils/moduleCategories.js";
-import ChangePasswordModal from "../../modals/ChangePasswordModal.js";
+// import ChangePasswordModal from "../../modals/ChangePasswordModal.js";
 
 const importPriority = [
   "Import - DSR",
@@ -19,13 +19,13 @@ const importPriority = [
 
 function Home() {
   const { user } = useContext(UserContext);
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState();
   const navigate = useNavigate();
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  // const handleCloseModal = () => {
+  //   setOpenModal(false);
+  // };
 
   useEffect(() => {
     async function getUser() {
@@ -34,7 +34,7 @@ function Home() {
           `${process.env.REACT_APP_API_STRING}/get-user/${user.username}`
         );
         setData(res.data);
-        setOpenModal(res.data.is_first_login);
+        // setOpenModal(res.data.is_first_login);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

@@ -4,7 +4,6 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import useTableConfig from "../../customHooks/useTableConfig";
 
 function ViewOnboardings() {
   const [data, setData] = useState([]);

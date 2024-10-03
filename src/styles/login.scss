@@ -3,11 +3,11 @@
 }
 
 .login-left-col {
-  background: #0060AE;
+  background: #0060ae;
 }
 
 .login-right-col {
- background: #fff;
+  background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,6 +22,12 @@
   align-items: center;
   justify-content: center;
   flex: 1;
+
+  p {
+    color: #035fad;
+    cursor: pointer;
+    font-weight: 600;
+  }
 }
 
 .login-input {
