@@ -39,7 +39,7 @@ const handleSingleFileUpload = async (file, folderName, setFileSnackbar) => {
 function useFetchJobDetails(
   params,
   checked,
-  setSelectedRegNo,
+
   setTabValue,
   setFileSnackbar
 ) {
@@ -141,7 +141,6 @@ function useFetchJobDetails(
         );
 
         // Fetched CTH documents with URLs merged from data.cth_documents if they exist
-        console.log(Array.isArray(cthRes.data));
         const fetchedCthDocuments =
           Array.isArray(cthRes.data) &&
           cthRes.data.map((cthDoc) => {
@@ -197,6 +196,8 @@ function useFetchJobDetails(
     }
 
     getCthDocs();
+
+    // eslint-disable-next-line
   }, [data]);
 
   // Formik
@@ -316,16 +317,6 @@ function useFetchJobDetails(
   // Update formik intial values when data is fetched from db
   useEffect(() => {
     if (data) {
-      setSelectedRegNo(
-        data.sims_reg_no
-          ? "sims"
-          : data.pims_reg_no
-          ? "pims"
-          : data.nfmims_reg_no
-          ? "nfmims"
-          : ""
-      );
-
       const container_nos = data.container_nos?.map((container) => ({
         do_revalidation:
           container.do_revalidation === undefined
@@ -547,6 +538,8 @@ function useFetchJobDetails(
     } else {
       formik.setFieldValue("document_received_date", "");
     }
+
+    // eslint-disable-next-line
   }, [formik.values.obl_telex_bl]);
 
   // Set do_planning_date to today if doPlanning is true
@@ -556,6 +549,8 @@ function useFetchJobDetails(
     } else {
       formik.setFieldValue("do_planning_date", "");
     }
+
+    // eslint-disable-next-line
   }, [formik.values.doPlanning]);
 
   // Set do_revalidation_date to today if do_revalidation is true
@@ -565,6 +560,8 @@ function useFetchJobDetails(
     } else {
       formik.setFieldValue("do_revalidation_date", "");
     }
+
+    // eslint-disable-next-line
   }, [formik.values.do_revalidation]);
 
   // Set examination_planning_date to today if examinationPlanning is true
@@ -574,6 +571,8 @@ function useFetchJobDetails(
     } else {
       formik.setFieldValue("examination_planning_date", "");
     }
+
+    // eslint-disable-next-line
   }, [formik.values.examinationPlanning]);
 
   // Update detention from dates and set do_validity_upto_job_level

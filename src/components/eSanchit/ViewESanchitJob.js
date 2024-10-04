@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import JobDetailsStaticData from "../import-dsr/JobDetailsStaticData";
 import Snackbar from "@mui/material/Snackbar";
-import AWS from "aws-sdk";
 import { TextField } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
 
@@ -174,6 +173,7 @@ function ViewESanchitJob() {
     }
 
     getCthDocs();
+    // eslint-disable-next-line
   }, [data]);
 
   // Handle IRN change

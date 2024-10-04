@@ -23,6 +23,10 @@
   justify-content: center;
   flex: 1;
 
+  form {
+    min-width: 400px !important;
+  }
+
   p {
     color: #035fad;
     cursor: pointer;

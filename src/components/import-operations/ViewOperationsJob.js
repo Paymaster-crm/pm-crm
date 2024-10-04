@@ -9,8 +9,6 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { handleFileUpload } from "../../utils/awsFileUpload";
 import { handleCopyContainerNumber } from "../../utils/handleCopyContainerNumber";
 import AWS from "aws-sdk";
-import { handleActualWeightChange } from "../../utils/handleActualWeightChange";
-import { handleNetWeightChange } from "../../utils/handleNetWeightChange";
 import { handleTareWeightChange } from "../../utils/handleTareWeightChange";
 import { handlePhysicalWeightChange } from "../../utils/handlePhysicalWeightChange";
 import JobDetailsRowHeading from "../import-dsr/JobDetailsRowHeading";

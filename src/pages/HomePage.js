@@ -51,6 +51,8 @@ import AppbarComponent from "../components/home/AppbarComponent.js";
 import DrawerComponent from "../components/home/DrawerComponent.js";
 // LR Report
 import LrReport from "../components/lr-report/LrReport.js";
+// Recruitment
+import Recruitment from "../components/recruitment/Recruitment.js";
 // SRCC Directories
 import SrccDirectories from "../components/srcc-directories/SrccDirectories.js";
 import ViewSrccOrganisationData from "../components/srcc-directories/view-data/ViewSrccOrganisationData.js";
@@ -58,8 +60,6 @@ import ViewSrccOrganisationData from "../components/srcc-directories/view-data/V
 import Submission from "../components/submission/Submission.js";
 // Tyre Maintenance
 import TyreMaintenance from "../components/tyre-maintenance/TyreMaintenance.js";
-// RTO
-import RTO from "../components/rto/RTO.js";
 
 const drawerWidth = 60;
 
@@ -69,9 +69,7 @@ function HomePage() {
     JSON.parse(localStorage.getItem("tab_value") || 0)
   );
 
-  useEffect(() => {
-    
-  }, [tabValue]);
+  useEffect(() => {}, [tabValue]);
 
   return (
     <TabValueContext.Provider value={{ tabValue, setTabValue }}>
@@ -140,12 +138,9 @@ function HomePage() {
             <Route path="/documentation" element={<Documentation />} />
 
             {/* Employee KYC */}
-            <Route path="/employee-kyc" element={<EmployeeKYC />} />
+            <Route path="/kyc" element={<EmployeeKYC />} />
             <Route path="/view-kyc/:username" element={<ViewIndividualKyc />} />
-            <Route
-              path="/edit-employee-kyc/:username"
-              element={<EditEmployeeKyc />}
-            />
+            <Route path="/edit-kyc/:username" element={<EditEmployeeKyc />} />
 
             {/* Employee Onboarding */}
             <Route
@@ -198,6 +193,9 @@ function HomePage() {
             {/* LR Report */}
             <Route path="/lr-report" element={<LrReport />} />
 
+            {/* Recruitment */}
+            <Route path="/recruitment" element={<Recruitment />} />
+
             {/* SRCC Directories */}
             <Route path="/srcc-directories" element={<SrccDirectories />} />
             <Route
@@ -210,8 +208,6 @@ function HomePage() {
 
             {/* Tyre Maintenance */}
             <Route path="/tyre-maintenance" element={<TyreMaintenance />} />
-            {/* RTO */}
-            <Route path="/rto" element={<RTO />} />
           </Routes>
         </Box>
       </Box>

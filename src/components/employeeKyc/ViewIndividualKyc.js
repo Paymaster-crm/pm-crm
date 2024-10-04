@@ -256,7 +256,7 @@ function ViewIndividualKyc() {
           <button
             className="btn"
             style={{ marginLeft: "10px" }}
-            onClick={() => navigate(`/edit-employee-kyc/${data.username}`)}
+            onClick={() => navigate(`/edit-kyc/${data.username}`)}
           >
             Edit
           </button>

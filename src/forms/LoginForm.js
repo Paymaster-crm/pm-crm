@@ -3,7 +3,6 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { TextField } from "@mui/material";
 import { UserContext } from "../contexts/UserContext";
-import ChangePassword from "../components/home/ChangePassword";
 
 function LoginPage() {
   const { setUser } = useContext(UserContext);
@@ -80,7 +79,24 @@ function LoginPage() {
 
       {resetPassword && (
         <>
-          <ChangePassword />
+          <form>
+            <TextField
+              size="small"
+              fullWidth
+              margin="dense"
+              variant="filled"
+              id="username"
+              name="username"
+              label="Username"
+              value={formik.values.username}
+              onChange={formik.handleChange}
+              error={formik.touched.username && Boolean(formik.errors.username)}
+              helperText={formik.touched.username && formik.errors.username}
+            />
+            <button type="submit" className="btn">
+              Reset
+            </button>
+          </form>
           <p onClick={() => setResetPassword(false)}>Login</p>
         </>
       )}

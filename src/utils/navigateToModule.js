@@ -2,8 +2,8 @@ export const navigateToModule = (module, navigate) => {
   switch (module) {
     case "Employee Onboarding":
       return navigate("/employee-onboarding");
-    case "Employee KYC":
-      return navigate("/employee-kyc");
+    case "Basic KYC Details":
+      return navigate("/kyc");
     case "Import - DSR":
       return navigate("/import-dsr");
     case "Import - Operations":
@@ -28,13 +28,13 @@ export const navigateToModule = (module, navigate) => {
       return navigate("/tyre-maintenance");
     case "SRCC Directories":
       return navigate("/srcc-directories");
-    case "RTO":
-      return navigate("/rto");
     case "Documentation":
       return navigate("/documentation");
     case "Submission":
       return navigate("/submission");
+    case "Recruitment":
+      return navigate("/recruitment");
     default:
-      return navigate("/home");
+      return navigate("/");
   }
 };

@@ -6,11 +6,10 @@ import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import DensitySmallIcon from "@mui/icons-material/DensitySmall";
 import { IconButton } from "@mui/material";
 import { Col, Row } from "react-bootstrap";
-import { SelectedYearContext } from "../../contexts/SelectedYearContext";
 
 function JobsOverView() {
   const [data, setData] = useState();
-  const { selectedYear } = React.useContext(SelectedYearContext);
+
   useEffect(() => {
     async function getData() {
       const res = await axios.get(

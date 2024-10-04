@@ -5,7 +5,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import logo from "../../assets/images/logo.webp";
+import logo from "../../assets/images/logo-1.webp";
 
 const drawerWidth = 60;
 
@@ -50,7 +50,7 @@ function AppbarComponent(props) {
           <img
             src={logo}
             alt="logo"
-            height="50px"
+            height="70px"
             onClick={() => navigate("/")}
             style={{ cursor: "pointer" }}
           />

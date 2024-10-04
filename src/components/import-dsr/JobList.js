@@ -38,6 +38,7 @@ function JobList(props) {
       setSelectedYear(filteredYears[0]);
     }
     getYears();
+    // eslint-disable-next-line
   }, []);
 
   const table = useMaterialReactTable({

@@ -8,19 +8,11 @@ import { navigateToModule } from "../../utils/navigateToModule.js";
 import { moduleCategories } from "../../utils/moduleCategories.js";
 // import ChangePasswordModal from "../../modals/ChangePasswordModal.js";
 
-const importPriority = [
-  "Import - DSR",
-  "e-Sanchit",
-  "Documentation",
-  "Submission",
-  "Import - DO",
-  "Import - Operations",
-];
-
 function Home() {
   const { user } = useContext(UserContext);
   // const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState();
+  console.log(data);
   const navigate = useNavigate();
 
   // const handleCloseModal = () => {
@@ -50,14 +42,6 @@ function Home() {
     return acc;
   }, {});
 
-  const sortImports = (modules) => {
-    return modules.sort((a, b) => {
-      const indexA = importPriority.indexOf(a);
-      const indexB = importPriority.indexOf(b);
-      return indexA - indexB;
-    });
-  };
-
   return (
     <>
       <div>
@@ -72,10 +56,7 @@ function Home() {
                 </h6>
                 <hr style={{ margin: "5px 0" }} />
                 <Row>
-                  {(category === "Import"
-                    ? sortImports(categorizedModules[category])
-                    : categorizedModules[category].sort()
-                  ).map((module, id) => (
+                  {categorizedModules[category].sort().map((module, id) => (
                     <Col xs={12} md={4} lg={2} key={id} className="module-col">
                       <div
                         className="module-col-inner"

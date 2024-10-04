@@ -4,7 +4,6 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Dashboard from "./Dashboard";
 import "../../styles/import-dsr.scss";
-import { MenuItem, TextField } from "@mui/material";
 import axios from "axios";
 import { SelectedYearContext } from "../../contexts/SelectedYearContext";
 import JobTabs from "./JobTabs";

@@ -29,7 +29,6 @@ function JobDetails() {
   const { setTabValue } = React.useContext(TabValueContext);
   const options = Array.from({ length: 25 }, (_, index) => index);
   const [checked, setChecked] = useState(false);
-  const [selectedRegNo, setSelectedRegNo] = useState();
   const [snackbar, setSnackbar] = useState(false);
   const [fileSnackbar, setFileSnackbar] = useState(false);
   const bl_no_ref = useRef();
@@ -51,35 +50,7 @@ function JobDetails() {
     handleAddDocument,
     handleRemoveDocument,
     filterDocuments,
-  } = useFetchJobDetails(
-    params,
-    checked,
-    setSelectedRegNo,
-    setTabValue,
-    setFileSnackbar
-  );
-
-  const handleRadioChange = (event) => {
-    const selectedValue = event.target.value;
-
-    if (selectedValue === "clear") {
-      setSelectedRegNo("");
-      formik.setFieldValue("sims_reg_no", "");
-      formik.setFieldValue("pims_reg_no", "");
-      formik.setFieldValue("nfmims_reg_no", "");
-      formik.setFieldValue("sims_date", "");
-      formik.setFieldValue("pims_date", "");
-      formik.setFieldValue("nfmims_date", "");
-    } else {
-      setSelectedRegNo(selectedValue);
-      formik.setFieldValue("sims_reg_no", "");
-      formik.setFieldValue("pims_reg_no", "");
-      formik.setFieldValue("nfmims_reg_no", "");
-      formik.setFieldValue("sims_date", "");
-      formik.setFieldValue("pims_date", "");
-      formik.setFieldValue("nfmims_date", "");
-    }
-  };
+  } = useFetchJobDetails(params, checked, setTabValue, setFileSnackbar);
 
   const handleBlStatusChange = (event) => {
     const selectedValue = event.target.value;
