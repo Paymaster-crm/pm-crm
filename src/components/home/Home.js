@@ -12,7 +12,6 @@ function Home() {
   const { user } = useContext(UserContext);
   // const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState();
-  console.log(data);
   const navigate = useNavigate();
 
   // const handleCloseModal = () => {

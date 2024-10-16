@@ -22,7 +22,7 @@ function LoginPage() {
         );
 
         if (res.status === 200) {
-          localStorage.setItem("exim_user", JSON.stringify(res.data));
+          sessionStorage.setItem("crm_user", JSON.stringify(res.data));
           setUser(res.data);
           resetForm();
         }
