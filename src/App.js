@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
+import { navigateWithKeyboard } from "./utils/navigateWithKeyboard";
 
 function App() {
   // Retrieve the user from session storage
@@ -13,39 +14,13 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-      const ctrlShiftLeftArrow =
-        event.ctrlKey && event.shiftKey && event.key === "ArrowLeft" && !isMac;
-      const cmdShiftLeftArrow =
-        event.metaKey && event.shiftKey && event.key === "ArrowLeft" && isMac;
-      const ctrlShiftRightArrow =
-        event.ctrlKey && event.shiftKey && event.key === "ArrowRight" && !isMac;
-      const cmdShiftRightArrow =
-        event.metaKey && event.shiftKey && event.key === "ArrowRight" && isMac;
-
-      if (ctrlShiftLeftArrow || cmdShiftLeftArrow) {
-        navigate(-1); // Go back to the previous page
-      } else if (ctrlShiftRightArrow || cmdShiftRightArrow) {
-        navigate(1); // Go forward to the next page
-      }
-    };
-
+    const handleKeyDown = (event) => navigateWithKeyboard(event, navigate);
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [navigate]);
-
-  // Update session storage when the user changes
-  useEffect(() => {
-    if (user) {
-      sessionStorage.setItem("crm_user", JSON.stringify(user));
-    } else {
-      sessionStorage.removeItem("crm_user");
-    }
-  }, [user]);
 
   // Function to log out the user
   const handleLogout = () => {
@@ -55,15 +30,10 @@ function App() {
   };
 
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      // Log out the user on tab close
-      handleLogout();
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("beforeunload", handleLogout);
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleLogout);
     };
   }, [handleLogout]);
 
