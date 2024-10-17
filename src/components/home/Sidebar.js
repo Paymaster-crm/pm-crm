@@ -11,16 +11,7 @@ import { UserContext } from "../../contexts/UserContext";
 
 function Sidebar() {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
-  const handleLogout = () => {
-    setUser(null);
-    navigate("/");
-    // Remove user from local storage
-    localStorage.removeItem("exim_user");
-    localStorage.removeItem("selected_importer");
-    localStorage.removeItem("selected_importer_url");
-    localStorage.removeItem("tab_value");
-  };
+  const { user, handleLogout } = useContext(UserContext);
 
   return (
     <div className="sidebar">
@@ -65,12 +56,6 @@ function Sidebar() {
           sx={{ textAlign: "left" }}
           className="appbar-links"
           aria-label="list-item"
-          onClick={() =>
-            window.open(
-              "https://aivision.odoo.com/helpdesk/customer-care-1",
-              "_blank"
-            )
-          }
         >
           <IconButton sx={{ color: "#ffffff9f" }} aria-label="icon">
             <FeedbackIcon />

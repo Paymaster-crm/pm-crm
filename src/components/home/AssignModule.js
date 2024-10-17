@@ -29,7 +29,6 @@ const allModules = [
   "SRCC Directories",
   "Documentation",
   "Submission",
-  "RTO",
 ];
 
 function not(a, b) {

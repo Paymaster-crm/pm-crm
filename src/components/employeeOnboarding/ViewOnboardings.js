@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { MaterialReactTable } from "material-react-table";
-import useTableConfig from "../../customHooks/useTableConfig";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 
 function ViewOnboardings() {
   const [data, setData] = useState([]);
@@ -85,7 +87,35 @@ function ViewOnboardings() {
     },
   ];
 
-  const table = useTableConfig(data, columns);
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    enableColumnResizing: true,
+    enableColumnOrdering: true,
+    enableDensityToggle: false, // Disable density toggle
+    enablePagination: false,
+    enableBottomToolbar: false,
+    initialState: {
+      density: "compact",
+    }, // Set initial table density to compact
+    enableColumnPinning: true, // Enable column pinning
+    enableGrouping: true, // Enable row grouping
+    enableColumnFilters: false, // Disable column filters
+    enableColumnActions: false,
+    enableStickyHeader: true, // Enable sticky header
+    enablePinning: true, // Enable pinning for sticky columns
+    muiTableContainerProps: {
+      sx: { maxHeight: "650px", overflowY: "auto" },
+    },
+
+    muiTableHeadCellProps: {
+      sx: {
+        position: "sticky",
+        top: 0,
+        zIndex: 1,
+      },
+    },
+  });
 
   return (
     <div>
