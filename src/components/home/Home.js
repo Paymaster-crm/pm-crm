@@ -1,40 +1,38 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { Row, Col } from "react-bootstrap";
 import "../../styles/home.scss";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { navigateToModule } from "../../utils/navigateToModule.js";
 import { moduleCategories } from "../../utils/moduleCategories.js";
-// import ChangePasswordModal from "../../modals/ChangePasswordModal.js";
+import axios from "axios";
 
 function Home() {
-  const { user } = useContext(UserContext);
-  // const [openModal, setOpenModal] = useState(false);
-  const [data, setData] = useState();
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
-
-  // const handleCloseModal = () => {
-  //   setOpenModal(false);
-  // };
 
   useEffect(() => {
     async function getUser() {
-      try {
-        const res = await axios(
-          `${process.env.REACT_APP_API_STRING}/get-user/${user.username}`
-        );
-        setData(res.data);
-        // setOpenModal(res.data.is_first_login);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
+      const res = await axios(
+        `${process.env.REACT_APP_API_STRING}/get-user-profile/${user.username}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.username) {
+        setUser(res.data);
+      } else {
+        setUser(null);
+        navigate("/");
       }
     }
 
     getUser();
-  }, [user]);
+    // eslint-disable-next-line
+  }, []);
 
-  const categorizedModules = data?.modules?.reduce((acc, module) => {
+  const categorizedModules = user.modules?.reduce((acc, module) => {
     const category = moduleCategories[module] || "Uncategorized";
     if (!acc[category]) acc[category] = [];
     acc[category].push(module);
@@ -69,12 +67,6 @@ function Home() {
               </div>
             ))}
       </div>
-      {/* {openModal && (
-        <ChangePasswordModal
-          openModal={openModal}
-          handleCloseModal={handleCloseModal}
-        />
-      )} */}
     </>
   );
 }

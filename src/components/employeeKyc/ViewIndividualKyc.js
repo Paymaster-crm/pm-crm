@@ -11,7 +11,10 @@ function ViewIndividualKyc() {
   useEffect(() => {
     async function getUser() {
       const res = await axios(
-        `${process.env.REACT_APP_API_STRING}/get-user-data/${username}`
+        `${process.env.REACT_APP_API_STRING}/get-user-data/${username}`,
+        {
+          withCredentials: true,
+        }
       );
       setData(res.data);
     }
@@ -23,7 +26,10 @@ function ViewIndividualKyc() {
     const kyc_approval = status === true ? "Approved" : "Rejected";
     const res = await axios.post(
       `${process.env.REACT_APP_API_STRING}/kyc-approval`,
-      { username, kyc_approval }
+      { username, kyc_approval },
+      {
+        withCredentials: true,
+      }
     );
     alert(res.data.message);
   };

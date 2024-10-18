@@ -27,7 +27,10 @@ function CompleteOnboarding() {
       console.log(values);
       const res = await axios.post(
         `${process.env.REACT_APP_API_STRING}/complete-onboarding`,
-        { ...values, username: user.username }
+        { ...values, username: user.username },
+        {
+          withCredentials: true,
+        }
       );
       alert(res.data.message);
       resetForm();

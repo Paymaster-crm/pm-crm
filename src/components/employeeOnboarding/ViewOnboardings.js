@@ -11,7 +11,10 @@ function ViewOnboardings() {
   useEffect(() => {
     async function getData() {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_STRING}/view-onboardings`
+        `${process.env.REACT_APP_API_STRING}/view-onboardings`,
+        {
+          withCredentials: true,
+        }
       );
       setData(res.data);
     }

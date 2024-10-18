@@ -69,7 +69,10 @@ function CompleteKYC() {
       console.log(values);
       const res = await axios.post(
         `${process.env.REACT_APP_API_STRING}/complete-kyc`,
-        { ...values, username: user.username }
+        { ...values, username: user.username },
+        {
+          withCredentials: true,
+        }
       );
       console.log(res.data);
       alert(res.data.message);

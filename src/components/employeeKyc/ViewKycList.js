@@ -13,7 +13,10 @@ function ViewKycList() {
   useEffect(() => {
     async function getData() {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_STRING}/view-all-kycs`
+        `${process.env.REACT_APP_API_STRING}/view-all-kycs`,
+        {
+          withCredentials: true,
+        }
       );
       setData(res.data);
     }

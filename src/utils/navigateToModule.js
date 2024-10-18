@@ -4,36 +4,20 @@ export const navigateToModule = (module, navigate) => {
       return navigate("/employee-onboarding");
     case "Basic KYC Details":
       return navigate("/kyc");
-    case "Import - DSR":
-      return navigate("/import-dsr");
-    case "Import - Operations":
-      return navigate("/import-operations");
-    case "Import - DO":
-      return navigate("/import-do");
-    case "Inward Register":
-      return navigate("/inward-register");
-    case "Outward Register":
-      return navigate("/outward-register");
-    case "Accounts":
-      return navigate("/accounts");
-    case "Customer KYC":
-      return navigate("/customer-kyc");
+    case "Pre-Recruitment Process":
+      return navigate("/pre-recruitment-process");
+    case "Recruitment Process":
+      return navigate("/recruitment-process");
     case "Exit Feedback":
       return navigate("/exit-feedback");
-    case "e-Sanchit":
-      return navigate("/e-sanchit");
-    case "LR Report":
-      return navigate("/lr-report");
-    case "Tyre Maintenance":
-      return navigate("/tyre-maintenance");
-    case "SRCC Directories":
-      return navigate("/srcc-directories");
-    case "Documentation":
-      return navigate("/documentation");
-    case "Submission":
-      return navigate("/submission");
-    case "Recruitment":
-      return navigate("/recruitment");
+    case "Performance Appraisal":
+      return navigate("/performance-appraisal");
+    case "Training And Development":
+      return navigate("/training-and-development");
+    case "Employee Relation":
+      return navigate("/employee-relation");
+    case "ISO and Statutory Compliance":
+      return navigate("/iso-and-statutory-compliance");
     default:
       return navigate("/");
   }

@@ -1,16 +1,15 @@
 import "./App.scss";
 import { UserContext } from "./contexts/UserContext";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // Import useCallback
 import { useNavigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import { navigateWithKeyboard } from "./utils/navigateWithKeyboard";
+import axios from "axios";
 
 function App() {
   // Retrieve the user from session storage
-  const [user, setUser] = useState(
-    JSON.parse(sessionStorage.getItem("crm_user"))
-  );
+  const [user, setUser] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,20 +21,44 @@ function App() {
     };
   }, [navigate]);
 
-  // Function to log out the user
-  const handleLogout = () => {
-    setUser(null); // Clear user state
-    sessionStorage.removeItem("crm_user"); // Remove user from session storage
-    navigate("/"); // Navigate to the login page
-  };
+  // Function to log out the user using useCallback
+  const handleLogout = useCallback(async () => {
+    try {
+      // Request the backend to clear the cookie
+      await axios.post(
+        `${process.env.REACT_APP_API_STRING}/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
+      setUser(null);
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to log out:", error);
+    }
+  }, [navigate]);
 
   useEffect(() => {
-    window.addEventListener("beforeunload", handleLogout);
+    async function getUser() {
+      const res = await axios(
+        `${process.env.REACT_APP_API_STRING}/verify-user/`,
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.user) {
+        setUser(res.data.user);
+      } else {
+        setUser(null);
+        navigate("/");
+      }
+    }
 
-    return () => {
-      window.removeEventListener("beforeunload", handleLogout);
-    };
-  }, [handleLogout]);
+    getUser();
+    // eslint-disable-next-line
+  }, []);
 
   // Inactivity timeout
   useEffect(() => {
@@ -65,7 +88,7 @@ function App() {
       window.removeEventListener("click", resetTimer);
       window.removeEventListener("touchstart", resetTimer);
     };
-  }, [handleLogout]);
+  }, [handleLogout]); // handleLogout is stable now
 
   return (
     <UserContext.Provider value={{ user, setUser, handleLogout }}>

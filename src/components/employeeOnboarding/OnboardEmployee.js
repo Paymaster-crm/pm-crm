@@ -20,7 +20,10 @@ function OnboardEmployee() {
       console.log(values);
       const res = await axios.post(
         `${process.env.REACT_APP_API_STRING}/onboard-employee`,
-        values
+        values,
+        {
+          withCredentials: true,
+        }
       );
       alert(res.data.message);
       resetForm();

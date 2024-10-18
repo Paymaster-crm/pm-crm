@@ -9,6 +9,11 @@ export const moduleCategories = {
   "Change password": "HR & Management",
   "Change logs": "HR & Management",
   Interview: "Interview",
-  "Employee Management": "Employee Management",
-  Recruitment: "Recruitment",
+  "Pre-Recruitment Process": "Employee Management",
+  "Recruitment Process": "Employee Management",
+  "Exit Feedback": "Employee Management",
+  "Performance Appraisal": "Employee Management",
+  "Training And Development": "Employee Management",
+  "Employee Relation": "Employee Management",
+  "ISO and Statutory Compliance": "Employee Management",
 };

@@ -24,7 +24,10 @@ function EditEmployeeKyc() {
   useEffect(() => {
     async function getUser() {
       const res = await axios(
-        `${process.env.REACT_APP_API_STRING}/get-user-data/${username}`
+        `${process.env.REACT_APP_API_STRING}/get-user-data/${username}`,
+        {
+          withCredentials: true,
+        }
       );
       setData(res.data);
     }
@@ -88,7 +91,10 @@ function EditEmployeeKyc() {
       console.log(values);
       const res = await axios.post(
         `${process.env.REACT_APP_API_STRING}/complete-kyc`,
-        { ...values, username: user.username }
+        { ...values, username: user.username },
+        {
+          withCredentials: true,
+        }
       );
       console.log(res.data);
       alert(res.data.message);
