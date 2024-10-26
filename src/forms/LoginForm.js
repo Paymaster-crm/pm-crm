@@ -1,188 +1,211 @@
-// import React, { useContext } from "react";
-// import axios from "axios";
-// import { useFormik } from "formik";
-// import { TextField } from "@mui/material";
-// import { UserContext } from "../contexts/UserContext";
-// import { validationSchema } from "../schemas/loginSchema";
-
-// function LoginForm() {
-//   const { setUser } = useContext(UserContext);
-
-//   const formik = useFormik({
-//     initialValues: {
-//       username: "",
-//       password: "",
-//     },
-
-//     validationSchema,
-
-//     onSubmit: async (values, { resetForm }) => {
-//       try {
-//         const res = await axios.post(
-//           `${process.env.REACT_APP_API_STRING}/login`,
-//           { ...values, userAgent: navigator.userAgent },
-//           {
-//             withCredentials: true,
-//           }
-//         );
-
-//         if (res.data.message === "Login successful") {
-//           setUser(res.data.user);
-//           resetForm();
-//         } else {
-//           alert(res.data.message);
-//         }
-//       } catch (error) {
-//         if (error.response && error.response.status === 400) {
-//           alert(error.response.data.message);
-//         } else {
-//           alert("An unexpected error occurred. Please try again later.");
-//         }
-//       }
-//     },
-//   });
-
-//   return (
-//     <>
-//       <form onSubmit={formik.handleSubmit}>
-//         <TextField
-//           size="small"
-//           fullWidth
-//           margin="dense"
-//           variant="filled"
-//           id="username"
-//           name="username"
-//           label="Username"
-//           value={formik.values.username}
-//           onChange={formik.handleChange}
-//           error={formik.touched.username && Boolean(formik.errors.username)}
-//           helperText={formik.touched.username && formik.errors.username}
-//         />
-//         <TextField
-//           type="password"
-//           size="small"
-//           fullWidth
-//           margin="dense"
-//           variant="filled"
-//           id="password"
-//           name="password"
-//           label="Password"
-//           value={formik.values.password}
-//           onChange={formik.handleChange}
-//           error={formik.touched.password && Boolean(formik.errors.password)}
-//           helperText={formik.touched.password && formik.errors.password}
-//         />
-//         <button type="submit" className="btn">
-//           Login
-//         </button>
-//       </form>
-//     </>
-//   );
-// }
-
-// export default LoginForm;
-
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
-import { TextField } from "@mui/material";
 import { UserContext } from "../contexts/UserContext";
 import { validationSchema } from "../schemas/loginSchema";
+import { getGeolocation } from "../utils/getGeolocation";
+import { InputText } from "primereact/inputtext";
+import { InputOtp } from "primereact/inputotp";
+import { Password } from "primereact/password";
 
 function LoginForm() {
   const { setUser } = useContext(UserContext);
+  const [qr, setQr] = useState(null);
   const [geolocation, setGeolocation] = useState({
     latitude: null,
     longitude: null,
   });
 
+  const [setupComplete, setSetupComplete] = useState(false); // State to track if 2FA setup is complete
+  const [useBackupCode, setUseBackupCode] = useState(false); // State for using backup codes
+
   useEffect(() => {
-    const getGeolocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          setGeolocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        });
-      } else {
-        console.log("Geolocation is not supported by this browser.");
-      }
-    };
-    getGeolocation();
+    getGeolocation(setGeolocation);
   }, []);
 
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
+      twoFAToken: "",
+      backupCode: "",
     },
-
-    validationSchema,
-
-    onSubmit: async (values, { resetForm }) => {
+    validationSchema: validationSchema(setupComplete, useBackupCode),
+    onSubmit: async (values) => {
       try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_STRING}/login`,
-          {
-            ...values,
-            userAgent: navigator.userAgent,
-            geolocation, // Include geolocation data
-          },
-          {
-            withCredentials: true,
-          }
-        );
+        if (!setupComplete) {
+          // Step 1: Check if 2FA is already enabled (setup)
+          const res = await axios.post(
+            `${process.env.REACT_APP_API_STRING}/2fa/setup`,
+            {
+              username: values.username,
+              userAgent: navigator.userAgent,
+              geolocation,
+            },
+            {
+              withCredentials: true,
+            }
+          );
 
-        if (res.data.message === "Login successful") {
-          setUser(res.data.user);
-          resetForm();
+          if (res.data.message === "2FA setup required") {
+            setQr(res.data.qrCode); // Set QR code
+            setSetupComplete(true); // Mark setup as complete
+          } else if (res.data.message === "2FA already enabled.") {
+            setSetupComplete(true); // Mark setup as complete
+            setQr(null);
+          } else {
+            alert(res.data.message);
+          }
         } else {
-          alert(res.data.message);
+          // Step 2: Submit the login form with 2FA token or backup code
+          const loginRes = await axios.post(
+            `${process.env.REACT_APP_API_STRING}/login`,
+            {
+              username: values.username,
+              password: values.password,
+              twoFAToken: useBackupCode ? "" : values.twoFAToken, // Use token or leave empty
+              backupCode: useBackupCode ? values.backupCode : "", // Use backup code if selected
+              userAgent: navigator.userAgent,
+              geolocation,
+            },
+            {
+              withCredentials: true,
+            }
+          );
+
+          if (loginRes.data.message === "Login successful") {
+            setUser(loginRes.data.user);
+          } else {
+            alert(loginRes.data.message);
+          }
         }
       } catch (error) {
-        if (error.response && error.response.status === 400) {
-          alert(error.response.data.message);
-        } else {
-          alert("An unexpected error occurred. Please try again later.");
-        }
+        console.log(error);
       }
     },
   });
 
+  // Reset form and states
+  const handleStartFresh = () => {
+    formik.resetForm(); // Reset form values
+    setQr(null); // Clear QR code
+    setSetupComplete(false); // Reset setup
+    setUseBackupCode(false); // Reset backup code usage
+  };
+
+  // Reset 2FA token and QR code on username or password change
+  const handleInputChange = (e) => {
+    formik.handleChange(e);
+    if (e.target.name === "username" || e.target.name === "password") {
+      setQr(null); // Reset QR code
+      setSetupComplete(false); // Reset setup
+      formik.setFieldValue("twoFAToken", ""); // Clear the 2FA token field
+      formik.setFieldValue("backupCode", ""); // Clear the backup code field
+      setUseBackupCode(false); // Reset backup code usage
+    }
+  };
+
   return (
     <>
-      <form onSubmit={formik.handleSubmit}>
-        <TextField
-          size="small"
-          fullWidth
-          margin="dense"
-          variant="filled"
+      <form className="login-form" onSubmit={formik.handleSubmit}>
+        <InputText
           id="username"
           name="username"
-          label="Username"
+          placeholder="Username"
           value={formik.values.username}
-          onChange={formik.handleChange}
-          error={formik.touched.username && Boolean(formik.errors.username)}
-          helperText={formik.touched.username && formik.errors.username}
+          onChange={handleInputChange} // Use the custom input change handler
+          className={
+            formik.touched.username && formik.errors.username ? "p-invalid" : ""
+          }
+          disabled={setupComplete} // Disable if 2FA is set up
         />
-        <TextField
-          type="password"
-          size="small"
-          fullWidth
-          margin="dense"
-          variant="filled"
+        {formik.touched.username && formik.errors.username && (
+          <small className="p-error">{formik.errors.username}</small>
+        )}
+
+        <Password
+          toggleMask
           id="password"
           name="password"
-          label="Password"
+          placeholder="Password"
           value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
+          onChange={handleInputChange} // Use the custom input change handler
+          feedback={false} // Disable the strength indicator feedback
+          className={
+            formik.touched.password && formik.errors.password ? "p-invalid" : ""
+          }
+          disabled={setupComplete} // Disable if 2FA is set up
         />
-        <button type="submit" className="btn">
-          Login
-        </button>
+        {formik.touched.password && formik.errors.password && (
+          <small className="p-error">{formik.errors.password}</small>
+        )}
+
+        {/* Show QR Code if 2FA setup is in progress */}
+        {qr && (
+          <div className="flex-div">
+            <img src={qr} width={200} alt="QR code for Google Authenticator" />
+            <span>Scan this QR code with your Google Authenticator app</span>
+          </div>
+        )}
+
+        {/* Show the token input field after the setup is complete */}
+        {setupComplete && (
+          <div className="flex-div">
+            {/* Conditionally render the Google Authenticator token input and its label */}
+            {!useBackupCode && (
+              <>
+                <span>Enter Google Authenticator token</span>
+                <InputOtp
+                  placeholder="Enter 6-digit code"
+                  value={formik.values.twoFAToken}
+                  onChange={(e) => formik.setFieldValue("twoFAToken", e.value)} // Handle value directly
+                  mask
+                  integerOnly
+                  length={6}
+                />
+              </>
+            )}
+
+            <span
+              onClick={() => setUseBackupCode(!useBackupCode)}
+              style={{
+                cursor: "pointer",
+                color: "#0060ae",
+                fontWeight: "bold",
+                marginTop: "16px",
+              }}
+            >
+              {useBackupCode ? "Use Google Authenticator" : "Use Backup Code"}
+            </span>
+
+            {/* Input for backup code */}
+            {useBackupCode && (
+              <InputOtp
+                placeholder="Enter Backup Code"
+                value={formik.values.backupCode}
+                onChange={(e) => formik.setFieldValue("backupCode", e.value)}
+                mask
+                length={8}
+              />
+            )}
+          </div>
+        )}
+
+        <div style={{ marginTop: 16 }}>
+          <button type="submit" className="btn">
+            {setupComplete ? "Login" : "Two Factor Authentication"}
+          </button>
+          {setupComplete && (
+            <button
+              type="button"
+              className="btn"
+              onClick={handleStartFresh}
+              style={{ marginLeft: 8 }}
+            >
+              Clear Form
+            </button>
+          )}
+        </div>
       </form>
     </>
   );

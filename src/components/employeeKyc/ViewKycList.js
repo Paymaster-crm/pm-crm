@@ -48,12 +48,7 @@ function ViewKycList() {
       enableSorting: false,
       size: 200,
     },
-    {
-      accessorKey: "company",
-      header: "Company",
-      enableSorting: false,
-      size: 300,
-    },
+    
     {
       accessorKey: "kyc_approval",
       header: "KYC Approval",

@@ -7,7 +7,7 @@ export const handleFileUpload = async (
   formik,
   setFileSnackbar
 ) => {
-  if (e.target.files.length === 0) {
+  if (e.target.files?.length === 0) {
     alert("No file selected");
     return;
   }
@@ -21,10 +21,10 @@ export const handleFileUpload = async (
 
     const uploadedFiles = [];
 
-    for (let i = 0; i < e.target.files.length; i++) {
+    for (let i = 0; i < e.target.files?.length; i++) {
       const file = e.target.files[i];
       const params = {
-        Bucket: "alvision-exim-images",
+        Bucket: "paymaster-document",
         Key: `${folderName}/${file.name}`,
         Body: file,
       };

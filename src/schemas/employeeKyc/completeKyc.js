@@ -23,7 +23,6 @@ export const validationSchema = yup.object({
     .string("Enter address line 2")
     .required("Address line 2 is required"),
   permanent_address_city: yup.string("Enter city").required("City is required"),
-  permanent_address_area: yup.string("Enter area").required("Area is required"),
   permanent_address_state: yup
     .string("Enter state")
     .required("State is required"),
@@ -40,9 +39,6 @@ export const validationSchema = yup.object({
   communication_address_city: yup
     .string("Enter city")
     .required("City is required"),
-  communication_address_area: yup
-    .string("Enter area")
-    .required("Area is required"),
   communication_address_state: yup
     .string("Enter state")
     .required("State is required"),
@@ -50,11 +46,6 @@ export const validationSchema = yup.object({
     .string("Enter pincode")
     .required("Pincode is required")
     .matches(pinCodeRegex, "Invalid pincode"),
-  personal_email: yup
-    .string()
-    .email("Invalid email")
-    .required("Please enter personal email")
-    .matches(emailRegex, "Invalid personal email"),
   official_email: yup
     .string()
     .email("Invalid email")
@@ -63,25 +54,6 @@ export const validationSchema = yup.object({
     .string("Enter mobile number")
     .required("Mobile number is required")
     .matches(mobileNumberRegex, "Invalid mobile"),
-  emergency_contact: yup
-    .string("Enter emergency contact")
-    .required("Emergency contact is required")
-    .matches(mobileNumberRegex, "Invalid emergency contact"),
-  emergency_contact_name: yup
-    .string("Enter emergency contact name")
-    .required("Emergency contact name is required"),
-  family_members: yup
-    .array()
-    .of(yup.string())
-    .min(1, "At least one family member is required")
-    .required("Family members are required"),
-  close_friend_contact_no: yup
-    .string("Enter close friend contact no")
-    .required("Close friend contact no is required")
-    .matches(mobileNumberRegex, "Invalid close friend contact no"),
-  close_friend_contact_name: yup
-    .string("Enter close friend contact name")
-    .required("Close friend contact name is required"),
   blood_group: yup
     .string("Enter blood group")
     .required("Blood group is required"),
@@ -113,10 +85,4 @@ export const validationSchema = yup.object({
     .required("Bank account no is required"),
   bank_name: yup.string("Enter bank name").required("Bank name is required"),
   ifsc_code: yup.string("Enter IFSC code").required("IFSC code is required"),
-  favorite_song: yup
-    .string("Enter favorite song")
-    .required("Favorite song is required"),
-  marital_status: yup
-    .string("Enter marital status")
-    .required("Marital status is required"),
 });

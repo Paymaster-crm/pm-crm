@@ -18,6 +18,8 @@ export const navigateToModule = (module, navigate) => {
       return navigate("/employee-relation");
     case "ISO and Statutory Compliance":
       return navigate("/iso-and-statutory-compliance");
+    case "Attendance":
+      return navigate("/attendance");
     default:
       return navigate("/");
   }

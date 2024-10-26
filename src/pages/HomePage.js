@@ -10,7 +10,8 @@ import DrawerComponent from "../components/home/DrawerComponent.js";
 import Home from "../components/home/Home";
 import Assign from "../components/home/Assign.js";
 import ViewBugs from "../components/home/ViewBugs.js";
-import ChangePassword from "../components/home/ChangePassword.js";
+import ResetPassword from "../components/home/ResetPassword.js";
+import Profile from "../components/home/Profile.js";
 // Employee KYC
 import EmployeeKYC from "../components/employeeKyc/EmployeeKYC.js";
 import ViewIndividualKyc from "../components/employeeKyc/ViewIndividualKyc.js";
@@ -25,6 +26,9 @@ import Appraisal from "../components/employeeManagement/appraisal/Appraisal.js";
 import TrainingAndDevelopment from "../components/employeeManagement/training/TrainingAndDevelopment.js";
 import EmployeeRelation from "../components/employeeManagement/employeeRelation/EmployeeRelation.js";
 import IsoCompliance from "../components/employeeManagement/iso/IsoCompliance.js";
+// Attendance
+import Attendance from "../components/attendance/Attendance.js";
+import Dashboard from "../components/dashboard/Dashboard.js";
 
 const drawerWidth = 60;
 
@@ -66,10 +70,12 @@ function HomePage() {
           <Toolbar />
           <Routes>
             {/* Home */}
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/modules" element={<Home />} />
             <Route path="/assign" element={<Assign />} />
             <Route path="/view-bugs" element={<ViewBugs />} />
-            <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/change-password" element={<ResetPassword />} />
+            <Route path="/profile" element={<Profile />} />
 
             {/* Employee KYC */}
             <Route path="/kyc" element={<EmployeeKYC />} />
@@ -102,6 +108,8 @@ function HomePage() {
               path="/iso-and-statutory-compliance"
               element={<IsoCompliance />}
             />
+            {/* Attendance */}
+            <Route path="/attendance" element={<Attendance />} />
           </Routes>
         </Box>
       </Box>

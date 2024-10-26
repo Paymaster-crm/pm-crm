@@ -18,9 +18,7 @@ function EmployeeRelation() {
       followUpActions: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: (values) => {},
   });
 
   return (

@@ -2,11 +2,11 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/sidebar.scss";
 import { Avatar, IconButton, ListItemButton, Tooltip } from "@mui/material";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import FeedbackIcon from "@mui/icons-material/Feedback";
-import LockResetIcon from "@mui/icons-material/LockReset";
 import { UserContext } from "../../contexts/UserContext";
 
 function Sidebar() {
@@ -20,19 +20,31 @@ function Sidebar() {
         enterDelay={0}
         placement="right"
       >
-        <IconButton>
+        <IconButton onClick={() => navigate("/profile")}>
           <Avatar src={user.employee_photo} alt="Employee Photo" />
         </IconButton>
       </Tooltip>
 
-      <Tooltip title="Home" enterDelay={0} placement="right">
+      <Tooltip title="Dashboard" enterDelay={0} placement="right">
         <ListItemButton
           className="appbar-links"
           aria-label="list-item"
           onClick={() => navigate("/")}
         >
           <IconButton sx={{ color: "#ffffff9f" }} aria-label="icon">
-            <HomeRoundedIcon />
+            <SpaceDashboardIcon />
+          </IconButton>
+        </ListItemButton>
+      </Tooltip>
+
+      <Tooltip title="Modules" enterDelay={0} placement="right">
+        <ListItemButton
+          className="appbar-links"
+          aria-label="list-item"
+          onClick={() => navigate("/modules")}
+        >
+          <IconButton sx={{ color: "#ffffff9f" }} aria-label="icon">
+            <ViewModuleIcon />
           </IconButton>
         </ListItemButton>
       </Tooltip>
@@ -59,19 +71,6 @@ function Sidebar() {
         >
           <IconButton sx={{ color: "#ffffff9f" }} aria-label="icon">
             <FeedbackIcon />
-          </IconButton>
-        </ListItemButton>
-      </Tooltip>
-
-      <Tooltip title="Change Password" enterDelay={0} placement="right">
-        <ListItemButton
-          sx={{ textAlign: "left" }}
-          className="appbar-links"
-          aria-label="list-item"
-          onClick={() => navigate("/change-password")}
-        >
-          <IconButton sx={{ color: "#ffffff9f" }} aria-label="icon">
-            <LockResetIcon />
           </IconButton>
         </ListItemButton>
       </Tooltip>

@@ -11,7 +11,7 @@ export const getCityAndStateByPinCode = async (pinCode) => {
     if (
       response.data &&
       response.data[0].Status === "Success" &&
-      response.data[0].PostOffice.length > 0
+      response.data[0].PostOffice?.length > 0
     ) {
       const postOffice = response.data[0].PostOffice[0];
       return {

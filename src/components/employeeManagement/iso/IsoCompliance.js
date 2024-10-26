@@ -28,9 +28,7 @@ function IsoCompliance() {
       remarksStatutory: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: (values) => {},
   });
 
   return (

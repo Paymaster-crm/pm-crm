@@ -12,12 +12,7 @@ function ViewExitFeedbacks() {
       enableSorting: false,
       size: 160,
     },
-    {
-      accessorKey: "company",
-      header: "Company",
-      enableSorting: false,
-      size: 180,
-    },
+   
     {
       accessorKey: "department",
       header: "Department",

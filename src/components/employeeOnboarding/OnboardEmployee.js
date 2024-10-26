@@ -12,12 +12,10 @@ function OnboardEmployee() {
       middle_name: "",
       last_name: "",
       email: "",
-      company: "",
       employment_type: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
-      console.log(values);
       const res = await axios.post(
         `${process.env.REACT_APP_API_STRING}/onboard-employee`,
         values,
@@ -105,50 +103,6 @@ function OnboardEmployee() {
             helperText={formik.touched.email && formik.errors.email}
             className="login-input"
           />
-        </Col>
-
-        <Col xs={4}>
-          <TextField
-            select
-            size="small"
-            margin="dense"
-            variant="filled"
-            fullWidth
-            id="company"
-            name="company"
-            label="Company"
-            value={formik.values.company}
-            onChange={formik.handleChange}
-            error={formik.touched.company && Boolean(formik.errors.company)}
-            helperText={formik.touched.company && formik.errors.company}
-            className="login-input"
-          >
-            <MenuItem value="Suraj Forwarders Private Limited">
-              Suraj Forwarders Private Limited
-            </MenuItem>
-            <MenuItem value="Suraj Forwarders & Shipping Agencies">
-              Suraj Forwarders & Shipping Agencies
-            </MenuItem>
-            <MenuItem value="Suraj Forwarders">Suraj Forwarders</MenuItem>
-            <MenuItem value="EXIMBIZ Enterprise">EXIMBIZ Enterprise</MenuItem>
-            <MenuItem value="Sansar Tradelink">Sansar Tradelink</MenuItem>
-
-            <MenuItem value="Paramount Propack Private Limited">
-              Paramount Propack Private Limited
-            </MenuItem>
-            <MenuItem value="SR Container Carriers">
-              SR Container Carriers
-            </MenuItem>
-            <MenuItem value="RABS Industries India Private Limited">
-              RABS Industries India Private Limited
-            </MenuItem>
-            <MenuItem value="Novusha Consulting Services India LLP">
-              Novusha Consulting Services India LLP
-            </MenuItem>
-            <MenuItem value="Alluvium IoT Solutions Private Limited">
-              Alluvium IoT Solutions Private Limited
-            </MenuItem>
-          </TextField>
         </Col>
 
         <Col xs={4}>

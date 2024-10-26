@@ -71,7 +71,7 @@ function AssignModule(props) {
   const numberOfChecked = (items) => intersection(checked, items)?.length;
 
   const handleToggleAll = (items) => () => {
-    if (numberOfChecked(items) === items.length) {
+    if (numberOfChecked(items) === items?.length) {
       setChecked(not(checked, items));
     } else {
       setChecked(union(checked, items));

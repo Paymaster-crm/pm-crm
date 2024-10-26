@@ -17,9 +17,7 @@ function RecruitmentProcess() {
       status: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: (values) => {},
   });
 
   return (

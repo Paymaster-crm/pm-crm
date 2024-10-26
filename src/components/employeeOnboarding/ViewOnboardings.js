@@ -79,15 +79,6 @@ function ViewOnboardings() {
       Cell: ({ cell }) =>
         cell.getValue() ? <a href={`${cell.getValue()}`}>View</a> : "NA",
     },
-    {
-      accessorKey: "nda",
-      header: "NDA",
-      enableSorting: false,
-      size: 160,
-
-      Cell: ({ cell }) =>
-        cell.getValue() ? <a href={`${cell.getValue()}`}>View</a> : "NA",
-    },
   ];
 
   const table = useMaterialReactTable({

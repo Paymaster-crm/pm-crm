@@ -1,3 +1,20 @@
+.login-form {
+  span {
+    color: #0060ae;
+    font-weight: 800;
+    font-size: 14px;
+    margin: 16px;
+    display: block;
+    cursor: pointer;
+  }
+
+  .flex-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 .login-row {
   height: 100%;
 }
@@ -34,17 +51,17 @@
   }
 }
 
+.span-text {
+  margin-bottom: 50px;
+  cursor: pointer;
+  color: #035fad;
+  font-weight: 600;
+}
+
 .login-input {
   .MuiInputBase-root {
     background-color: #fff !important;
   }
-}
-
-.login-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
 }
 
 @media screen and (max-width: 992px) {
@@ -53,11 +70,5 @@
   }
   .login-right-col-inner-container {
     width: 90%;
-  }
-  .login-footer {
-    display: block;
-    img {
-      display: none;
-    }
   }
 }

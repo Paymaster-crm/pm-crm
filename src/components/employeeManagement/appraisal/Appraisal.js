@@ -19,10 +19,7 @@ function PerformanceAppraisal() {
       overallRating: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-      // Handle form submission (e.g., send to API)
-    },
+    onSubmit: (values) => {},
   });
 
   return (

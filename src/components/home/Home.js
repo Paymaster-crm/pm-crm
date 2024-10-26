@@ -6,15 +6,25 @@ import { useNavigate } from "react-router-dom";
 import { navigateToModule } from "../../utils/navigateToModule.js";
 import { moduleCategories } from "../../utils/moduleCategories.js";
 import axios from "axios";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import useTabs from "../../customHooks/useTabs.js";
 
 function Home() {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
+  const { a11yProps, CustomTabPanel } = useTabs();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   useEffect(() => {
     async function getUser() {
       const res = await axios(
-        `${process.env.REACT_APP_API_STRING}/get-user-profile/${user.username}`,
+        `${process.env.REACT_APP_API_STRING}/get-user-profile`,
         {
           withCredentials: true,
         }
@@ -32,7 +42,8 @@ function Home() {
     // eslint-disable-next-line
   }, []);
 
-  const categorizedModules = user.modules?.reduce((acc, module) => {
+  // Categorize the user's modules
+  const categorizedModules = user?.modules?.reduce((acc, module) => {
     const category = moduleCategories[module] || "Uncategorized";
     if (!acc[category]) acc[category] = [];
     acc[category].push(module);
@@ -41,17 +52,29 @@ function Home() {
 
   return (
     <>
-      <div>
+      <Box sx={{ width: "100%" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="Module Categories"
+          >
+            {/* Generate Tabs dynamically from categorizedModules */}
+            {categorizedModules &&
+              Object.keys(categorizedModules)
+                .sort()
+                .map((category, idx) => (
+                  <Tab key={idx} label={category} {...a11yProps(idx)} />
+                ))}
+          </Tabs>
+        </Box>
+
+        {/* Generate Tab Panels dynamically from categorizedModules */}
         {categorizedModules &&
           Object.keys(categorizedModules)
             .sort()
             .map((category, idx) => (
-              <div key={idx}>
-                <br />
-                <h6 style={{ marginBottom: 0, color: "#5B5E5F" }}>
-                  <strong>{category}</strong>
-                </h6>
-                <hr style={{ margin: "5px 0" }} />
+              <CustomTabPanel value={value} index={idx} key={idx}>
                 <Row>
                   {categorizedModules[category].sort().map((module, id) => (
                     <Col xs={12} md={4} lg={2} key={id} className="module-col">
@@ -64,9 +87,9 @@ function Home() {
                     </Col>
                   ))}
                 </Row>
-              </div>
+              </CustomTabPanel>
             ))}
-      </div>
+      </Box>
     </>
   );
 }

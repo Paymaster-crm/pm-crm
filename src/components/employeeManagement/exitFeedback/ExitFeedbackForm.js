@@ -112,7 +112,9 @@ function ExitFeedbackForm() {
             <MenuItem value="Development opportunities">
               Development opportunities
             </MenuItem>
-            <MenuItem value="Company culture">Company culture</MenuItem>
+            <MenuItem value="Company culture">
+              paymaster-document culture
+            </MenuItem>
           </TextField>
         </Col>
       </Row>

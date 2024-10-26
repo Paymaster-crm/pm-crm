@@ -20,11 +20,9 @@ function CompleteOnboarding() {
       employee_photo: "",
       resume: "",
       address_proof: "",
-      nda: "",
     },
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
-      console.log(values);
       const res = await axios.post(
         `${process.env.REACT_APP_API_STRING}/complete-onboarding`,
         { ...values, username: user.username },
@@ -47,8 +45,6 @@ function CompleteOnboarding() {
       {employee_name}
       <br />
       Email:&nbsp;{user.email}
-      <br />
-      Company:&nbsp;{user.company}
       <br />
       Employment Type:&nbsp;{user.employment_type}
       <br />
@@ -89,33 +85,6 @@ function CompleteOnboarding() {
             helperText={
               formik.touched.company_policy_visited &&
               formik.errors.company_policy_visited
-            }
-            className="login-input"
-          >
-            <MenuItem value="Yes">Yes</MenuItem>
-            <MenuItem value="No">No</MenuItem>
-          </TextField>
-        </Col>
-
-        <Col xs={4}>
-          <TextField
-            select
-            size="small"
-            margin="dense"
-            variant="filled"
-            fullWidth
-            id="introduction_with_md"
-            name="introduction_with_md"
-            label="Introduction has been done with Rajan Sir?"
-            value={formik.values.introduction_with_md}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.introduction_with_md &&
-              Boolean(formik.errors.introduction_with_md)
-            }
-            helperText={
-              formik.touched.introduction_with_md &&
-              formik.errors.introduction_with_md
             }
             className="login-input"
           >
@@ -219,38 +188,6 @@ function CompleteOnboarding() {
             </>
           ) : (
             ""
-          )}
-        </Col>
-        <Col>
-          {user.company === "Alluvium IoT Solutions Private Limited" && (
-            <>
-              <label htmlFor="">Upload Signed NDA:&nbsp;</label>
-              <input
-                type="file"
-                name=""
-                id=""
-                onChange={(e) =>
-                  handleSingleFileUpload(
-                    e,
-                    "nda",
-                    "kyc",
-                    formik,
-                    setFileSnackbar
-                  )
-                }
-              />
-              {formik.touched.nda && formik.errors.nda ? (
-                <div style={{ color: "#D32F2F" }}>{formik.errors.nda}</div>
-              ) : null}
-              {formik.values.nda !== "" ? (
-                <>
-                  <br />
-                  <a href={formik.values.nda}>{formik.values.nda}</a>
-                </>
-              ) : (
-                ""
-              )}
-            </>
           )}
         </Col>
       </Row>

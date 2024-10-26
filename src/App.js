@@ -1,15 +1,16 @@
 import "./App.scss";
 import { UserContext } from "./contexts/UserContext";
-import React, { useState, useEffect, useCallback } from "react"; // Import useCallback
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import { navigateWithKeyboard } from "./utils/navigateWithKeyboard";
+import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 
 function App() {
-  // Retrieve the user from session storage
   const [user, setUser] = useState();
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,18 +22,11 @@ function App() {
     };
   }, [navigate]);
 
-  // Function to log out the user using useCallback
   const handleLogout = useCallback(async () => {
     try {
-      // Request the backend to clear the cookie
-      await axios.post(
-        `${process.env.REACT_APP_API_STRING}/logout`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-
+      await axios(`${process.env.REACT_APP_API_STRING}/logout`, {
+        withCredentials: true,
+      });
       setUser(null);
       navigate("/");
     } catch (error) {
@@ -42,23 +36,29 @@ function App() {
 
   useEffect(() => {
     async function getUser() {
-      const res = await axios(
-        `${process.env.REACT_APP_API_STRING}/verify-user/`,
-        {
-          withCredentials: true,
+      try {
+        const res = await axios(
+          `${process.env.REACT_APP_API_STRING}/verify-user/`,
+          { withCredentials: true }
+        );
+
+        if (res.data.user) {
+          setUser(res.data.user);
+        } else {
+          setUser(null);
+          navigate("/");
         }
-      );
-      if (res.data.user) {
-        setUser(res.data.user);
-      } else {
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
         setUser(null);
         navigate("/");
+      } finally {
+        setLoading(false);
       }
     }
 
     getUser();
-    // eslint-disable-next-line
-  }, []);
+  }, [navigate]);
 
   // Inactivity timeout
   useEffect(() => {
@@ -67,8 +67,8 @@ function App() {
     const resetTimer = () => {
       clearTimeout(inactivityTimer);
       inactivityTimer = setTimeout(() => {
-        handleLogout(); // Log out user after 30 minutes of inactivity
-      }, 1800000);
+        handleLogout(); // Log out user after 1 hour of inactivity
+      }, 3600000);
     };
 
     // Add event listeners for activity
@@ -88,11 +88,28 @@ function App() {
       window.removeEventListener("click", resetTimer);
       window.removeEventListener("touchstart", resetTimer);
     };
-  }, [handleLogout]); // handleLogout is stable now
+  }, [handleLogout]);
 
   return (
     <UserContext.Provider value={{ user, setUser, handleLogout }}>
-      <div className="App">{user ? <HomePage /> : <LoginPage />}</div>
+      <div className="App">
+        {loading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <CircularProgress />
+          </div>
+        ) : user ? (
+          <HomePage />
+        ) : (
+          <LoginPage />
+        )}
+      </div>
     </UserContext.Provider>
   );
 }

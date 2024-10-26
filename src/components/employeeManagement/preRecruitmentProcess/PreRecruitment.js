@@ -20,9 +20,7 @@ function PreRecruitment() {
       recruitmentStatus: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: (values) => {},
   });
 
   return (

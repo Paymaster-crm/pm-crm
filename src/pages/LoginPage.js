@@ -17,22 +17,26 @@ function LoginPage() {
             {!forgotPassword ? (
               <>
                 <LoginForm />
-                <button className="btn" onClick={() => setForgotPassword(true)}>
-                  Forgot Password
-                </button>
               </>
             ) : (
               <>
                 <ForgotPasswordForm setForgotPassword={setForgotPassword} />
-                <button
-                  className="btn"
-                  onClick={() => setForgotPassword(false)}
-                >
-                  Login instead
-                </button>
               </>
             )}
           </div>
+
+          {!forgotPassword ? (
+            <span className="span-text" onClick={() => setForgotPassword(true)}>
+              Forgot Password
+            </span>
+          ) : (
+            <span
+              className="span-text"
+              onClick={() => setForgotPassword(false)}
+            >
+              Login Instead
+            </span>
+          )}
         </Col>
       </Row>
     </Container>

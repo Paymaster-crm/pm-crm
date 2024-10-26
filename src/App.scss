@@ -62,63 +62,6 @@
   padding: 10px !important;
 }
 
-/* Job List Row Colors */
-.MuiTableRow-root.custom-clearance-completed {
-  background-color: #ccffff !important;
-}
-
-.MuiTableRow-root.clearance-pending {
-  background-color: #99ccff !important;
-}
-
-.MuiTableRow-root.arrival-pending {
-  background-color: #99ccff !important;
-}
-
-.MuiTableRow-root.sea-igm-filed {
-  background-color: #ffcc99 !important;
-}
-
-.MuiTableRow-root.discharge {
-  background-color: #ffcc99 !important;
-}
-
-.MuiTableRow-root.discharge:hover {
-  background-color: #ffcc99 !important;
-}
-
-.MuiTableRow-root.eta {
-  background-color: #ffff99 !important;
-}
-
-.MuiTableRow-root.custom-clearance-completed:hover {
-  background-color: #ccffff !important;
-}
-
-.MuiTableRow-root.clearance-pending:hover {
-  background-color: #99ccff !important;
-}
-
-.MuiTableRow-root.arrival-pending:hover {
-  background-color: #99ccff !important;
-}
-
-.MuiTableRow-root.sea-igm-filed:hover {
-  background-color: #ffcc99 !important;
-}
-
-.MuiTableRow-root.eta:hover {
-  background-color: #ffff99 !important;
-}
-
-.MuiTableRow-root.payment_made {
-  background-color: #ffc5c5 !important;
-}
-
-.MuiTableRow-root.payment_made:hover {
-  background-color: #ffc5c5 !important;
-}
-
 .MuiTableRow-root.MuiDataGrid-cell {
   display: flex !important;
   align-items: center !important;
@@ -140,4 +83,73 @@
 .Mui-TableHeadCell-Content-Wrapper,
 .MuiTableCell-root {
   white-space: normal !important;
+}
+
+.MuiListItemText-secondary {
+  text-align: right !important;
+}
+
+.form {
+  h5 {
+    margin-top: 20px;
+  }
+}
+
+.p-icon-field,
+.p-dropdown {
+  width: 100% !important;
+}
+.p-input-icon {
+  top: 30% !important;
+  margin: 0 !important;
+}
+
+.p-password,
+.p-calendar {
+  width: 100% !important;
+}
+.p-inputtext,
+.p-password-input {
+  height: 45px !important;
+  width: 100% !important;
+  padding: 10px !important;
+  margin: 5px 0 !important;
+}
+
+.p-error {
+  color: #f15c6d !important;
+}
+
+a .MuiTypography-body2 {
+  color: #0a5fae !important;
+}
+
+.dashboard-container {
+  box-shadow: 2px 2px 50px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.calendar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.p-datepicker {
+  border: none !important;
+}
+
+.card.flex {
+  border: none !important;
+}
+
+.p-datepicker-month,
+.p-datepicker-year {
+  margin: 0 10px !important;
+}
+
+.p-datepicker-calendar-container {
+  padding: 20px !important;
 }

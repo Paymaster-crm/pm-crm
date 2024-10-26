@@ -1,24 +1,22 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useFormik } from "formik";
-import { UserContext } from "../../contexts/UserContext";
 import { TextField } from "@mui/material";
-import { validationSchema } from "../../schemas/changePasswordSchema";
+import { validationSchema } from "../../schemas/resetPasswordSchema";
 import axios from "axios";
 
-function ChangePassword() {
-  const { user } = useContext(UserContext);
-
+function ResetPassword() {
   const formik = useFormik({
     initialValues: {
-      current_password: "",
+      password: "",
       new_password: "",
       confirm_password: "",
     },
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       const res = await axios.post(
-        `${process.env.REACT_APP_API_STRING}/change-password`,
-        { ...values, username: user.username }
+        `${process.env.REACT_APP_API_STRING}/reset-password`,
+        values,
+        { withCredentials: true }
       );
       alert(res.data.message);
       resetForm();
@@ -27,32 +25,26 @@ function ChangePassword() {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <h4>Change password</h4>
       <TextField
         size="small"
         type="password"
         fullWidth
         margin="dense"
-        variant="outlined"
-        id="current_password"
-        name="current_password"
+        variant="filled"
+        id="password"
+        name="password"
         label="Current password"
-        value={formik.values.current_password}
+        value={formik.values.password}
         onChange={formik.handleChange}
-        error={
-          formik.touched.current_password &&
-          Boolean(formik.errors.current_password)
-        }
-        helperText={
-          formik.touched.current_password && formik.errors.current_password
-        }
+        error={formik.touched.password && Boolean(formik.errors.password)}
+        helperText={formik.touched.password && formik.errors.password}
       />
       <TextField
         size="small"
         type="password"
         fullWidth
         margin="dense"
-        variant="outlined"
+        variant="filled"
         id="new_password"
         name="new_password"
         label="New password"
@@ -69,7 +61,7 @@ function ChangePassword() {
         type="password"
         fullWidth
         margin="dense"
-        variant="outlined"
+        variant="filled"
         id="confirm_password"
         name="confirm_password"
         label="Confirm password"
@@ -90,4 +82,4 @@ function ChangePassword() {
   );
 }
 
-export default ChangePassword;
+export default ResetPassword;

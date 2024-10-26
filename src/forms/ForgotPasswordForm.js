@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
-import { TextField } from "@mui/material";
+import { InputOtp } from "primereact/inputotp";
+import { InputText } from "primereact/inputtext";
+import { Password } from "primereact/password";
 import { validationSchemaForgotPassword } from "../schemas/forgotPasswordSchema";
 import { validationSchemaOtp } from "../schemas/updatePasswordSchema";
 
 function ForgotPasswordForm(props) {
-  const [otpSent, setOtpSent] = useState(false); // New state for OTP sent
+  const [otpSent, setOtpSent] = useState(false); // State for OTP sent
   const [username, setUsername] = useState("");
 
   const formikForgotPassword = useFormik({
@@ -70,80 +72,90 @@ function ForgotPasswordForm(props) {
     <>
       {!otpSent ? (
         <form onSubmit={formikForgotPassword.handleSubmit}>
-          <TextField
-            size="small"
-            fullWidth
-            margin="dense"
-            variant="filled"
+          <InputText
             id="username"
             name="username"
-            label="Username"
+            placeholder="Username"
             value={formikForgotPassword.values.username}
             onChange={formikForgotPassword.handleChange}
-            error={
-              formikForgotPassword.touched.username &&
-              Boolean(formikForgotPassword.errors.username)
-            }
-            helperText={
+            className={
               formikForgotPassword.touched.username &&
               formikForgotPassword.errors.username
+                ? "p-invalid"
+                : ""
             }
           />
+          {formikForgotPassword.touched.username &&
+            formikForgotPassword.errors.username && (
+              <small className="p-error">
+                {formikForgotPassword.errors.username}
+                <br />
+              </small>
+            )}
+
           <button type="submit" className="btn">
             Reset
           </button>
         </form>
       ) : (
         <form onSubmit={formikOtp.handleSubmit}>
-          <TextField
-            size="small"
-            fullWidth
-            margin="dense"
-            variant="filled"
-            id="otp"
-            name="otp"
-            label="OTP"
+          <span style={{ color: "#0060ae", fontWeight: 800, fontSize: "14px" }}>
+            Enter OTP
+          </span>
+          <InputOtp
+            placeholder="Enter OTP"
             value={formikOtp.values.otp}
-            onChange={formikOtp.handleChange}
-            error={formikOtp.touched.otp && Boolean(formikOtp.errors.otp)}
-            helperText={formikOtp.touched.otp && formikOtp.errors.otp}
+            onChange={(e) => formikOtp.setFieldValue("otp", e.value)} // Handle value directly
+            mask
+            integerOnly
+            length={6}
           />
-          <TextField
-            size="small"
-            fullWidth
-            margin="dense"
-            variant="filled"
-            type="password"
+
+          {formikOtp.touched.otp && formikOtp.errors.otp && (
+            <small className="p-error">{formikOtp.errors.otp}</small>
+          )}
+
+          <Password
+            toggleMask
             id="password"
             name="password"
-            label="New Password"
+            placeholder="New Password"
             value={formikOtp.values.password}
             onChange={formikOtp.handleChange}
-            error={
-              formikOtp.touched.password && Boolean(formikOtp.errors.password)
+            className={
+              formikOtp.touched.password && formikOtp.errors.password
+                ? "p-invalid"
+                : ""
             }
-            helperText={formikOtp.touched.password && formikOtp.errors.password}
+            feedback={false}
           />
-          <TextField
-            size="small"
-            fullWidth
-            margin="dense"
-            variant="filled"
-            type="password"
+
+          {formikOtp.touched.password && formikOtp.errors.password && (
+            <small className="p-error">{formikOtp.errors.password}</small>
+          )}
+
+          <Password
+            toggleMask
             id="confirmPassword"
             name="confirmPassword"
-            label="Confirm Password"
+            placeholder="Confirm Password"
             value={formikOtp.values.confirmPassword}
             onChange={formikOtp.handleChange}
-            error={
-              formikOtp.touched.confirmPassword &&
-              Boolean(formikOtp.errors.confirmPassword)
-            }
-            helperText={
+            className={
               formikOtp.touched.confirmPassword &&
               formikOtp.errors.confirmPassword
+                ? "p-invalid"
+                : ""
             }
+            feedback={false}
           />
+          {formikOtp.touched.confirmPassword &&
+            formikOtp.errors.confirmPassword && (
+              <small className="p-error">
+                {formikOtp.errors.confirmPassword}
+              </small>
+            )}
+          <br />
           <button type="submit" className="btn">
             Confirm
           </button>
