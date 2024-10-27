@@ -48,7 +48,7 @@ function AppbarComponent(props) {
 
         <div>
           <img
-            src={logo}
+            src="https://paymaster-document.s3.ap-south-1.amazonaws.com/logo.webp"
             alt="logo"
             height="70px"
             onClick={() => navigate("/")}
