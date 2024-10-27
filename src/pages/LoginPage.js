@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import LoginForm from "../forms/LoginForm";
 import "../styles/login.scss";
-import logo from "../assets/images/logo.webp";
 import ForgotPasswordForm from "../forms/ForgotPasswordForm.js";
 
 function LoginPage() {

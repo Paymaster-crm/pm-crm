@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import CompleteKYC from "./CompleteKYC";
 import ViewKycList from "./ViewKycList";
 import useTabs from "../../customHooks/useTabs";
+import { UserContext } from "../../contexts/UserContext";
 
 function EmployeeKYC() {
   const [value, setValue] = React.useState(0);
@@ -13,6 +14,8 @@ function EmployeeKYC() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const { user } = React.useContext(UserContext);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -32,7 +35,7 @@ function EmployeeKYC() {
           <ViewKycList />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <CompleteKYC />
+          <CompleteKYC username={user.username} />
         </CustomTabPanel>
       </>
     </Box>

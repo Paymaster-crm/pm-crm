@@ -16,7 +16,7 @@ import BackupCodes from "./BackupCodes";
 export default function Profile() {
   const [expanded, setExpanded] = React.useState("panel1");
   const [geolocation, setGeolocation] = React.useState({});
-  const { setUser } = React.useContext(UserContext);
+  const { setUser, user } = React.useContext(UserContext);
 
   const navigate = useNavigate();
   const handleChange = (panel) => (event, newExpanded) => {
@@ -42,7 +42,7 @@ export default function Profile() {
         <AccordionDetails
           style={{ maxHeight: "60vh", overflowY: "auto", padding: "30px" }}
         >
-          <BasicInfo />
+          <BasicInfo user={user} />
         </AccordionDetails>
       </Accordion>
       {/* Logged in devices */}

@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { UserContext } from "../../contexts/UserContext";
+import React from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -7,9 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import { Container, Row, Col } from "react-bootstrap";
 
-function BasicInfo() {
-  const { user } = useContext(UserContext);
-
+function BasicInfo(props) {
   return (
     <Container>
       <Row>
@@ -20,7 +17,7 @@ function BasicInfo() {
               style={{ display: "flex", alignItems: "center", width: "100%" }}
             >
               <Avatar
-                src={user.employee_photo}
+                src={props.user.employee_photo}
                 style={{ width: 80, height: 80 }}
               />
               <List
@@ -31,16 +28,16 @@ function BasicInfo() {
               >
                 <ListItem>
                   <ListItemText primary="Username" />
-                  <ListItemText secondary={user.username} />
+                  <ListItemText secondary={props.user.username} />
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="First Name" />
                   <ListItemText
                     secondary={[
-                      user.first_name,
-                      user.middle_name,
-                      user.last_name,
+                      props.user.first_name,
+                      props.user.middle_name,
+                      props.user.last_name,
                     ]
                       .filter(Boolean)
                       .join(" ")}
@@ -49,12 +46,12 @@ function BasicInfo() {
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Birth Date" />
-                  <ListItemText secondary={user.dob} />
+                  <ListItemText secondary={props.user.dob} />
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Blood Group" />
-                  <ListItemText secondary={user.blood_group} />
+                  <ListItemText secondary={props.user.blood_group} />
                 </ListItem>
               </List>
             </div>
@@ -73,18 +70,18 @@ function BasicInfo() {
               >
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Email" />
-                  <ListItemText secondary={user.email} />
+                  <ListItemText secondary={props.user.email} />
                 </ListItem>
 
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Official Email" />
-                  <ListItemText secondary={user.official_email} />
+                  <ListItemText secondary={props.user.official_email} />
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Mobile" />
-                  <ListItemText secondary={user.mobile} />
+                  <ListItemText secondary={props.user.mobile} />
                 </ListItem>
               </List>
             </div>
@@ -109,12 +106,12 @@ function BasicInfo() {
                   <ListItemText primary="Communication Address" />
                   <ListItemText
                     secondary={[
-                      user.communication_address_line_1,
-                      user.communication_address_line_2,
-                      user.communication_address_city,
-                      user.communication_address_area,
-                      user.communication_address_state,
-                      user.communication_address_pincode,
+                      props.user.communication_address_line_1,
+                      props.user.communication_address_line_2,
+                      props.user.communication_address_city,
+                      props.user.communication_address_area,
+                      props.user.communication_address_state,
+                      props.user.communication_address_pincode,
                     ]
                       .filter(Boolean)
                       .join(", ")}
@@ -125,12 +122,12 @@ function BasicInfo() {
                   <ListItemText primary="Permanent Address" />
                   <ListItemText
                     secondary={[
-                      user.permanent_address_line_1,
-                      user.permanent_address_line_2,
-                      user.permanent_address_city,
-                      user.permanent_address_area,
-                      user.permanent_address_state,
-                      user.permanent_address_pincode,
+                      props.user.permanent_address_line_1,
+                      props.user.permanent_address_line_2,
+                      props.user.permanent_address_city,
+                      props.user.permanent_address_area,
+                      props.user.permanent_address_state,
+                      props.user.permanent_address_pincode,
                     ]
                       .filter(Boolean)
                       .join(", ")}
@@ -153,16 +150,16 @@ function BasicInfo() {
               >
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Bank Account Number" />
-                  <ListItemText secondary={user.bank_account_no} />
+                  <ListItemText secondary={props.user.bank_account_no} />
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Bank Name" />
-                  <ListItemText secondary={user.bank_name} />
+                  <ListItemText secondary={props.user.bank_name} />
                 </ListItem>
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="IFSC" />
-                  <ListItemText secondary={user.ifsc_code} />
+                  <ListItemText secondary={props.user.ifsc_code} />
                 </ListItem>
               </List>
             </div>
@@ -186,17 +183,17 @@ function BasicInfo() {
               >
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Designation" />
-                  <ListItemText secondary={user.designation} />
+                  <ListItemText secondary={props.user.designation} />
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Department" />
-                  <ListItemText secondary={user.department} />
+                  <ListItemText secondary={props.user.department} />
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Joining Date" />
-                  <ListItemText secondary={user.joining_date} />
+                  <ListItemText secondary={props.user.joining_date} />
                 </ListItem>
               </List>
             </div>
@@ -214,36 +211,29 @@ function BasicInfo() {
               >
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="AADHAR Number" />
-                  <a href={user.aadhar_photo_front}>
+                  <a href={props.user.aadhar_photo_front}>
                     <ListItemText
                       sx={{ color: "blue !important" }}
-                      secondary={user.aadhar_no}
+                      secondary={props.user.aadhar_no}
                     />
                   </a>
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="PAN Number" />
-                  <a href={user.pan_photo}>
-                    <ListItemText secondary={user.pan_no} />
-                  </a>
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Driving License" />
-                  <a href={user.license_front}>
-                    <ListItemText secondary="View" />
+                  <a href={props.user.pan_photo}>
+                    <ListItemText secondary={props.user.pan_no} />
                   </a>
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="PF Number" />
-                  <ListItemText secondary={user.pf_no} />
+                  <ListItemText secondary={props.user.pf_no} />
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="ESIC Number" />
-                  <ListItemText secondary={user.esic_no} />
+                  <ListItemText secondary={props.user.esic_no} />
                 </ListItem>
               </List>
             </div>

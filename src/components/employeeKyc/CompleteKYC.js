@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { MenuItem, TextField } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { UserContext } from "../../contexts/UserContext";
 import { states } from "../../assets/data/statesData";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -11,10 +10,11 @@ import Checkbox from "@mui/material/Checkbox";
 import AWS from "aws-sdk";
 import Snackbar from "@mui/material/Snackbar";
 import { validationSchema } from "../../schemas/employeeKyc/completeKyc";
+import { useParams } from "react-router-dom";
 
-function CompleteKYC() {
-  const { user } = useContext(UserContext);
+function CompleteKYC(props) {
   const [fileSnackbar, setFileSnackbar] = useState(false);
+  const { username } = useParams();
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -54,7 +54,7 @@ function CompleteKYC() {
     onSubmit: async (values) => {
       const res = await axios.post(
         `${process.env.REACT_APP_API_STRING}/complete-kyc`,
-        { ...values, username: user.username },
+        { ...values, username: props.username },
         {
           withCredentials: true,
         }
@@ -64,6 +64,23 @@ function CompleteKYC() {
       // resetForm();
     },
   });
+
+  useEffect(() => {
+    async function getData() {
+      if (username) {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_STRING}/get-user-data/${username}`,
+          {
+            withCredentials: true,
+          }
+        );
+        formik.setValues(res.data);
+      }
+    }
+
+    getData();
+    // eslint-disable-next-line
+  }, [username]);
 
   const handleSameAsPermanentAddress = (event) => {
     if (event.target.checked) {

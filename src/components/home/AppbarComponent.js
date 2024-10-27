@@ -5,7 +5,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import logo from "../../assets/images/logo.webp";
 
 const drawerWidth = 60;
 

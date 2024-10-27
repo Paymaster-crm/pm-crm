@@ -16,6 +16,7 @@ function ViewIndividualKyc() {
           withCredentials: true,
         }
       );
+
       setData(res.data);
     }
 
@@ -38,7 +39,7 @@ function ViewIndividualKyc() {
     <>
       {data && (
         <div style={{ padding: 20, backgroundColor: "#fff" }}>
-          <BasicInfo />
+          <BasicInfo user={data} />
           <br />
           <button className="btn" onClick={() => handleKycApproval(true)}>
             Approve
