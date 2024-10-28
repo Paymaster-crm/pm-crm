@@ -1,6 +1,10 @@
 .dashboard {
   padding: 20px 0;
 
+  .dashboard-container {
+    margin: 10px 0;
+  }
+
   #dashboard-personal {
     display: flex;
     flex-direction: column;

@@ -176,9 +176,9 @@ export default function Dashboard() {
     <>
       <Container fluid className="dashboard">
         <Row>
-          <Col xs={8}>
+          <Col xs={12} md={6} lg={8}>
             <Row>
-              <Col xs={5}>
+              <Col xs={12} lg={5}>
                 <div id="dashboard-personal" className="dashboard-container">
                   <p>Welcome back,</p>
                   <br />
@@ -189,7 +189,7 @@ export default function Dashboard() {
                   </h1>
                 </div>
               </Col>
-              <Col xs={7}>
+              <Col xs={12} lg={7}>
                 <div className="dashboard-container">
                   <h5>
                     <strong>Attendance and Leaves</strong>
@@ -227,7 +227,6 @@ export default function Dashboard() {
             </Row>
             <Row>
               <Col>
-                <br />
                 <div className="dashboard-container">
                   <h5>
                     <strong>Announcements</strong>
@@ -240,7 +239,6 @@ export default function Dashboard() {
             </Row>
             <Row>
               <Col>
-                <br />
                 <div className="dashboard-container">
                   <h5>
                     <strong>Attendance Heatmap</strong>
@@ -255,7 +253,7 @@ export default function Dashboard() {
               </Col>
             </Row>
           </Col>
-          <Col xs={4}>
+          <Col xs={12} md={6} lg={4}>
             <Row>
               <div className="dashboard-container">
                 <h5>
@@ -290,7 +288,6 @@ export default function Dashboard() {
                 </div>
               </div>
             </Row>
-            <br />
             <Row>
               <div className="dashboard-container">
                 <h5>
