@@ -10,15 +10,16 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import useTabs from "../../customHooks/useTabs.js";
+import { TabValueContext } from "../../contexts/TabValueContext.js";
 
 function Home() {
   const { user, setUser } = useContext(UserContext);
+  const { tabValue, setTabValue } = useContext(TabValueContext);
   const navigate = useNavigate();
   const { a11yProps, CustomTabPanel } = useTabs();
-  const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setTabValue(newValue);
   };
 
   useEffect(() => {
@@ -55,7 +56,7 @@ function Home() {
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
-            value={value}
+            value={tabValue}
             onChange={handleChange}
             aria-label="Module Categories"
           >
@@ -74,7 +75,7 @@ function Home() {
           Object.keys(categorizedModules)
             .sort()
             .map((category, idx) => (
-              <CustomTabPanel value={value} index={idx} key={idx}>
+              <CustomTabPanel value={tabValue} index={idx} key={idx}>
                 <Row>
                   {categorizedModules[category].sort().map((module, id) => (
                     <Col xs={12} md={4} lg={2} key={id} className="module-col">

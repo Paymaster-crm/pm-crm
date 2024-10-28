@@ -9,7 +9,6 @@ import DrawerComponent from "../components/home/DrawerComponent.js";
 // Home
 import Home from "../components/home/Home";
 import Assign from "../components/home/Assign.js";
-import ViewBugs from "../components/home/ViewBugs.js";
 import ResetPassword from "../components/home/ResetPassword.js";
 import Profile from "../components/home/Profile.js";
 // Employee KYC
@@ -29,14 +28,22 @@ import IsoCompliance from "../components/employeeManagement/iso/IsoCompliance.js
 // Attendance
 import Attendance from "../components/attendance/Attendance.js";
 import Dashboard from "../components/dashboard/Dashboard.js";
+// Document Request Form
+import DocumentRequest from "../components/documentRequest/DocumentRequest.js";
+// DRA Profile
+import DraProfile from "../components/dra/DraProfile.js";
+// Resignation
+import Resignation from "../components/resignation/Resignation.js";
+// Salaries and Commissions
+import SalariesAndCommissions from "../components/salariesAndCommissions/SalariesAndCommissions.js";
+// Interview
+import Interview from "../components/interview/Interview.js";
 
 const drawerWidth = 60;
 
 function HomePage() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [tabValue, setTabValue] = useState(
-    JSON.parse(sessionStorage.getItem("tab_value") || 0)
-  );
+  const [tabValue, setTabValue] = useState(0);
 
   return (
     <TabValueContext.Provider value={{ tabValue, setTabValue }}>
@@ -73,7 +80,6 @@ function HomePage() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/modules" element={<Home />} />
             <Route path="/assign" element={<Assign />} />
-            <Route path="/view-bugs" element={<ViewBugs />} />
             <Route path="/change-password" element={<ResetPassword />} />
             <Route path="/profile" element={<Profile />} />
 
@@ -110,6 +116,19 @@ function HomePage() {
             />
             {/* Attendance */}
             <Route path="/attendance" element={<Attendance />} />
+            {/* Document Request */}
+            <Route path="/document-request" element={<DocumentRequest />} />
+            {/* DRA Profile */}
+            <Route path="/dra-profile" element={<DraProfile />} />
+            {/* Resignation */}
+            <Route path="/resignation-process" element={<Resignation />} />
+            {/* Salaries and Commissions */}
+            <Route
+              path="/salaries-and-commissions"
+              element={<SalariesAndCommissions />}
+            />
+            {/* Interview */}
+            <Route path="/interview" element={<Interview />} />
           </Routes>
         </Box>
       </Box>

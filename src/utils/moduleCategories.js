@@ -6,6 +6,7 @@ export const moduleCategories = {
   "Salary + commission details": "HR & Management",
   "Complement / document request": "HR & Management",
   "Resignation process": "HR & Management",
+  "Document Request": "HR & Management",
   "Change logs": "HR & Management",
   Interview: "Interview",
   "Pre-Recruitment Process": "Employee Management",

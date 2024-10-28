@@ -20,6 +20,16 @@ export const navigateToModule = (module, navigate) => {
       return navigate("/iso-and-statutory-compliance");
     case "Attendance":
       return navigate("/attendance");
+    case "Complement / document request":
+      return navigate("/document-request");
+    case "DRA Profile":
+      return navigate("/dra-profile");
+    case "Resignation process":
+      return navigate("/resignation-process");
+    case "Salary + commission details":
+      return navigate("/salaries-and-commissions");
+    case "Interview":
+      return navigate("/interview");
     default:
       return navigate("/");
   }

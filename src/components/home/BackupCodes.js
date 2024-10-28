@@ -5,9 +5,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import { Row, Col } from "react-bootstrap";
-import DownloadIcon from "@mui/icons-material/Download";
+import MailIcon from "@mui/icons-material/Mail";
 import "../../styles/backup-codes.scss";
 import axios from "axios";
+import AWS from "aws-sdk";
+
+AWS.config.update({
+  accessKeyId: process.env.REACT_APP_ACCESS_KEY,
+  secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY,
+  region: "ap-south-1",
+});
+
+const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 function BackupCodes() {
   const { user, setUser } = useContext(UserContext);
@@ -42,7 +51,7 @@ function BackupCodes() {
     alert(res.data.message);
   };
 
-  const downloadCSV = () => {
+  const sendEmail = async () => {
     // Create CSV formatted string
     const header = "Backup Codes\n";
     const csvContent = user.backupCodes.map((code) => `${code}`).join("\n");
@@ -50,14 +59,40 @@ function BackupCodes() {
 
     // Create a Blob from the CSV string
     const blob = new Blob([csv], { type: "text/csv" });
+    const reader = new FileReader();
 
-    // Create a link to trigger the download
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "Paymaster Backup Codes.csv";
+    reader.onloadend = async () => {
+      const params = {
+        Destinations: [user.email],
+        RawMessage: {
+          Data: [
+            `From: sameery.020@gmail.com\n`,
+            `To: ${user.email}\n`,
+            `Subject: Your Backup Codes\n`,
+            `MIME-Version: 1.0\n`,
+            `Content-Type: multipart/mixed; boundary="NextPart"\n\n`,
+            `--NextPart\n`,
+            `Content-Type: text/plain\n\n`,
+            `Attached are your backup codes.\n\n`,
+            `--NextPart\n`,
+            `Content-Type: text/csv\n`,
+            `Content-Disposition: attachment; filename="backup_codes.csv"\n\n`,
+            `${csv}\n`, // Attach CSV data
+            `--NextPart--`,
+          ].join(""),
+        },
+      };
 
-    // Trigger the download
-    link.click();
+      try {
+        await ses.sendRawEmail(params).promise();
+        alert("Email sent successfully!");
+      } catch (error) {
+        console.error("Error sending email:", error);
+        alert("Failed to send email.");
+      }
+    };
+
+    reader.readAsDataURL(blob);
   };
 
   return (
@@ -84,9 +119,9 @@ function BackupCodes() {
               <DeleteIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Download backup codes as CSV">
-            <IconButton onClick={downloadCSV}>
-              <DownloadIcon />
+          <Tooltip title="Email backup codes">
+            <IconButton onClick={sendEmail}>
+              <MailIcon />
             </IconButton>
           </Tooltip>
         </div>

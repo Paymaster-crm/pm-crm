@@ -70,6 +70,12 @@ export default function Dashboard() {
     chart: {
       height: 350,
       type: "heatmap",
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
     },
     plotOptions: {
       heatmap: {
