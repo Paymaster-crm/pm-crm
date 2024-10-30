@@ -20,7 +20,10 @@ function ForgotPasswordForm(props) {
       try {
         const res = await axios.post(
           `${process.env.REACT_APP_API_STRING}/forgot-password`,
-          values
+          values,
+          {
+            withCredentials: true,
+          }
         );
         if (res.data.message === "OTP sent to your email") {
           setUsername(values.username);
@@ -52,6 +55,9 @@ function ForgotPasswordForm(props) {
             username,
             otp: values.otp,
             password: values.password,
+          },
+          {
+            withCredentials: true,
           }
         );
         alert(res.data.message);

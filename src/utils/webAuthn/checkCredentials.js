@@ -5,7 +5,8 @@ export async function checkCredentials(username) {
   try {
     const response = await axios.post(
       `${process.env.REACT_APP_API_STRING}/webauthn/credential-check`,
-      { username }
+      { username },
+      { withCredentials: true }
     );
     return response.data;
   } catch (error) {
