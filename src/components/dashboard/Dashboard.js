@@ -9,7 +9,7 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 
-export default function Dashboard() {
+export default function Dashboard() {   
   const { user } = React.useContext(UserContext);
 
   const data = [

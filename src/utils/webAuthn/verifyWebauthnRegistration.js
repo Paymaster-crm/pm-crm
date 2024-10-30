@@ -1,12 +1,10 @@
 import axios from "axios";
-import { initiateWebauthnLogin } from "./initiateWebauthnLogin";
 
 // Verify WebAuthn Registration
 export const verifyWebauthnRegistration = async (
   username,
   credential,
-  geolocation,
-  setUser
+  setIsWebAuthnEnabled
 ) => {
   try {
     const res = await axios.post(
@@ -15,7 +13,8 @@ export const verifyWebauthnRegistration = async (
       { withCredentials: true }
     );
     if (res.data.verified) {
-      initiateWebauthnLogin(username, geolocation, setUser);
+      alert("Registration successful");
+      setIsWebAuthnEnabled(true);
     } else {
       alert("Registration failed. Please try again.");
     }

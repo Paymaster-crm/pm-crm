@@ -12,6 +12,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import ResetPassword from "./ResetPassword";
 import BackupCodes from "./BackupCodes";
+import TwoFactorAuthentication from "./TwoFactorAuthentication";
 
 export default function Profile() {
   const [expanded, setExpanded] = React.useState("panel1");
@@ -40,7 +41,7 @@ export default function Profile() {
           <h6 style={{ fontWeight: "bold" }}>Personal Info</h6>
         </AccordionSummary>
         <AccordionDetails
-          style={{ maxHeight: "60vh", overflowY: "auto", padding: "30px" }}
+          style={{ maxHeight: "55vh", overflowY: "auto", padding: "30px" }}
         >
           <BasicInfo user={user} />
         </AccordionDetails>
@@ -89,10 +90,22 @@ export default function Profile() {
           <ResetPassword />
         </AccordionDetails>
       </Accordion>
-      {/* Backup Codes */}
+      {/* Two Factor Authentication */}
       <Accordion
         expanded={expanded === "panel4"}
         onChange={handleChange("panel4")}
+      >
+        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+          <h6 style={{ fontWeight: "bold" }}>Two Factor Authentication</h6>
+        </AccordionSummary>
+        <AccordionDetails>
+          <TwoFactorAuthentication />
+        </AccordionDetails>
+      </Accordion>
+      {/* Backup Codes */}
+      <Accordion
+        expanded={expanded === "panel5"}
+        onChange={handleChange("panel5")}
       >
         <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
           <h6 style={{ fontWeight: "bold" }}>Backup Codes</h6>
