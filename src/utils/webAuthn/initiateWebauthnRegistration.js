@@ -4,13 +4,14 @@ import { verifyWebauthnRegistration } from "./verifyWebauthnRegistration";
 
 // Initiate WebAuthn Registration
 export async function initiateWebauthnRegistration(
-  username,
-  setIsWebAuthnEnabled
+  user,
+  setIsWebAuthnEnabled,
+  setUser
 ) {
   try {
     const registrationOptionsRes = await axios.post(
       `${process.env.REACT_APP_API_STRING}/webauthn/register`,
-      { username },
+      { username: user.username },
       { withCredentials: true }
     );
 
@@ -35,9 +36,10 @@ export async function initiateWebauthnRegistration(
 
     // Send the generated credential to verify and finalize registration
     await verifyWebauthnRegistration(
-      username,
+      user,
       credential,
-      setIsWebAuthnEnabled
+      setIsWebAuthnEnabled,
+      setUser
     );
   } catch (error) {
     console.log("Registration error:", error);

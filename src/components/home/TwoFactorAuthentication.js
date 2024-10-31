@@ -16,7 +16,7 @@ function TwoFactorAuthentication() {
   const [isWebAuthnEnabled, setIsWebAuthnEnabled] = useState(false);
   const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
   const [qr, setQr] = useState(null);
-
+  console.log(user);
   useEffect(() => {
     if (user) {
       setIsWebAuthnEnabled(user.isWebAuthnEnabled || false);
@@ -29,7 +29,7 @@ function TwoFactorAuthentication() {
 
   const handleSwitchChange = (e) => {
     if (e.target.checked) {
-      initiateWebauthnRegistration(username, setIsWebAuthnEnabled);
+      initiateWebauthnRegistration(user, setIsWebAuthnEnabled, setUser);
     } else {
       disableWebAuthn(username, setIsWebAuthnEnabled);
     }

@@ -13,11 +13,12 @@ export async function enableTwoFactor(
       { withCredentials: true }
     );
     setQr(res.data.qrCodeImage);
-    alert(res.data.message);
     setIsTwoFactorEnabled(true);
     setUser({
       ...user,
       backupCodes: res.data.backupCodes,
+      isTwoFactorEnabled: true,
+      qrCodeImage: res.data.qrCodeImage,
     });
   } catch (error) {
     console.log(error);
