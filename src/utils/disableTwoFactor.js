@@ -7,8 +7,11 @@ export async function disableTwoFactor(username, setIsTwoFactorEnabled) {
       { username },
       { withCredentials: true }
     );
-    alert(res.data.message);
-    setIsTwoFactorEnabled(false);
+    if (res.data.message === "Two factor authentication disabled") {
+      setIsTwoFactorEnabled(false);
+    } else {
+      alert(res.data.message);
+    }
   } catch (error) {
     console.log(error);
   }
