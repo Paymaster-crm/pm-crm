@@ -38,7 +38,6 @@ function BackupCodes() {
       { withCredentials: true }
     );
 
-    alert(res.data.message);
     setUser({ ...user, backupCodes: res.data.backupCodes });
   };
 
@@ -48,7 +47,11 @@ function BackupCodes() {
       { withCredentials: true }
     );
 
-    alert(res.data.message);
+    if (res.data.message === "Backup codes deleted") {
+      setUser({ ...user, backupCodes: [] });
+    } else {
+      alert(res.data.message);
+    }
   };
 
   const sendEmail = async () => {
