@@ -48,102 +48,84 @@ function LoginForm(props) {
     },
   });
 
-  const handleInputChange = (e) => {
-    formik.handleChange(e);
-  };
-
   return (
     <>
       <form className="login-form" onSubmit={formik.handleSubmit}>
-        <Password
-          toggleMask
-          id="password"
-          name="password"
-          placeholder="Password"
-          value={formik.values.password}
-          onChange={handleInputChange} // Use the custom input change handler
-          feedback={false} // Disable the strength indicator feedback
-          className={
-            formik.touched.password && formik.errors.password ? "p-invalid" : ""
-          }
-          disabled={useBackupCode}
-        />
-        {formik.touched.password && formik.errors.password && (
-          <small className="p-error">{formik.errors.password}</small>
+        {!useBackupCode && (
+          <>
+            <Password
+              toggleMask
+              id="password"
+              name="password"
+              placeholder="Password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              feedback={false}
+              className={
+                formik.touched.password && formik.errors.password
+                  ? "p-invalid"
+                  : ""
+              }
+            />
+            {formik.touched.password && formik.errors.password && (
+              <small className="p-error">{formik.errors.password}</small>
+            )}
+          </>
         )}
 
         {/* Render 2FA section only if two-factor authentication is enabled */}
         {props.isTwoFactorEnabled && (
-          <>
-            {props.isTwoFactorEnabled && (
-              <div>
-                {/* Conditionally render the Google Authenticator token input and its label */}
-
-                {!useBackupCode ? (
-                  <span>Enter Google Authenticator token</span>
-                ) : (
-                  <span>
-                    Enter Backup Code
-                    <br />
-                    (Password is not required when using backup code)
-                  </span>
-                )}
-                {!useBackupCode && (
-                  <>
-                    <InputOtp
-                      placeholder="Enter 6-digit code"
-                      value={formik.values.twoFAToken}
-                      onChange={(e) =>
-                        formik.setFieldValue("twoFAToken", e.value)
-                      } // Handle value directly
-                      mask
-                      integerOnly
-                      length={6}
-                    />
-                    {formik.touched.twoFAToken && formik.errors.twoFAToken && (
-                      <small className="p-error">
-                        {formik.errors.twoFAToken}
-                      </small>
-                    )}
-                  </>
-                )}
-
-                {/* Input for backup code */}
-                {useBackupCode && (
-                  <>
-                    <InputOtp
-                      placeholder="Enter Backup Code"
-                      value={formik.values.backupCode}
-                      onChange={(e) =>
-                        formik.setFieldValue("backupCode", e.value)
-                      }
-                      mask
-                      length={8}
-                    />
-                    {formik.touched.backupCode && formik.errors.backupCode && (
-                      <small className="p-error">
-                        {formik.errors.backupCode}
-                      </small>
-                    )}
-                  </>
-                )}
-
-                <span
-                  onClick={() => setUseBackupCode(!useBackupCode)}
-                  style={{
-                    cursor: "pointer",
-                    color: "#0060ae",
-                    fontWeight: "bold",
-                    marginTop: "16px",
-                  }}
-                >
-                  {useBackupCode
-                    ? "Use Google Authenticator"
-                    : "Use Backup Code"}
-                </span>
-              </div>
+          <div>
+            {/* Conditionally render the Google Authenticator token input and its label */}
+            {!useBackupCode ? (
+              <span>Enter Google Authenticator token</span>
+            ) : (
+              <span>Enter Backup Code</span>
             )}
-          </>
+            {!useBackupCode && (
+              <>
+                <InputOtp
+                  placeholder="Enter 6-digit code"
+                  value={formik.values.twoFAToken}
+                  onChange={(e) => formik.setFieldValue("twoFAToken", e.value)}
+                  mask
+                  integerOnly
+                  length={6}
+                />
+                {formik.touched.twoFAToken && formik.errors.twoFAToken && (
+                  <small className="p-error">{formik.errors.twoFAToken}</small>
+                )}
+              </>
+            )}
+
+            {/* Input for backup code */}
+            {useBackupCode && (
+              <>
+                <InputOtp
+                  placeholder="Enter Backup Code"
+                  value={formik.values.backupCode}
+                  onChange={(e) => formik.setFieldValue("backupCode", e.value)}
+                  mask
+                  length={8}
+                />
+                {formik.touched.backupCode && formik.errors.backupCode && (
+                  <small className="p-error">{formik.errors.backupCode}</small>
+                )}
+              </>
+            )}
+
+            <span
+              onClick={() => setUseBackupCode(!useBackupCode)}
+              style={{
+                cursor: "pointer",
+                color: "#0060ae",
+                fontWeight: "bold",
+                marginTop: "16px",
+              }}
+            >
+              {useBackupCode ? "Use Google Authenticator" : "Use Backup Code"}
+            </span>
+          </div>
         )}
 
         <div style={{ marginTop: 16 }}>
