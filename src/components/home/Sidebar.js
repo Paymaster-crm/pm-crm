@@ -5,7 +5,6 @@ import { Avatar, IconButton, ListItemButton, Tooltip } from "@mui/material";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import ViewModuleIcon from "@mui/icons-material/ViewModule";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import { UserContext } from "../../contexts/UserContext";
 
@@ -48,20 +47,6 @@ function Sidebar() {
           </IconButton>
         </ListItemButton>
       </Tooltip>
-
-      {user.role === "Admin" && (
-        <Tooltip title="Assign Module" enterDelay={0} placement="right">
-          <ListItemButton
-            className="appbar-links"
-            aria-label="list-item"
-            onClick={() => navigate("/assign")}
-          >
-            <IconButton sx={{ color: "#ffffff9f" }} aria-label="icon">
-              <AssignmentIndIcon />
-            </IconButton>
-          </ListItemButton>
-        </Tooltip>
-      )}
 
       <Tooltip title="Feedback" enterDelay={0} placement="right">
         <ListItemButton

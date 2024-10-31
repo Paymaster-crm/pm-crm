@@ -7,8 +7,11 @@ export async function disableWebAuthn(username, setIsWebAuthnEnabled) {
       { username },
       { withCredentials: true }
     );
-    alert(res.data.message);
-    setIsWebAuthnEnabled(false);
+    if (res.data.message === "WebAuthn disabled") {
+      setIsWebAuthnEnabled(false);
+    } else {
+      alert(res.data.message);
+    }
   } catch (error) {
     console.log(error);
   }

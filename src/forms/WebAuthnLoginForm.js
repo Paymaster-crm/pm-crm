@@ -50,7 +50,7 @@ function WebAuthnLoginForm(props) {
       // Verify credential and finalize login if successful
       const isVerified = await verifyCredential(username, serializedCredential);
       if (isVerified) {
-        await login(username, props.geoLocation, serializedCredential, setUser);
+        await login(username, serializedCredential, setUser);
       } else {
         props.setUseWebAuthn(false);
       }

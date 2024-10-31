@@ -5,6 +5,7 @@ import { UserContext } from "../contexts/UserContext";
 import { validationSchema } from "../schemas/loginSchema";
 import { InputOtp } from "primereact/inputotp";
 import { Password } from "primereact/password";
+import { getGeolocation } from "../utils/getGeolocation";
 
 function LoginForm(props) {
   const { setUser } = useContext(UserContext);
@@ -19,6 +20,7 @@ function LoginForm(props) {
     },
     validationSchema: validationSchema(props.isTwoFactorEnabled, useBackupCode),
     onSubmit: async (values) => {
+      const geoLocation = await getGeolocation();
       try {
         const loginRes = await axios.post(
           `${process.env.REACT_APP_API_STRING}/login`,
@@ -28,7 +30,7 @@ function LoginForm(props) {
             twoFAToken: useBackupCode ? "" : values.twoFAToken,
             backupCode: useBackupCode ? values.backupCode : "",
             userAgent: navigator.userAgent,
-            geolocation: props.geolocation,
+            geolocation: geoLocation,
             isTwoFactorEnabled: props.isTwoFactorEnabled,
             useBackupCode: useBackupCode,
           },
