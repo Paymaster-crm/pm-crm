@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Verify WebAuthn Registration
 export const verifyWebauthnRegistration = async (
   user,
   credential,

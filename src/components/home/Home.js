@@ -80,6 +80,8 @@ function Home() {
                   {categorizedModules[category].sort().map((module, id) => (
                     <Col xs={12} md={4} lg={2} key={id} className="module-col">
                       <div
+                        draggable
+                        style={{ backgroundColor: "#FFF" }}
                         className="module-col-inner"
                         onClick={() => navigateToModule(module, navigate)}
                       >

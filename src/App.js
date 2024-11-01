@@ -11,6 +11,9 @@ import useInactivityTimeout from "./customHooks/useInactivityTimeout";
 import useUserVerification from "./customHooks/useUserVerification";
 import useOnlineStatus from "./customHooks/useOnlineStatus";
 import useLogout from "./customHooks/useLogout";
+import { messaging } from "./firebase";
+import { getToken, onMessage } from "firebase/messaging";
+import axios from "axios";
 
 function App() {
   const [user, setUser] = useState();
@@ -27,9 +30,37 @@ function App() {
   }, [navigate]);
 
   const loading = useUserVerification(setUser);
-  useInactivityTimeout();
+  useInactivityTimeout(handleLogout);
   useOnlineStatus();
   useCookiesCheck();
+
+  const generateToken = async () => {
+    const permission = await Notification.requestPermission();
+
+    if (permission === "granted") {
+      const token = await getToken(messaging, {
+        vapidKey: process.env.REACT_APP_VAPID_KEY,
+      });
+      console.log("Token:", token);
+      if (user) {
+        const res = await axios.post(
+          `${process.env.REACT_APP_API_STRING}/save-fcm-token`,
+          { fcmToken: token, username: user.username },
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(res.data.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    generateToken();
+    onMessage(messaging, (payload) => {
+      console.log("Message received in foreground: ", payload);
+    });
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser, handleLogout }}>

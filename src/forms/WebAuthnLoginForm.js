@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import { InputText } from "primereact/inputtext";
 import { UserContext } from "../contexts/UserContext";
 import { checkCredentials } from "../utils/webAuthn/checkCredentials";
@@ -11,30 +11,35 @@ import { login } from "../utils/webAuthn/login";
 
 function WebAuthnLoginForm(props) {
   const { setUser } = useContext(UserContext);
+  const usernameRef = useRef(null);
+
+  useEffect(() => {
+    // Focus on the username input when the component mounts
+    if (usernameRef.current) {
+      usernameRef.current.focus();
+    }
+  }, []);
+
   const username = props.username;
 
-  // Main handleSubmit function to orchestrate the above steps
   async function handleSubmit(e) {
     e.preventDefault();
     let credentialRes;
 
     try {
-      // Check if the user has WebAuthn credentials
       credentialRes = await checkCredentials(username);
 
       if (credentialRes.message === "User not found") {
-        alert("User not found");
+        alert(credentialRes.message);
         return;
       }
 
-      // Update the 2FA state if the user does not have credentials
       if (!credentialRes.hasCredentials) {
         props.setUseWebAuthn(false);
         props.setIsTwoFactorEnabled(credentialRes.isTwoFactorEnabled);
         return;
       }
 
-      // Get and format login options
       const loginOptions = await getLoginOptions(username);
       if (!loginOptions) {
         props.setUseWebAuthn(false);
@@ -43,11 +48,9 @@ function WebAuthnLoginForm(props) {
 
       const formattedOptions = formatLoginOptions(loginOptions);
 
-      // Get and serialize credential
       const credential = await getCredential(formattedOptions);
       const serializedCredential = serializeCredential(credential);
 
-      // Verify credential and finalize login if successful
       const isVerified = await verifyCredential(username, serializedCredential);
       if (isVerified) {
         await login(username, serializedCredential, setUser);
@@ -55,18 +58,15 @@ function WebAuthnLoginForm(props) {
         props.setUseWebAuthn(false);
       }
     } catch (err) {
-      // Handle specific NotAllowedError for cancellation of the prompt
       if (err.name === "NotAllowedError") {
         console.log("User canceled the WebAuthn prompt.");
       } else {
-        console.log(err); // Log other errors
+        console.log(err);
       }
 
-      // Set isTwoFactorEnabled based on the credential response received earlier
       if (credentialRes) {
         props.setIsTwoFactorEnabled(credentialRes.isTwoFactorEnabled);
       } else {
-        // Handle case where credentialRes might not be defined
         console.warn("Could not determine 2FA status, setting to false.");
         props.setIsTwoFactorEnabled(false);
       }
@@ -75,11 +75,11 @@ function WebAuthnLoginForm(props) {
     }
   }
 
-  // Render the form with submit functionality
   return (
     <>
       <form className="login-form" onSubmit={handleSubmit}>
         <InputText
+          ref={usernameRef} // Attach the ref to InputText
           id="username"
           name="username"
           placeholder="Username"

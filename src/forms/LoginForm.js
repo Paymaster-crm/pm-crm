@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import { UserContext } from "../contexts/UserContext";
@@ -10,6 +10,7 @@ import { getGeolocation } from "../utils/getGeolocation";
 function LoginForm(props) {
   const { setUser } = useContext(UserContext);
   const [useBackupCode, setUseBackupCode] = useState(false);
+  const passwordRef = useRef(null);
 
   const formik = useFormik({
     initialValues: {
@@ -50,12 +51,17 @@ function LoginForm(props) {
     },
   });
 
+  useEffect(() => {
+    passwordRef.current?.focus();
+  }, []);
+
   return (
     <>
       <form className="login-form" onSubmit={formik.handleSubmit}>
         {!useBackupCode && (
           <>
             <Password
+              ref={passwordRef}
               toggleMask
               id="password"
               name="password"
@@ -75,10 +81,8 @@ function LoginForm(props) {
           </>
         )}
 
-        {/* Render 2FA section only if two-factor authentication is enabled */}
         {props.isTwoFactorEnabled && (
           <div>
-            {/* Conditionally render the Google Authenticator token input and its label */}
             {!useBackupCode ? (
               <span>Enter Google Authenticator token</span>
             ) : (
@@ -100,7 +104,6 @@ function LoginForm(props) {
               </>
             )}
 
-            {/* Input for backup code */}
             {useBackupCode && (
               <>
                 <InputOtp
