@@ -20,6 +20,7 @@ function App() {
   const [user, setUser] = useState();
   const navigate = useNavigate();
   const handleLogout = useLogout(setUser);
+  const [fcmToken, setFcmToken] = useState(null);
 
   useEffect(() => {
     const handleKeyDown = (event) => navigateWithKeyboard(event, navigate);
@@ -35,31 +36,47 @@ function App() {
   useOnlineStatus();
   useCookiesCheck();
 
+  // Generate FCM token function
   const generateToken = async () => {
     const permission = await Notification.requestPermission();
-
     if (permission === "granted") {
-      const token = await getToken(messaging, {
-        vapidKey: process.env.REACT_APP_VAPID_KEY,
-      });
-      console.log(token);
-      if (user) {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_STRING}/save-fcm-token`,
-          { fcmToken: token, username: user.username },
-          {
-            withCredentials: true,
-          }
-        );
-        console.log(res.data.message);
+      try {
+        const token = await getToken(messaging, {
+          vapidKey: process.env.REACT_APP_VAPID_KEY,
+        });
+        console.log("Generated Token:", token);
+        setFcmToken(token);
+      } catch (error) {
+        console.error("Error generating token:", error);
       }
     }
   };
 
+  // Save FCM token function
+  const saveToken = async (token) => {
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_STRING}/save-fcm-token`,
+        { fcmToken: token, username: user.username },
+        { withCredentials: true }
+      );
+      console.log(res.data.message);
+    } catch (error) {
+      console.error("Error saving token:", error);
+    }
+  };
+
+  // Generate token when the component mounts or user changes
   useEffect(() => {
     generateToken();
-    // eslint-disable-next-line
   }, [user]);
+
+  // Save token in db whenever fcmToken changes
+  useEffect(() => {
+    if (fcmToken && user) {
+      saveToken(fcmToken);
+    }
+  }, [fcmToken, user]);
 
   useEffect(() => {
     const audio = new Audio(notificationAudio);
