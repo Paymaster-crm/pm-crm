@@ -14,6 +14,7 @@ import useLogout from "./customHooks/useLogout";
 import { messaging } from "./firebase";
 import { getToken, onMessage } from "firebase/messaging";
 import axios from "axios";
+import notificationAudio from "./assets/audio/notification-audio.wav";
 
 function App() {
   const [user, setUser] = useState();
@@ -58,10 +59,10 @@ function App() {
   useEffect(() => {
     generateToken();
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    const audio = new Audio("https://www.soundjay.com/button/beep-07.wav");
+    const audio = new Audio(notificationAudio);
     onMessage(messaging, (payload) => {
       console.log("Notification received: ", payload);
       audio.play().catch((error) => console.error("Audio play error:", error));
