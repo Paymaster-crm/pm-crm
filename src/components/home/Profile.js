@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import ResetPassword from "./ResetPassword";
 import BackupCodes from "./BackupCodes";
 import TwoFactorAuthentication from "./TwoFactorAuthentication";
+import PushNotifications from "./PushNotifications";
 
 export default function Profile() {
   const [expanded, setExpanded] = React.useState("panel1");
@@ -41,7 +42,7 @@ export default function Profile() {
           <h6 style={{ fontWeight: "bold" }}>Personal Info</h6>
         </AccordionSummary>
         <AccordionDetails
-          style={{ maxHeight: "55vh", overflowY: "auto", padding: "30px" }}
+          style={{ maxHeight: "50vh", overflowY: "auto", padding: "30px" }}
         >
           <BasicInfo user={user} />
         </AccordionDetails>
@@ -112,6 +113,18 @@ export default function Profile() {
         </AccordionSummary>
         <AccordionDetails>
           <BackupCodes />
+        </AccordionDetails>
+      </Accordion>
+      {/* Push Notifications */}
+      <Accordion
+        expanded={expanded === "panel6"}
+        onChange={handleChange("panel6")}
+      >
+        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+          <h6 style={{ fontWeight: "bold" }}>Push Notifications</h6>
+        </AccordionSummary>
+        <AccordionDetails>
+          <PushNotifications />
         </AccordionDetails>
       </Accordion>
     </div>

@@ -1,20 +1,14 @@
 import axios from "axios";
 
-export const verifyWebauthnRegistration = async (
-  user,
-  credential,
-  setIsWebAuthnEnabled,
-  setUser
-) => {
+export const verifyWebauthnRegistration = async (username, credential) => {
   try {
     const res = await axios.post(
       `${process.env.REACT_APP_API_STRING}/webauthn/verify-registration`,
-      { username: user.username, credential },
+      { username, credential },
       { withCredentials: true }
     );
     if (res.data.verified) {
-      setIsWebAuthnEnabled(true);
-      setUser({ ...user, isWebAuthnEnabled: true });
+      alert("Registration successful!");
     } else {
       alert("Registration failed. Please try again.");
     }

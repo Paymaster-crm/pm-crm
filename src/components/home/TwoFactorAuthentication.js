@@ -13,27 +13,17 @@ import Divider from "@mui/material/Divider";
 
 function TwoFactorAuthentication() {
   const { user, setUser } = useContext(UserContext);
-  const [isWebAuthnEnabled, setIsWebAuthnEnabled] = useState(false);
   const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
   const [qr, setQr] = useState(null);
 
   useEffect(() => {
     if (user) {
-      setIsWebAuthnEnabled(user.isWebAuthnEnabled || false);
       setIsTwoFactorEnabled(user.isTwoFactorEnabled || false);
       setQr(user.qrCodeImage || null);
     }
   }, [user]);
 
   const username = user.username;
-
-  const handleSwitchChange = (e) => {
-    if (e.target.checked) {
-      initiateWebauthnRegistration(user, setIsWebAuthnEnabled, setUser);
-    } else {
-      disableWebAuthn(username, setIsWebAuthnEnabled);
-    }
-  };
 
   const handleTwoFASwitchChange = (e) => {
     if (e.target.checked) {
@@ -58,10 +48,22 @@ function TwoFactorAuthentication() {
                 <ListItemText primary="WebAuthn Registration (for password-less login)" />
                 <ListItemText
                   secondary={
-                    <Switch
-                      checked={isWebAuthnEnabled}
-                      onChange={handleSwitchChange}
-                    />
+                    <>
+                      <button
+                        style={{ marginTop: 0 }}
+                        className="btn"
+                        onClick={() => initiateWebauthnRegistration(username)}
+                      >
+                        Enable on this device
+                      </button>
+                      <button
+                        style={{ marginTop: 0, marginLeft: "10px" }}
+                        className="btn"
+                        onClick={() => disableWebAuthn(username)}
+                      >
+                        Disable
+                      </button>
+                    </>
                   }
                 />
               </ListItem>
