@@ -44,7 +44,6 @@ function App() {
         const token = await getToken(messaging, {
           vapidKey: process.env.REACT_APP_VAPID_KEY,
         });
-        console.log("Generated Token:", token);
         setFcmToken(token);
       } catch (error) {
         console.error("Error generating token:", error);
@@ -55,12 +54,11 @@ function App() {
   // Save FCM token function
   const saveToken = async (token) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_API_STRING}/save-fcm-token`,
         { fcmToken: token, username: user.username },
         { withCredentials: true }
       );
-      console.log(res.data.message);
     } catch (error) {
       console.error("Error saving token:", error);
     }
