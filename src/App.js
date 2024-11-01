@@ -41,7 +41,7 @@ function App() {
       const token = await getToken(messaging, {
         vapidKey: process.env.REACT_APP_VAPID_KEY,
       });
-      console.log("Token:", token);
+      console.log(token);
       if (user) {
         const res = await axios.post(
           `${process.env.REACT_APP_API_STRING}/save-fcm-token`,
@@ -57,8 +57,14 @@ function App() {
 
   useEffect(() => {
     generateToken();
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    const audio = new Audio("https://www.soundjay.com/button/beep-07.wav");
     onMessage(messaging, (payload) => {
-      console.log("Message received in foreground: ", payload);
+      console.log("Notification received: ", payload);
+      audio.play().catch((error) => console.error("Audio play error:", error));
     });
   }, []);
 

@@ -8,7 +8,6 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import axios from "axios";
 
 export default function Dashboard() {
   const { user } = React.useContext(UserContext);
