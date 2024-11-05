@@ -7,6 +7,7 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import LiveHelpIcon from "@mui/icons-material/LiveHelp";
 import { UserContext } from "../../contexts/UserContext";
 
 function Sidebar() {
@@ -22,6 +23,7 @@ function Sidebar() {
     { title: "Modules", icon: <ViewModuleIcon />, path: "/modules" },
     { title: "Assign Module", icon: <AssignmentIndIcon />, path: "/assign" },
     { title: "Feedback", icon: <FeedbackIcon />, path: null },
+    { title: "Help", icon: <LiveHelpIcon />, path: "/help" },
   ];
 
   return (

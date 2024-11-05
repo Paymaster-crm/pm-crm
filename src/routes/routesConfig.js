@@ -1,7 +1,8 @@
 // Home
-import Home from "../components/home/Modules.js";
+import Modules from "../components/home/Modules.js";
 import Assign from "../components/home/Assign.js";
 import Profile from "../components/profile/Profile.js";
+import Help from "../components/home/Help.js";
 // Employee KYC
 import EmployeeKYC from "../components/hrManagement/employeeKyc/EmployeeKYC.js";
 import ViewIndividualKyc from "../components/hrManagement/employeeKyc/ViewIndividualKyc.js";
@@ -37,6 +38,7 @@ const routesConfig = [
     allowedModules: [],
     name: "Profile",
     category: null,
+    canBeAssigned: false,
   },
   {
     path: "/",
@@ -44,13 +46,15 @@ const routesConfig = [
     allowedModules: [],
     name: "Dashboard",
     category: null,
+    canBeAssigned: false,
   },
   {
     path: "/modules",
-    element: <Home />,
+    element: <Modules />,
     allowedModules: [],
     name: "Modules",
     category: null,
+    canBeAssigned: false,
   },
   {
     path: "/assign",
@@ -58,6 +62,15 @@ const routesConfig = [
     allowedModules: [],
     name: "Assign",
     category: null,
+    canBeAssigned: false,
+  },
+  {
+    path: "/help",
+    element: <Help />,
+    allowedModules: [],
+    name: "Help",
+    category: null,
+    canBeAssigned: false,
   },
   {
     path: "/kyc",
@@ -65,6 +78,7 @@ const routesConfig = [
     allowedModules: ["Basic KYC Details"],
     name: "Basic KYC Details",
     category: "HR & Management",
+    canBeAssigned: true,
   },
   {
     path: "/view-kyc/:username",
@@ -72,6 +86,7 @@ const routesConfig = [
     allowedModules: ["Basic KYC Details"],
     name: "View KYC Details",
     category: "HR & Management",
+    canBeAssigned: false,
   },
   {
     path: "/edit-kyc/:username",
@@ -79,6 +94,7 @@ const routesConfig = [
     allowedModules: ["Basic KYC Details"],
     name: "Edit KYC Details",
     category: "HR & Management",
+    canBeAssigned: false,
   },
   {
     path: "/employee-onboarding",
@@ -86,6 +102,7 @@ const routesConfig = [
     allowedModules: ["Employee Onboarding"],
     name: "Employee Onboarding",
     category: "HR & Management",
+    canBeAssigned: true,
   },
   {
     path: "/pre-recruitment",
@@ -93,6 +110,7 @@ const routesConfig = [
     allowedModules: ["Pre-Recruitment Process"],
     name: "Pre-Recruitment Process",
     category: "Employee Management",
+    canBeAssigned: true,
   },
   {
     path: "/recruitment",
@@ -100,6 +118,7 @@ const routesConfig = [
     allowedModules: ["Recruitment Process"],
     name: "Recruitment Process",
     category: "Employee Management",
+    canBeAssigned: true,
   },
   {
     path: "/exit-feedback",
@@ -107,6 +126,7 @@ const routesConfig = [
     allowedModules: ["Exit Feedback"],
     name: "Exit Feedback",
     category: "Employee Management",
+    canBeAssigned: true,
   },
   {
     path: "/performance-appraisal",
@@ -114,6 +134,7 @@ const routesConfig = [
     allowedModules: ["Performance Appraisal"],
     name: "Performance Appraisal",
     category: "Employee Management",
+    canBeAssigned: true,
   },
   {
     path: "/training",
@@ -121,6 +142,7 @@ const routesConfig = [
     allowedModules: ["Training And Development"],
     name: "Training And Development",
     category: "Employee Management",
+    canBeAssigned: true,
   },
   {
     path: "/employee-relation",
@@ -128,6 +150,7 @@ const routesConfig = [
     allowedModules: ["Employee Relation"],
     name: "Employee Relation",
     category: "Employee Management",
+    canBeAssigned: true,
   },
   {
     path: "/iso-and-statutory-compliance",
@@ -135,6 +158,7 @@ const routesConfig = [
     allowedModules: ["ISO and Statutory Compliance"],
     name: "ISO and Statutory Compliance",
     category: "Employee Management",
+    canBeAssigned: true,
   },
   {
     path: "/attendance",
@@ -142,6 +166,7 @@ const routesConfig = [
     allowedModules: ["Attendance"],
     name: "Attendance",
     category: "HR & Management",
+    canBeAssigned: true,
   },
   {
     path: "/document-request",
@@ -149,6 +174,7 @@ const routesConfig = [
     allowedModules: ["Document Request"],
     name: "Document Request",
     category: "HR & Management",
+    canBeAssigned: true,
   },
   {
     path: "/dra-profile",
@@ -156,6 +182,7 @@ const routesConfig = [
     allowedModules: ["DRA Profile"],
     name: "DRA Profile",
     category: "HR & Management",
+    canBeAssigned: true,
   },
   {
     path: "/resignation-process",
@@ -163,6 +190,7 @@ const routesConfig = [
     allowedModules: ["Resignation Process"],
     name: "Resignation Process",
     category: "HR & Management",
+    canBeAssigned: true,
   },
   {
     path: "/salaries",
@@ -170,6 +198,7 @@ const routesConfig = [
     allowedModules: ["Salaries and Commission Details"],
     name: "Salaries and Commission Details",
     category: "HR & Management",
+    canBeAssigned: true,
   },
   {
     path: "/interview",
@@ -177,6 +206,7 @@ const routesConfig = [
     allowedModules: ["Interview"],
     name: "Interview",
     category: "Interview",
+    canBeAssigned: true,
   },
 ];
 

@@ -10,14 +10,11 @@ import routesConfig from "../../routes/routesConfig";
 function AssignModule(props) {
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
-  const excludedModules = [
-    "Dashboard",
-    "Profile",
-    "Modules",
-    "Assign",
-    "Edit KYC Details",
-    "View KYC Details",
-  ];
+
+  const excludedModules = routesConfig
+    .filter((route) => !route.canBeAssigned)
+    .map((route) => route.name);
+
   const allModules = routesConfig
     .map((route) => route.name)
     .filter((name) => !excludedModules.includes(name));
