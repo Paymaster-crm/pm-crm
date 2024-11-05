@@ -20,8 +20,6 @@ const style = {
   padding: "10px",
 };
 
-const alwaysVisibleRoutes = new Set(["/", "/modules", "/assign", "/profile"]);
-
 export default function SpotlightModal(props) {
   const { user } = React.useContext(UserContext);
   const inputRef = React.useRef(null);
@@ -30,6 +28,9 @@ export default function SpotlightModal(props) {
   const [filteredRoutes, setFilteredRoutes] = React.useState([]);
   const [highlightedIndex, setHighlightedIndex] = React.useState(0);
   const suggestionListRef = React.useRef(null);
+  const alwaysVisibleRoutes = routesConfig
+    .filter((route) => route.allowedModules.length === 0)
+    .map((route) => route.path);
 
   React.useEffect(() => {
     if (props.open && inputRef.current) {
@@ -56,7 +57,7 @@ export default function SpotlightModal(props) {
       .search(value)
       .filter((result) => {
         const route = result.item;
-        const isAlwaysVisible = alwaysVisibleRoutes.has(route.path);
+        const isAlwaysVisible = alwaysVisibleRoutes.includes(route.path);
         const moduleAllowed = user.modules.includes(route.name);
         return isAlwaysVisible || moduleAllowed;
       })
