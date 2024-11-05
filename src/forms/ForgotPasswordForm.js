@@ -4,8 +4,9 @@ import { useFormik } from "formik";
 import { InputOtp } from "primereact/inputotp";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
-import { validationSchemaForgotPassword } from "../schemas/forgotPasswordSchema";
-import { validationSchemaOtp } from "../schemas/updatePasswordSchema";
+import { validationSchemaForgotPassword } from "../schemas/auth/forgotPasswordSchema";
+import { validationSchemaOtp } from "../schemas/auth/updatePasswordSchema";
+import CustomButton from "../components/customComponents/CustomButton";
 
 function ForgotPasswordForm(props) {
   const [otpSent, setOtpSent] = useState(false); // State for OTP sent
@@ -99,9 +100,10 @@ function ForgotPasswordForm(props) {
               </small>
             )}
 
-          <button type="submit" className="btn">
-            Reset
-          </button>
+          <CustomButton
+            isSubmitting={formikForgotPassword.isSubmitting}
+            name={"Reset"}
+          />
         </form>
       ) : (
         <form onSubmit={formikOtp.handleSubmit}>
@@ -162,9 +164,10 @@ function ForgotPasswordForm(props) {
               </small>
             )}
           <br />
-          <button type="submit" className="btn">
-            Confirm
-          </button>
+          <CustomButton
+            isSubmitting={formikOtp.isSubmitting}
+            name={"Confirm"}
+          />
         </form>
       )}
     </>

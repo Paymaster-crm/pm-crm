@@ -10,8 +10,8 @@ export const navigateWithKeyboard = (event, navigate) => {
     event.metaKey && event.shiftKey && event.key === "ArrowRight" && isMac;
 
   if (ctrlShiftLeftArrow || cmdShiftLeftArrow) {
-    navigate(-1); // Go back to the previous page
+    navigate(-1);
   } else if (ctrlShiftRightArrow || cmdShiftRightArrow) {
-    navigate(1); // Go forward to the next page
+    navigate(1);
   }
 };

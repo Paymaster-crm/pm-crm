@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
-import { validationSchema } from "../../../schemas/employeeManagement/isoComplianceSchema";
-import { TextField, MenuItem } from "@mui/material";
+import CustomTextField from "../../customComponents/CustomTextField";
+import CustomButton from "../../customComponents/CustomButton";
 
 function IsoCompliance() {
   const formik = useFormik({
@@ -27,382 +27,198 @@ function IsoCompliance() {
       followUpDateStatutory: "",
       remarksStatutory: "",
     },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      console.log(values);
+    },
   });
 
   return (
     <form onSubmit={formik.handleSubmit}>
       <br />
       <h4>ISO Compliance</h4>
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="employeeName"
         name="employeeName"
         label="Employee Name"
-        value={formik.values.employeeName}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.employeeName && Boolean(formik.errors.employeeName)
-        }
-        helperText={formik.touched.employeeName && formik.errors.employeeName}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="employeeEmail"
         name="employeeEmail"
         label="Employee Email"
         type="email"
-        value={formik.values.employeeEmail}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.employeeEmail && Boolean(formik.errors.employeeEmail)
-        }
-        helperText={formik.touched.employeeEmail && formik.errors.employeeEmail}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="department"
         name="department"
         label="Department"
+        formik={formik}
         select
-        value={formik.values.department}
-        onChange={formik.handleChange}
-        error={formik.touched.department && Boolean(formik.errors.department)}
-        helperText={formik.touched.department && formik.errors.department}
-      >
-        {[
-          "Retail Banking",
-          "Corporate Banking",
-          "Investment Banking",
-          "Risk Management",
-          "Compliance and Regulatory Affairs",
-          "Wealth Management",
-          "Operations",
-          "IT Support",
-        ].map((dept) => (
-          <MenuItem key={dept} value={dept}>
-            {dept}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={[
+          { value: "Retail Banking", label: "Retail Banking" },
+          { value: "Corporate Banking", label: "Corporate Banking" },
+          { value: "Investment Banking", label: "Investment Banking" },
+          { value: "Risk Management", label: "Risk Management" },
+          {
+            value: "Compliance and Regulatory Affairs",
+            label: "Compliance and Regulatory Affairs",
+          },
+          { value: "Wealth Management", label: "Wealth Management" },
+          { value: "Operations", label: "Operations" },
+          { value: "IT Support", label: "IT Support" },
+        ]}
+      />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="isoStandard"
         name="isoStandard"
         label="ISO Standard"
+        formik={formik}
         select
-        value={formik.values.isoStandard}
-        onChange={formik.handleChange}
-        error={formik.touched.isoStandard && Boolean(formik.errors.isoStandard)}
-        helperText={formik.touched.isoStandard && formik.errors.isoStandard}
-      >
-        {["ISO 9001", "ISO 14001", "ISO 27001", "ISO 45001"].map((iso) => (
-          <MenuItem key={iso} value={iso}>
-            {iso}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={[
+          { value: "ISO 9001", label: "ISO 9001" },
+          { value: "ISO 14001", label: "ISO 14001" },
+          { value: "ISO 27001", label: "ISO 27001" },
+          { value: "ISO 45001", label: "ISO 45001" },
+        ]}
+      />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="auditDate"
         name="auditDate"
         label="Audit Date"
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={formik.values.auditDate}
-        onChange={formik.handleChange}
-        error={formik.touched.auditDate && Boolean(formik.errors.auditDate)}
-        helperText={formik.touched.auditDate && formik.errors.auditDate}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="complianceStatusISO"
         name="complianceStatusISO"
         label="Compliance Status"
+        formik={formik}
         select
-        value={formik.values.complianceStatusISO}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.complianceStatusISO &&
-          Boolean(formik.errors.complianceStatusISO)
-        }
-        helperText={
-          formik.touched.complianceStatusISO &&
-          formik.errors.complianceStatusISO
-        }
-      >
-        {["Compliant", "Non-Compliant", "Pending"].map((status) => (
-          <MenuItem key={status} value={status}>
-            {status}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={[
+          { value: "Compliant", label: "Compliant" },
+          { value: "Non-Compliant", label: "Non-Compliant" },
+          { value: "Pending", label: "Pending" },
+        ]}
+      />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="correctiveActionsISO"
         name="correctiveActionsISO"
         label="Corrective Actions"
         multiline
         rows={4}
-        value={formik.values.correctiveActionsISO}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.correctiveActionsISO &&
-          Boolean(formik.errors.correctiveActionsISO)
-        }
-        helperText={
-          formik.touched.correctiveActionsISO &&
-          formik.errors.correctiveActionsISO
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="followUpDateISO"
         name="followUpDateISO"
         label="Follow-up Date"
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={formik.values.followUpDateISO}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.followUpDateISO &&
-          Boolean(formik.errors.followUpDateISO)
-        }
-        helperText={
-          formik.touched.followUpDateISO && formik.errors.followUpDateISO
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="remarksISO"
         name="remarksISO"
         label="Remarks"
         multiline
         rows={4}
-        value={formik.values.remarksISO}
-        onChange={formik.handleChange}
-        error={formik.touched.remarksISO && Boolean(formik.errors.remarksISO)}
-        helperText={formik.touched.remarksISO && formik.errors.remarksISO}
+        formik={formik}
       />
 
       <br />
       <br />
       <h4>Statutory Compliance</h4>
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="complianceType"
         name="complianceType"
         label="Compliance Type"
+        formik={formik}
         select
-        value={formik.values.complianceType}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.complianceType && Boolean(formik.errors.complianceType)
-        }
-        helperText={
-          formik.touched.complianceType && formik.errors.complianceType
-        }
-      >
-        {[
-          "Tax Filing",
-          "Labor Laws",
-          "Health & Safety Regulations",
-          "Environmental Compliance",
-        ].map((type) => (
-          <MenuItem key={type} value={type}>
-            {type}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={[
+          { value: "Tax Filing", label: "Tax Filing" },
+          { value: "Labor Laws", label: "Labor Laws" },
+          {
+            value: "Health & Safety Regulations",
+            label: "Health & Safety Regulations",
+          },
+          {
+            value: "Environmental Compliance",
+            label: "Environmental Compliance",
+          },
+        ]}
+      />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="submissionDate"
         name="submissionDate"
         label="Submission Date"
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={formik.values.submissionDate}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.submissionDate && Boolean(formik.errors.submissionDate)
-        }
-        helperText={
-          formik.touched.submissionDate && formik.errors.submissionDate
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="dueDate"
         name="dueDate"
         label="Due Date"
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={formik.values.dueDate}
-        onChange={formik.handleChange}
-        error={formik.touched.dueDate && Boolean(formik.errors.dueDate)}
-        helperText={formik.touched.dueDate && formik.errors.dueDate}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="complianceStatusStatutory"
         name="complianceStatusStatutory"
         label="Compliance Status"
+        formik={formik}
         select
-        value={formik.values.complianceStatusStatutory}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.complianceStatusStatutory &&
-          Boolean(formik.errors.complianceStatusStatutory)
-        }
-        helperText={
-          formik.touched.complianceStatusStatutory &&
-          formik.errors.complianceStatusStatutory
-        }
-      >
-        {["Compliant", "Non-Compliant", "Pending"].map((status) => (
-          <MenuItem key={status} value={status}>
-            {status}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={[
+          { value: "Compliant", label: "Compliant" },
+          { value: "Non-Compliant", label: "Non-Compliant" },
+          { value: "Pending", label: "Pending" },
+        ]}
+      />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="penaltyImposed"
         name="penaltyImposed"
         label="Penalty Imposed (if any)"
-        value={formik.values.penaltyImposed}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.penaltyImposed && Boolean(formik.errors.penaltyImposed)
-        }
-        helperText={
-          formik.touched.penaltyImposed && formik.errors.penaltyImposed
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="correctiveActionsStatutory"
         name="correctiveActionsStatutory"
         label="Corrective Actions"
         multiline
         rows={4}
-        value={formik.values.correctiveActionsStatutory}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.correctiveActionsStatutory &&
-          Boolean(formik.errors.correctiveActionsStatutory)
-        }
-        helperText={
-          formik.touched.correctiveActionsStatutory &&
-          formik.errors.correctiveActionsStatutory
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="followUpDateStatutory"
         name="followUpDateStatutory"
         label="Follow-up Date"
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={formik.values.followUpDateStatutory}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.followUpDateStatutory &&
-          Boolean(formik.errors.followUpDateStatutory)
-        }
-        helperText={
-          formik.touched.followUpDateStatutory &&
-          formik.errors.followUpDateStatutory
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="remarksStatutory"
         name="remarksStatutory"
         label="Remarks"
         multiline
         rows={4}
-        value={formik.values.remarksStatutory}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.remarksStatutory &&
-          Boolean(formik.errors.remarksStatutory)
-        }
-        helperText={
-          formik.touched.remarksStatutory && formik.errors.remarksStatutory
-        }
+        formik={formik}
       />
 
-      <button className="btn" type="submit">
-        Submit
-      </button>
+      <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
     </form>
   );
 }

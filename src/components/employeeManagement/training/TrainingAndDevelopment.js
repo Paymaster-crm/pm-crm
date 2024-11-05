@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
-import { TextField, MenuItem } from "@mui/material";
-import { validationSchema } from "../../../schemas/employeeManagement/traininSchema";
+import CustomTextField from "../../customComponents/CustomTextField";
+import CustomButton from "../../customComponents/CustomButton";
 
 function TrainingAndDevelopment() {
   const formik = useFormik({
@@ -17,7 +17,6 @@ function TrainingAndDevelopment() {
       improvementAreas: "",
       futureGoals: "",
     },
-    validationSchema: validationSchema,
     onSubmit: (values) => {},
   });
 
@@ -25,196 +24,101 @@ function TrainingAndDevelopment() {
     <form onSubmit={formik.handleSubmit}>
       <br />
       <h4>Training and Development</h4>
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+
+      <CustomTextField
         id="employeeName"
         name="employeeName"
         label="Employee Name"
-        value={formik.values.employeeName}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.employeeName && Boolean(formik.errors.employeeName)
-        }
-        helperText={formik.touched.employeeName && formik.errors.employeeName}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="employeeEmail"
         name="employeeEmail"
         label="Employee Email"
         type="email"
-        value={formik.values.employeeEmail}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.employeeEmail && Boolean(formik.errors.employeeEmail)
-        }
-        helperText={formik.touched.employeeEmail && formik.errors.employeeEmail}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="department"
         name="department"
         label="Department"
         select
-        value={formik.values.department}
-        onChange={formik.handleChange}
-        error={formik.touched.department && Boolean(formik.errors.department)}
-        helperText={formik.touched.department && formik.errors.department}
-      >
-        {[
-          "Retail Banking",
-          "Corporate Banking",
-          "Investment Banking",
-          "Risk Management",
-          "Compliance and Regulatory Affairs",
-          "Wealth Management",
-          "Operations",
-          "IT Support",
-        ].map((dept) => (
-          <MenuItem key={dept} value={dept}>
-            {dept}
-          </MenuItem>
-        ))}
-      </TextField>
+        formik={formik}
+        options={[
+          { value: "Retail Banking", label: "Retail Banking" },
+          { value: "Corporate Banking", label: "Corporate Banking" },
+          { value: "Investment Banking", label: "Investment Banking" },
+          { value: "Risk Management", label: "Risk Management" },
+          {
+            value: "Compliance and Regulatory Politics",
+            label: "Compliance and Regulatory Affairs",
+          },
+          { value: "Wealth Management", label: "Wealth Management" },
+          { value: "Operations", label: "Operations" },
+          { value: "IT Support", label: "IT Support" },
+        ]}
+      />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="trainingProgram"
         name="trainingProgram"
         label="Training Program"
-        value={formik.values.trainingProgram}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.trainingProgram &&
-          Boolean(formik.errors.trainingProgram)
-        }
-        helperText={
-          formik.touched.trainingProgram && formik.errors.trainingProgram
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="trainingDate"
         name="trainingDate"
         label="Training Date"
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={formik.values.trainingDate}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.trainingDate && Boolean(formik.errors.trainingDate)
-        }
-        helperText={formik.touched.trainingDate && formik.errors.trainingDate}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="duration"
         name="duration"
         label="Duration (in hours)"
         type="number"
-        value={formik.values.duration}
-        onChange={formik.handleChange}
-        error={formik.touched.duration && Boolean(formik.errors.duration)}
-        helperText={formik.touched.duration && formik.errors.duration}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="trainingProvider"
         name="trainingProvider"
         label="Training Provider"
-        value={formik.values.trainingProvider}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.trainingProvider &&
-          Boolean(formik.errors.trainingProvider)
-        }
-        helperText={
-          formik.touched.trainingProvider && formik.errors.trainingProvider
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="feedback"
         name="feedback"
         label="Feedback"
         multiline
         rows={4}
-        value={formik.values.feedback}
-        onChange={formik.handleChange}
-        error={formik.touched.feedback && Boolean(formik.errors.feedback)}
-        helperText={formik.touched.feedback && formik.errors.feedback}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="improvementAreas"
         name="improvementAreas"
         label="Areas for Improvement"
         multiline
         rows={4}
-        value={formik.values.improvementAreas}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.improvementAreas &&
-          Boolean(formik.errors.improvementAreas)
-        }
-        helperText={
-          formik.touched.improvementAreas && formik.errors.improvementAreas
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="futureGoals"
         name="futureGoals"
         label="Future Goals"
         multiline
         rows={4}
-        value={formik.values.futureGoals}
-        onChange={formik.handleChange}
-        error={formik.touched.futureGoals && Boolean(formik.errors.futureGoals)}
-        helperText={formik.touched.futureGoals && formik.errors.futureGoals}
+        formik={formik}
       />
 
-      <button className="btn" type="submit">
-        Submit
-      </button>
+      <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
     </form>
   );
 }

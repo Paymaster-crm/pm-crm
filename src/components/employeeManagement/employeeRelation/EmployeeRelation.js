@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
-import { validationSchema } from "../../../schemas/loginSchema";
-import { TextField, MenuItem } from "@mui/material";
+import CustomTextField from "../../customComponents/CustomTextField";
+import CustomButton from "../../customComponents/CustomButton";
 
 function EmployeeRelation() {
   const formik = useFormik({
@@ -17,7 +17,6 @@ function EmployeeRelation() {
       resolutionStatus: "",
       followUpActions: "",
     },
-    validationSchema: validationSchema,
     onSubmit: (values) => {},
   });
 
@@ -25,228 +24,118 @@ function EmployeeRelation() {
     <form onSubmit={formik.handleSubmit}>
       <br />
       <h4>Employee Relation</h4>
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="employeeName"
         name="employeeName"
         label="Employee Name"
-        value={formik.values.employeeName}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.employeeName && Boolean(formik.errors.employeeName)
-        }
-        helperText={formik.touched.employeeName && formik.errors.employeeName}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="employeeEmail"
         name="employeeEmail"
         label="Employee Email"
         type="email"
-        value={formik.values.employeeEmail}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.employeeEmail && Boolean(formik.errors.employeeEmail)
-        }
-        helperText={formik.touched.employeeEmail && formik.errors.employeeEmail}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="department"
         name="department"
         label="Department"
+        formik={formik}
         select
-        value={formik.values.department}
-        onChange={formik.handleChange}
-        error={formik.touched.department && Boolean(formik.errors.department)}
-        helperText={formik.touched.department && formik.errors.department}
-      >
-        {[
-          "Retail Banking",
-          "Corporate Banking",
-          "Investment Banking",
-          "Risk Management",
-          "Compliance and Regulatory Affairs",
-          "Wealth Management",
-          "Operations",
-          "IT Support",
-        ].map((dept) => (
-          <MenuItem key={dept} value={dept}>
-            {dept}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={[
+          { value: "Retail Banking", label: "Retail Banking" },
+          { value: "Corporate Banking", label: "Corporate Banking" },
+          { value: "Investment Banking", label: "Investment Banking" },
+          { value: "Risk Management", label: "Risk Management" },
+          {
+            value: "Compliance and Regulatory Affairs",
+            label: "Compliance and Regulatory Affairs",
+          },
+          { value: "Wealth Management", label: "Wealth Management" },
+          { value: "Operations", label: "Operations" },
+          { value: "IT Support", label: "IT Support" },
+        ]}
+      />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="grievanceType"
         name="grievanceType"
         label="Grievance Type"
+        formik={formik}
         select
-        value={formik.values.grievanceType}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.grievanceType && Boolean(formik.errors.grievanceType)
-        }
-        helperText={formik.touched.grievanceType && formik.errors.grievanceType}
-      >
-        {[
-          "Workplace Harassment",
-          "Discrimination",
-          "Disciplinary Issues",
-          "Salary Disputes",
-          "Workplace Safety",
-          "Interpersonal Conflict",
-          "Policy Violation",
-          "Other",
-        ].map((grievance) => (
-          <MenuItem key={grievance} value={grievance}>
-            {grievance}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={[
+          { value: "Workplace Harassment", label: "Workplace Harassment" },
+          { value: "Discrimination", label: "Discrimination" },
+          { value: "Disciplinary Issues", label: "Disciplinary Issues" },
+          { value: "Salary Disputes", label: "Salary Disputes" },
+          { value: "Workplace Safety", label: "Workplace Safety" },
+          { value: "Interpersonal Conflict", label: "Interpersonal Conflict" },
+          { value: "Policy Violation", label: "Policy Violation" },
+          { value: "Other", label: "Other" },
+        ]}
+      />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="grievanceDetails"
         name="grievanceDetails"
         label="Grievance Details"
         multiline
         rows={4}
-        value={formik.values.grievanceDetails}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.grievanceDetails &&
-          Boolean(formik.errors.grievanceDetails)
-        }
-        helperText={
-          formik.touched.grievanceDetails && formik.errors.grievanceDetails
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="reportedDate"
         name="reportedDate"
         label="Reported Date"
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={formik.values.reportedDate}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.reportedDate && Boolean(formik.errors.reportedDate)
-        }
-        helperText={formik.touched.reportedDate && formik.errors.reportedDate}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="resolutionDate"
         name="resolutionDate"
         label="Resolution Date"
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={formik.values.resolutionDate}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.resolutionDate && Boolean(formik.errors.resolutionDate)
-        }
-        helperText={
-          formik.touched.resolutionDate && formik.errors.resolutionDate
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="actionsTaken"
         name="actionsTaken"
         label="Actions Taken"
         multiline
         rows={4}
-        value={formik.values.actionsTaken}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.actionsTaken && Boolean(formik.errors.actionsTaken)
-        }
-        helperText={formik.touched.actionsTaken && formik.errors.actionsTaken}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="resolutionStatus"
         name="resolutionStatus"
         label="Resolution Status"
+        formik={formik}
         select
-        value={formik.values.resolutionStatus}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.resolutionStatus &&
-          Boolean(formik.errors.resolutionStatus)
-        }
-        helperText={
-          formik.touched.resolutionStatus && formik.errors.resolutionStatus
-        }
-      >
-        {["Pending", "Resolved", "Escalated", "Dismissed"].map((status) => (
-          <MenuItem key={status} value={status}>
-            {status}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={[
+          { value: "Pending", label: "Pending" },
+          { value: "Resolved", label: "Resolved" },
+          { value: "Escalated", label: "Escalated" },
+          { value: "Dismissed", label: "Dismissed" },
+        ]}
+      />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="followUpActions"
         name="followUpActions"
         label="Follow-up Actions"
         multiline
         rows={4}
-        value={formik.values.followUpActions}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.followUpActions &&
-          Boolean(formik.errors.followUpActions)
-        }
-        helperText={
-          formik.touched.followUpActions && formik.errors.followUpActions
-        }
+        formik={formik}
       />
 
-      <button className="btn" type="submit">
-        Submit
-      </button>
+      <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
     </form>
   );
 }

@@ -2,10 +2,11 @@ import React, { useContext, useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import { UserContext } from "../contexts/UserContext";
-import { validationSchema } from "../schemas/loginSchema";
+import { validationSchema } from "../schemas/auth/loginSchema";
 import { InputOtp } from "primereact/inputotp";
 import { Password } from "primereact/password";
 import { getGeolocation } from "../utils/getGeolocation";
+import CustomButton from "../components/customComponents/CustomButton";
 
 function LoginForm(props) {
   const { setUser } = useContext(UserContext);
@@ -134,9 +135,7 @@ function LoginForm(props) {
         )}
 
         <div style={{ marginTop: 16 }}>
-          <button type="submit" className="btn">
-            Login
-          </button>
+          <CustomButton isSubmitting={formik.isSubmitting} name={"Login"} />
         </div>
       </form>
     </>

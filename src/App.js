@@ -1,45 +1,32 @@
 import "./App.scss";
 import { UserContext } from "./contexts/UserContext";
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
-import { navigateWithKeyboard } from "./utils/navigateWithKeyboard";
 import CircularProgress from "@mui/material/CircularProgress";
-import useCookiesCheck from "./customHooks/useCookiesCheck";
-import useInactivityTimeout from "./customHooks/useInactivityTimeout";
-import useUserVerification from "./customHooks/useUserVerification";
-import useOnlineStatus from "./customHooks/useOnlineStatus";
-import useLogout from "./customHooks/useLogout";
-import { messaging } from "./firebase";
-import { onMessage } from "firebase/messaging";
-import notificationAudio from "./assets/audio/notification-audio.wav";
+import useInactivityTimeout from "./hooks/useInactivityTimeout";
+import useUserVerification from "./hooks/useUserVerification";
+import useOnlineStatus from "./hooks/useOnlineStatus";
+import useLogout from "./hooks/useLogout";
+import SpotlightModal from "./modals/SpotlightModal";
+import useSpotlightModal from "./hooks/useSpotlightModal";
+import useNavigateWithKeyboard from "./hooks/useNavigateWithKeyboard";
+import useFullScreen from "./hooks/useFullScreen.js";
+import useModuleAssignedAlert from "./hooks/useModuleAssignedAlert.js";
+import OfflineModal from "./modals/OfflineModal.js";
 
 function App() {
   const [user, setUser] = useState();
-  const navigate = useNavigate();
+  const [offline, setOffline] = useState(false);
   const handleLogout = useLogout(setUser);
 
-  useEffect(() => {
-    const handleKeyDown = (event) => navigateWithKeyboard(event, navigate);
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [navigate]);
-
+  const { open, handleOpen, handleClose } = useSpotlightModal(user);
   const loading = useUserVerification(setUser);
   useInactivityTimeout(handleLogout);
-  useOnlineStatus();
-  useCookiesCheck();
-
-  useEffect(() => {
-    const audio = new Audio(notificationAudio);
-    onMessage(messaging, (payload) => {
-      audio.play().catch((error) => console.error("Audio play error:", error));
-    });
-  }, []);
+  useModuleAssignedAlert(user, setUser);
+  useOnlineStatus(setOffline);
+  useNavigateWithKeyboard();
+  useFullScreen();
 
   return (
     <UserContext.Provider value={{ user, setUser, handleLogout }}>
@@ -61,6 +48,20 @@ function App() {
           <LoginPage />
         )}
       </div>
+
+      <SpotlightModal
+        open={open}
+        handleOpen={handleOpen}
+        handleClose={handleClose}
+      />
+      <OfflineModal
+        open={offline}
+        handleClose={(event, reason) => {
+          if (reason !== "backdropClick") {
+            setOffline(false);
+          }
+        }}
+      />
     </UserContext.Provider>
   );
 }

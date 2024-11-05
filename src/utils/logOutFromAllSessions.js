@@ -1,15 +1,20 @@
 import axios from "axios";
 
 export const logOutFromAllSessions = async (setUser, navigate) => {
-  const res = await axios(
-    `${process.env.REACT_APP_API_STRING}/logout-from-all-sessions`,
-    { withCredentials: true }
-  );
+  try {
+    const res = await axios(
+      `${process.env.REACT_APP_API_STRING}/logout-from-all-sessions`,
+      { withCredentials: true }
+    );
 
-  if (res.data.message === "Success") {
-    setUser(null);
-    navigate("/");
-  } else {
-    alert(res.data.message);
+    if (res.data.message === "Success") {
+      setUser(null);
+      navigate("/");
+    } else {
+      alert(res.data.message);
+    }
+  } catch (error) {
+    console.error("Error occurred while logging out from all sessions:", error);
+    alert("An error occurred while logging out from all sessions.");
   }
 };

@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import ExitFeedbackForm from "./ExitFeedbackForm";
 import ViewExitFeedbacks from "./ViewExitFeedbacks";
-import useTabs from "../../../customHooks/useTabs";
+import useTabs from "../../../hooks/useTabs";
 
 function ExitFeedback() {
   const [value, setValue] = React.useState(0);

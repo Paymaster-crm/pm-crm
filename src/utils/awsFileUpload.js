@@ -43,7 +43,7 @@ export const handleFileUpload = async (
     }));
 
     setFileSnackbar(true);
-
+    e.target.value = null;
     setTimeout(() => {
       setFileSnackbar(false);
     }, 3000);

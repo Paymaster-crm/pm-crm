@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
-import { TextField, MenuItem } from "@mui/material";
-import { validationSchema } from "../../../schemas/employeeManagement/preRecruitmentSchema";
+import CustomButton from "../../customComponents/CustomButton";
+import CustomTextField from "../../customComponents/CustomTextField";
 
 function PreRecruitment() {
   const formik = useFormik({
@@ -14,257 +14,107 @@ function PreRecruitment() {
       requiredSkills: "",
       experience: "",
       employmentType: "",
-      location: "",
       budget: "",
       hiringManager: "",
-      recruitmentStatus: "",
     },
-    validationSchema: validationSchema,
+
     onSubmit: (values) => {},
   });
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <br />
-      <h4>Pre-Recruitment Process</h4>
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <h3>Pre-Recruitment Process</h3>
+      <CustomTextField
         id="jobTitle"
         name="jobTitle"
         label="Job Title"
-        value={formik.values.jobTitle}
-        onChange={formik.handleChange}
-        error={formik.touched.jobTitle && Boolean(formik.errors.jobTitle)}
-        helperText={formik.touched.jobTitle && formik.errors.jobTitle}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="jobPostingDate"
         name="jobPostingDate"
         label="Job Posting Date"
+        formik={formik}
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={formik.values.jobPostingDate}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.jobPostingDate && Boolean(formik.errors.jobPostingDate)
-        }
-        helperText={
-          formik.touched.jobPostingDate && formik.errors.jobPostingDate
-        }
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="applicationDeadline"
         name="applicationDeadline"
         label="Application Deadline"
+        formik={formik}
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={formik.values.applicationDeadline}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.applicationDeadline &&
-          Boolean(formik.errors.applicationDeadline)
-        }
-        helperText={
-          formik.touched.applicationDeadline &&
-          formik.errors.applicationDeadline
-        }
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
-        id="department"
-        name="department"
-        label="Department"
+      <CustomTextField
+        id="applicationDeadline"
+        name="applicationDeadline"
+        label="Application Deadline"
+        formik={formik}
         select
-        value={formik.values.department}
-        onChange={formik.handleChange}
-        error={formik.touched.department && Boolean(formik.errors.department)}
-        helperText={formik.touched.department && formik.errors.department}
-      >
-        {[
-          "Retail Banking",
-          "Corporate Banking",
-          "Investment Banking",
-          "Risk Management",
-          "Compliance and Regulatory Affairs",
-          "Wealth Management",
-          "Operations",
-          "IT Support",
-        ].map((dept) => (
-          <MenuItem key={dept} value={dept}>
-            {dept}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={[
+          { value: "Retail Banking", label: "Retail Banking" },
+          { value: "Corporate Banking", label: "Corporate Banking" },
+          { value: "Investment Banking", label: "Investment Banking" },
+          { value: "Risk Management", label: "Risk Management" },
+          {
+            value: "Compliance and Regulatory Affairs",
+            label: "Compliance and Regulatory Affairs",
+          },
+        ]}
+      />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="jobDescription"
         name="jobDescription"
         label="Job Description"
-        multiline
-        rows={4}
-        value={formik.values.jobDescription}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.jobDescription && Boolean(formik.errors.jobDescription)
-        }
-        helperText={
-          formik.touched.jobDescription && formik.errors.jobDescription
-        }
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="requiredSkills"
         name="requiredSkills"
-        label="Required Skills (comma-separated)"
-        value={formik.values.requiredSkills}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.requiredSkills && Boolean(formik.errors.requiredSkills)
-        }
-        helperText={
-          formik.touched.requiredSkills && formik.errors.requiredSkills
-        }
+        label="Required Skills"
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="experience"
         name="experience"
         label="Experience (in years)"
-        type="number"
-        value={formik.values.experience}
-        onChange={formik.handleChange}
-        error={formik.touched.experience && Boolean(formik.errors.experience)}
-        helperText={formik.touched.experience && formik.errors.experience}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="employmentType"
         name="employmentType"
         label="Employment Type"
+        formik={formik}
         select
-        value={formik.values.employmentType}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.employmentType && Boolean(formik.errors.employmentType)
-        }
-        helperText={
-          formik.touched.employmentType && formik.errors.employmentType
-        }
-      >
-        {["Full-Time", "Part-Time", "Contract", "Temporary"].map((type) => (
-          <MenuItem key={type} value={type}>
-            {type}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
-        id="location"
-        name="location"
-        label="Location"
-        value={formik.values.location}
-        onChange={formik.handleChange}
-        error={formik.touched.location && Boolean(formik.errors.location)}
-        helperText={formik.touched.location && formik.errors.location}
+        options={[
+          { value: "Full-Time", label: "Full-Time" },
+          { value: "Part-Time", label: "Part-Time" },
+          { value: "Contract", label: "Contract" },
+          { value: "Temporary", label: "Temporary" },
+        ]}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="budget"
         name="budget"
         label="Budget (LPA)"
-        type="number"
-        value={formik.values.budget}
-        onChange={formik.handleChange}
-        error={formik.touched.budget && Boolean(formik.errors.budget)}
-        helperText={formik.touched.budget && formik.errors.budget}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
+      <CustomTextField
         id="hiringManager"
         name="hiringManager"
         label="Hiring Manager"
-        value={formik.values.hiringManager}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.hiringManager && Boolean(formik.errors.hiringManager)
-        }
-        helperText={formik.touched.hiringManager && formik.errors.hiringManager}
+        formik={formik}
       />
 
-      <TextField
-        size="small"
-        fullWidth
-        margin="dense"
-        variant="filled"
-        id="recruitmentStatus"
-        name="recruitmentStatus"
-        label="Recruitment Status"
-        select
-        value={formik.values.recruitmentStatus}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.recruitmentStatus &&
-          Boolean(formik.errors.recruitmentStatus)
-        }
-        helperText={
-          formik.touched.recruitmentStatus && formik.errors.recruitmentStatus
-        }
-      >
-        {["Open", "Closed", "On Hold"].map((status) => (
-          <MenuItem key={status} value={status}>
-            {status}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <button className="btn" type="submit">
-        Submit
-      </button>
+      <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
     </form>
   );
 }

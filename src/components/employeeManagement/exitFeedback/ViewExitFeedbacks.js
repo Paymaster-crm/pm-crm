@@ -1,6 +1,6 @@
 import React from "react";
 import { MaterialReactTable } from "material-react-table";
-import useTableConfig from "../../../customHooks/useTableConfig";
+import useTableConfig from "../../../hooks/useTableConfig";
 
 function ViewExitFeedbacks() {
   const data = [];
@@ -12,7 +12,7 @@ function ViewExitFeedbacks() {
       enableSorting: false,
       size: 160,
     },
-   
+
     {
       accessorKey: "department",
       header: "Department",

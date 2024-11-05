@@ -2,6 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import { MenuItem, TextField } from "@mui/material";
 import axios from "axios";
+import CustomButton from "../customComponents/CustomButton";
 
 function AssignRole(props) {
   const formik = useFormik({
@@ -14,12 +15,16 @@ function AssignRole(props) {
         return;
       }
       const data = { ...values, username: props.selectedUser };
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_STRING}/assign-role`,
-        data
-      );
-      alert(res.data.message);
-      resetForm();
+      try {
+        const res = await axios.post(
+          `${process.env.REACT_APP_API_STRING}/assign-role`,
+          data
+        );
+        alert(res.data.message);
+        resetForm();
+      } catch (error) {
+        console.error("Error occurred while assigning role:", error);
+      }
     },
   });
 
@@ -44,9 +49,7 @@ function AssignRole(props) {
         <MenuItem value="Admin">Admin</MenuItem>
         <MenuItem value="User">User</MenuItem>
       </TextField>
-      <button className="btn" type="submit">
-        Submit
-      </button>
+      <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
     </form>
   );
 }

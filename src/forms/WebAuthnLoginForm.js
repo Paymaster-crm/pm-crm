@@ -8,6 +8,9 @@ import { getCredential } from "../utils/webAuthn/getCredential";
 import { serializeCredential } from "../utils/webAuthn/serializeCredential";
 import { verifyCredential } from "../utils/webAuthn/verifyCredential";
 import { login } from "../utils/webAuthn/login";
+import CustomButton from "../components/customComponents/CustomButton";
+import { useFormik } from "formik";
+import { validationSchema } from "../schemas/auth/webAuthnLoginSchema";
 
 function WebAuthnLoginForm(props) {
   const { setUser } = useContext(UserContext);
@@ -20,75 +23,85 @@ function WebAuthnLoginForm(props) {
     }
   }, []);
 
-  const username = props.username;
+  const formik = useFormik({
+    initialValues: {
+      username: props.username,
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      props.setUsername(values.username);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    let credentialRes;
+      let credentialRes;
 
-    try {
-      credentialRes = await checkCredentials(username);
+      try {
+        credentialRes = await checkCredentials(values.username);
 
-      if (credentialRes.message === "User not found") {
-        alert(credentialRes.message);
-        return;
-      }
+        if (credentialRes.message === "User not found") {
+          alert(credentialRes.message);
+          return;
+        }
 
-      if (!credentialRes.hasCredentials) {
+        if (!credentialRes.hasCredentials) {
+          props.setUseWebAuthn(false);
+          props.setIsTwoFactorEnabled(credentialRes.isTwoFactorEnabled);
+          return;
+        }
+
+        const loginOptions = await getLoginOptions(values.username);
+        if (!loginOptions) {
+          props.setUseWebAuthn(false);
+          return;
+        }
+
+        const formattedOptions = formatLoginOptions(loginOptions);
+
+        const credential = await getCredential(formattedOptions);
+        const serializedCredential = serializeCredential(credential);
+
+        const isVerified = await verifyCredential(
+          values.username,
+          serializedCredential
+        );
+        if (isVerified) {
+          await login(values.username, serializedCredential, setUser);
+        } else {
+          props.setUseWebAuthn(false);
+        }
+      } catch (err) {
+        if (err.name === "NotAllowedError") {
+          console.log("User canceled the WebAuthn prompt.");
+        } else {
+          console.log(err);
+        }
+
+        if (credentialRes) {
+          props.setIsTwoFactorEnabled(credentialRes.isTwoFactorEnabled);
+        } else {
+          console.warn("Could not determine 2FA status, setting to false.");
+          props.setIsTwoFactorEnabled(false);
+        }
+
         props.setUseWebAuthn(false);
-        props.setIsTwoFactorEnabled(credentialRes.isTwoFactorEnabled);
-        return;
       }
-
-      const loginOptions = await getLoginOptions(username);
-      if (!loginOptions) {
-        props.setUseWebAuthn(false);
-        return;
-      }
-
-      const formattedOptions = formatLoginOptions(loginOptions);
-
-      const credential = await getCredential(formattedOptions);
-      const serializedCredential = serializeCredential(credential);
-
-      const isVerified = await verifyCredential(username, serializedCredential);
-      if (isVerified) {
-        await login(username, serializedCredential, setUser);
-      } else {
-        props.setUseWebAuthn(false);
-      }
-    } catch (err) {
-      if (err.name === "NotAllowedError") {
-        console.log("User canceled the WebAuthn prompt.");
-      } else {
-        console.log(err);
-      }
-
-      if (credentialRes) {
-        props.setIsTwoFactorEnabled(credentialRes.isTwoFactorEnabled);
-      } else {
-        console.warn("Could not determine 2FA status, setting to false.");
-        props.setIsTwoFactorEnabled(false);
-      }
-
-      props.setUseWebAuthn(false);
-    }
-  }
+    },
+  });
 
   return (
     <>
-      <form className="login-form" onSubmit={handleSubmit}>
+      <form className="login-form" onSubmit={formik.handleSubmit}>
         <InputText
-          ref={usernameRef} // Attach the ref to InputText
+          ref={usernameRef}
           id="username"
           name="username"
           placeholder="Username"
-          value={props.username}
-          onChange={(e) => props.setUsername(e.target.value)}
+          value={formik.values.username}
+          onChange={formik.handleChange}
         />
-        <button type="submit" className="btn">
-          Submit
-        </button>
+        {formik.touched.username && formik.errors.username && (
+          <small className="p-error">{formik.errors.username}</small>
+        )}
+        <br />
+        <CustomButton type="submit" variant="outlined" name={"Submit"} />
       </form>
     </>
   );

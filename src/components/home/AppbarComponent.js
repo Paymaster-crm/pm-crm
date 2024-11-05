@@ -38,7 +38,7 @@ function AppbarComponent(props) {
             color="inherit"
             aria-label="open drawer"
             edge="start"
-            onClick={() => window.history.back()}
+            onClick={() => navigate(-1)}
             sx={{ mr: 1 }}
           >
             <ArrowBackIcon sx={{ color: "#000" }} />

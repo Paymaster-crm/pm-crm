@@ -21,15 +21,19 @@
   margin-top: 10px;
 }
 
-.link {
-  color: blue;
-  cursor: pointer;
-}
-
 .btn:hover,
 .btn:active {
   background-color: #111b21 !important;
   color: #fff !important;
+}
+
+.MuiButton-startIcon {
+  margin: 0 !important;
+}
+
+.link {
+  color: blue;
+  cursor: pointer;
 }
 
 /* Table */
@@ -56,10 +60,6 @@
 /* Reduce padding on icon button container */
 .MuiDataGrid-iconButtonContainer {
   padding-right: 8px !important;
-}
-
-.css-19kzrtu {
-  padding: 10px !important;
 }
 
 .MuiTableRow-root.MuiDataGrid-cell {
@@ -154,10 +154,13 @@ a .MuiTypography-body2 {
   padding: 20px !important;
 }
 
-.MuiAlert-colorError,
-.MuiAlert-colorSuccess,
-.MuiAlert-colorWarning {
-  position: absolute !important;
-  bottom: 20px !important;
-  right: 20px !important;
+.card-header {
+  background-color: #fff;
+}
+
+.MuiAlert-root {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 400px;
 }

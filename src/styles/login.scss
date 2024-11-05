@@ -6,12 +6,6 @@
     margin: 16px 0;
     display: block;
   }
-
-  .flex-div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
 }
 
 .login-row {
@@ -34,11 +28,6 @@
 
 .login-right-col-inner-container {
   width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  // flex: 1;
 
   form {
     min-width: 400px !important;

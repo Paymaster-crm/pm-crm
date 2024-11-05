@@ -46,6 +46,10 @@ export const validationSchema = yup.object({
     .string("Enter pincode")
     .required("Pincode is required")
     .matches(pinCodeRegex, "Invalid pincode"),
+  email: yup
+    .string()
+    .email("Invalid email")
+    .matches(emailRegex, "Invalid official email"),
   official_email: yup
     .string()
     .email("Invalid email")

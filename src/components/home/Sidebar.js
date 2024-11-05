@@ -6,11 +6,23 @@ import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import FeedbackIcon from "@mui/icons-material/Feedback";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import { UserContext } from "../../contexts/UserContext";
 
 function Sidebar() {
   const navigate = useNavigate();
   const { user, handleLogout } = useContext(UserContext);
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
+  const navItems = [
+    { title: "Dashboard", icon: <SpaceDashboardIcon />, path: "/" },
+    { title: "Modules", icon: <ViewModuleIcon />, path: "/modules" },
+    { title: "Assign Module", icon: <AssignmentIndIcon />, path: "/assign" },
+    { title: "Feedback", icon: <FeedbackIcon />, path: null },
+  ];
 
   return (
     <div className="sidebar">
@@ -19,46 +31,24 @@ function Sidebar() {
         enterDelay={0}
         placement="right"
       >
-        <IconButton onClick={() => navigate("/profile")}>
+        <IconButton onClick={() => handleNavigation("/profile")}>
           <Avatar src={user.employee_photo} alt="Employee Photo" />
         </IconButton>
       </Tooltip>
 
-      <Tooltip title="Dashboard" enterDelay={0} placement="right">
-        <ListItemButton
-          className="appbar-links"
-          aria-label="list-item"
-          onClick={() => navigate("/")}
-        >
-          <IconButton sx={{ color: "#ffffff9f" }} aria-label="icon">
-            <SpaceDashboardIcon />
-          </IconButton>
-        </ListItemButton>
-      </Tooltip>
-
-      <Tooltip title="Modules" enterDelay={0} placement="right">
-        <ListItemButton
-          className="appbar-links"
-          aria-label="list-item"
-          onClick={() => navigate("/modules")}
-        >
-          <IconButton sx={{ color: "#ffffff9f" }} aria-label="icon">
-            <ViewModuleIcon />
-          </IconButton>
-        </ListItemButton>
-      </Tooltip>
-
-      <Tooltip title="Feedback" enterDelay={0} placement="right">
-        <ListItemButton
-          sx={{ textAlign: "left" }}
-          className="appbar-links"
-          aria-label="list-item"
-        >
-          <IconButton sx={{ color: "#ffffff9f" }} aria-label="icon">
-            <FeedbackIcon />
-          </IconButton>
-        </ListItemButton>
-      </Tooltip>
+      {navItems.map((item, index) => (
+        <Tooltip key={index} title={item.title} placement="right">
+          <ListItemButton
+            className="appbar-links"
+            aria-label="list-item"
+            onClick={() => handleNavigation(item.path)}
+          >
+            <IconButton sx={{ color: "#ffffff9f" }} aria-label="icon">
+              {item.icon}
+            </IconButton>
+          </ListItemButton>
+        </Tooltip>
+      ))}
 
       <Tooltip title="Logout" enterDelay={0} placement="right">
         <ListItemButton
