@@ -1,4 +1,5 @@
 import "./App.scss";
+import { Helmet } from "react-helmet";
 import { UserContext } from "./contexts/UserContext";
 import React, { useState, useMemo } from "react";
 import LoginPage from "./pages/LoginPage";
@@ -19,6 +20,8 @@ import useToggleSidebar from "./hooks/useToggleSidebar.js";
 import useBroadcastApi from "./hooks/useBroadcastApi.js";
 
 function App() {
+  const jsFileName = "main." + process.env.REACT_APP_BUILD_HASH + ".js";
+  const cssFileName = "main." + process.env.REACT_APP_BUILD_HASH + ".css";
   const [user, setUser] = useState();
   const [offline, setOffline] = useState(false);
   const handleLogout = useLogout(setUser);
@@ -38,6 +41,12 @@ function App() {
   return (
     <UserContext.Provider value={{ user, setUser, handleLogout }}>
       <div className="App">
+        <Helmet>
+          <link rel="preload" href={`/css/${cssFileName}`} as="style" />
+        </Helmet>
+        <Helmet>
+          <link rel="preload" href={`/js/${jsFileName}`} as="script" />
+        </Helmet>
         {loading ? (
           <div
             style={{
