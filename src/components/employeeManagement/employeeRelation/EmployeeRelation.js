@@ -140,4 +140,4 @@ function EmployeeRelation() {
   );
 }
 
-export default EmployeeRelation;
+export default React.memo(EmployeeRelation);

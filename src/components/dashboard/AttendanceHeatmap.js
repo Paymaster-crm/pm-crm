@@ -103,4 +103,4 @@ function AttendanceHeatmap() {
   );
 }
 
-export default AttendanceHeatmap;
+export default React.memo(AttendanceHeatmap);

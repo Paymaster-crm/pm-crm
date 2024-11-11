@@ -115,4 +115,4 @@ function BackupCodes() {
   );
 }
 
-export default BackupCodes;
+export default React.memo(BackupCodes);

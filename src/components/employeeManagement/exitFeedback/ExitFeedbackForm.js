@@ -228,4 +228,4 @@ function ExitFeedbackForm() {
   );
 }
 
-export default ExitFeedbackForm;
+export default React.memo(ExitFeedbackForm);

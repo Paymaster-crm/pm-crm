@@ -74,4 +74,4 @@ function AppbarComponent(props) {
   );
 }
 
-export default AppbarComponent;
+export default React.memo(AppbarComponent);

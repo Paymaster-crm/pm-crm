@@ -41,4 +41,4 @@ const CustomTextField = ({
   );
 };
 
-export default CustomTextField;
+export default React.memo(CustomTextField);

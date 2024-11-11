@@ -49,4 +49,4 @@ function PushNotifications() {
   );
 }
 
-export default PushNotifications;
+export default React.memo(PushNotifications);

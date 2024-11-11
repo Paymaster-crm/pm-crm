@@ -107,4 +107,4 @@ function WebAuthnLoginForm(props) {
   );
 }
 
-export default WebAuthnLoginForm;
+export default React.memo(WebAuthnLoginForm);

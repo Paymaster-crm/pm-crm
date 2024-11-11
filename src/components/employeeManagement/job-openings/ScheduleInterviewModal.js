@@ -18,7 +18,7 @@ const style = {
   p: 4,
 };
 
-export default function ScheduleInterviewModal(props) {
+function ScheduleInterviewModal(props) {
   const [dateTime, setDateTime] = useState(null);
 
   const handleSubmit = async () => {
@@ -111,3 +111,5 @@ export default function ScheduleInterviewModal(props) {
     </div>
   );
 }
+
+export default React.memo(ScheduleInterviewModal);

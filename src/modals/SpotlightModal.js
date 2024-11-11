@@ -20,7 +20,7 @@ const style = {
   padding: "10px",
 };
 
-export default function SpotlightModal(props) {
+function SpotlightModal(props) {
   const { user } = React.useContext(UserContext);
   const inputRef = React.useRef(null);
   const navigate = useNavigate();
@@ -195,3 +195,5 @@ export default function SpotlightModal(props) {
     </div>
   );
 }
+
+export default React.memo(SpotlightModal);

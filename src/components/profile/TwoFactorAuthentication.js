@@ -93,4 +93,4 @@ function TwoFactorAuthentication() {
   );
 }
 
-export default TwoFactorAuthentication;
+export default React.memo(TwoFactorAuthentication);

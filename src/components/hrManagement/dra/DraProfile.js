@@ -116,4 +116,4 @@ function DraProfile() {
   );
 }
 
-export default DraProfile;
+export default React.memo(DraProfile);

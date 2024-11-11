@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Calendar } from "primereact/calendar";
 
 function CalendarComponent() {
@@ -15,4 +15,4 @@ function CalendarComponent() {
   );
 }
 
-export default CalendarComponent;
+export default React.memo(CalendarComponent);

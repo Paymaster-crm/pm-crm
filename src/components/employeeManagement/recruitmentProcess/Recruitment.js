@@ -84,4 +84,4 @@ function RecruitmentProcess() {
   );
 }
 
-export default RecruitmentProcess;
+export default React.memo(RecruitmentProcess);

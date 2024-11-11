@@ -147,4 +147,4 @@ function Help() {
   );
 }
 
-export default Help;
+export default React.memo(Help);

@@ -238,4 +238,4 @@ function BasicInfo(props) {
   );
 }
 
-export default BasicInfo;
+export default React.memo(BasicInfo);

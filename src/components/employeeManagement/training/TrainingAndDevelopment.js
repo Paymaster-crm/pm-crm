@@ -123,4 +123,4 @@ function TrainingAndDevelopment() {
   );
 }
 
-export default TrainingAndDevelopment;
+export default React.memo(TrainingAndDevelopment);

@@ -68,4 +68,4 @@ const CustomUploadButton = React.forwardRef(({ name, onChange }, ref) => {
   );
 });
 
-export default CustomUploadButton;
+export default React.memo(CustomUploadButton);

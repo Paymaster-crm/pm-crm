@@ -90,4 +90,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default React.memo(ResetPassword);

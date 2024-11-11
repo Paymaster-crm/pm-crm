@@ -106,4 +106,4 @@ function DocumentRequest() {
   );
 }
 
-export default DocumentRequest;
+export default React.memo(DocumentRequest);

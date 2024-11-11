@@ -103,4 +103,4 @@ function SalariesAndCommissions() {
   );
 }
 
-export default SalariesAndCommissions;
+export default React.memo(SalariesAndCommissions);

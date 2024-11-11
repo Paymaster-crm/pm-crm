@@ -251,4 +251,4 @@ function ViewIndividualJob() {
   );
 }
 
-export default ViewIndividualJob;
+export default React.memo(ViewIndividualJob);

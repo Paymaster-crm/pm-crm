@@ -89,4 +89,4 @@ function Announcements() {
   );
 }
 
-export default Announcements;
+export default React.memo(Announcements);

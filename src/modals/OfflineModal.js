@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { style } from "../utils/modalStyle";
 
-export default function OfflineModal(props) {
+ function OfflineModal(props) {
   return (
     <div>
       <Modal
@@ -20,3 +20,5 @@ export default function OfflineModal(props) {
     </div>
   );
 }
+
+export default React.memo(OfflineModal);

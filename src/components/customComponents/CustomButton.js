@@ -30,7 +30,7 @@ const BootstrapButton = styled(Button)({
   },
 });
 
-export default function CustomButton(props) {
+function CustomButton(props) {
   return (
     <BootstrapButton
       startIcon={
@@ -55,3 +55,5 @@ export default function CustomButton(props) {
     </BootstrapButton>
   );
 }
+
+export default React.memo(CustomButton);

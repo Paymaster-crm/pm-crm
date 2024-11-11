@@ -9,7 +9,7 @@ import AttendanceHeatmap from "./AttendanceHeatmap";
 import Notifications from "./Notifications";
 import CalendarComponent from "./Calendar";
 
-export default function Dashboard() {
+function Dashboard() {
   const { user } = React.useContext(UserContext);
 
   return (
@@ -49,3 +49,5 @@ export default function Dashboard() {
     </>
   );
 }
+
+export default React.memo(Dashboard);

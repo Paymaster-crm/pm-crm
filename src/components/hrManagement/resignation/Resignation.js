@@ -85,4 +85,4 @@ function Resignation() {
   );
 }
 
-export default Resignation;
+export default React.memo(Resignation);

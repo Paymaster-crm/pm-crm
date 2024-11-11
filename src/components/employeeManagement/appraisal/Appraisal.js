@@ -129,4 +129,4 @@ function PerformanceAppraisal() {
   );
 }
 
-export default PerformanceAppraisal;
+export default React.memo(PerformanceAppraisal);

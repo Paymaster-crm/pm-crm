@@ -171,4 +171,4 @@ function ForgotPasswordForm(props) {
   );
 }
 
-export default ForgotPasswordForm;
+export default React.memo(ForgotPasswordForm);

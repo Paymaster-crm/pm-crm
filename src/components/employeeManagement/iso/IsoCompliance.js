@@ -223,4 +223,4 @@ function IsoCompliance() {
   );
 }
 
-export default IsoCompliance;
+export default React.memo(IsoCompliance);

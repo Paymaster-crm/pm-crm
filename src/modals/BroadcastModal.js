@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { style } from "../utils/modalStyle";
 
-export default function BroadcastModal(props) {
+ function BroadcastModal(props) {
   return (
     <div>
       <Modal
@@ -39,3 +39,5 @@ export default function BroadcastModal(props) {
     </div>
   );
 }
+
+export default React.memo(BroadcastModal);

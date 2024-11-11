@@ -66,4 +66,4 @@ function DrawerComponent(props) {
   );
 }
 
-export default DrawerComponent;
+export default React.memo(DrawerComponent);

@@ -22,7 +22,7 @@ const marks = [
   },
 ];
 
-function JobOpenings() {
+function NewJobOpenings() {
   const formik = useFormik({
     initialValues: {
       jobTitle: "",
@@ -148,4 +148,4 @@ function JobOpenings() {
   );
 }
 
-export default JobOpenings;
+export default React.memo(NewJobOpenings);

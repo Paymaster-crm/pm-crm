@@ -111,4 +111,4 @@ function LoggedInDevices(props) {
   );
 }
 
-export default LoggedInDevices;
+export default React.memo(LoggedInDevices);

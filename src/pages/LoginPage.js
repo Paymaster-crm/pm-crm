@@ -68,4 +68,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default React.memo(LoginPage);
