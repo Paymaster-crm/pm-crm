@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, Suspense, lazy } from "react";
 import { useFormik } from "formik";
 import { Row, Col } from "react-bootstrap";
 import axios from "axios";
@@ -6,9 +6,15 @@ import { UserContext } from "../../../contexts/UserContext";
 import Snackbar from "@mui/material/Snackbar";
 import { handleFileUpload } from "../../../utils/aws/handleFileUpload";
 import { validationSchema } from "../../../schemas/employeeOnboarding/completeOnboarding";
-import CustomButton from "../../customComponents/CustomButton";
-import CustomUploadButton from "../../customComponents/CustomUploadButton";
-import CustomTextField from "../../customComponents/CustomTextField";
+
+// Lazy load custom components
+const CustomButton = lazy(() => import("../../customComponents/CustomButton"));
+const CustomUploadButton = lazy(() =>
+  import("../../customComponents/CustomUploadButton")
+);
+const CustomTextField = lazy(() =>
+  import("../../customComponents/CustomTextField")
+);
 
 function CompleteOnboarding() {
   const { user } = useContext(UserContext);
@@ -61,45 +67,51 @@ function CompleteOnboarding() {
       <br />
       <Row>
         <Col xs={4}>
-          <CustomTextField
-            id="skill"
-            name="skill"
-            label="Skill"
-            formik={formik}
-          />
+          <Suspense fallback={<div>Loading Skill field...</div>}>
+            <CustomTextField
+              id="skill"
+              name="skill"
+              label="Skill"
+              formik={formik}
+            />
+          </Suspense>
         </Col>
 
         <Col xs={4}>
-          <CustomTextField
-            id="company_policy_visited"
-            name="company_policy_visited"
-            label="Gone through company policy?"
-            formik={formik}
-            select
-            options={[
-              { value: "Yes", label: "Yes" },
-              { value: "No", label: "No" },
-            ]}
-          />
+          <Suspense fallback={<div>Loading Company Policy field...</div>}>
+            <CustomTextField
+              id="company_policy_visited"
+              name="company_policy_visited"
+              label="Gone through company policy?"
+              formik={formik}
+              select
+              options={[
+                { value: "Yes", label: "Yes" },
+                { value: "No", label: "No" },
+              ]}
+            />
+          </Suspense>
         </Col>
       </Row>
       <br />
       <Row>
         <Col>
-          <CustomUploadButton
-            name={"Employee Photo"}
-            onChange={(e) => {
-              handleFileUpload(
-                e,
-                "employee_photo",
-                "kyc",
-                formik,
-                setFileSnackbar,
-                false
-              );
-            }}
-            ref={(el) => (fileInputRefs.current.employeePhoto = el)}
-          />
+          <Suspense fallback={<div>Loading Upload Button...</div>}>
+            <CustomUploadButton
+              name={"Employee Photo"}
+              onChange={(e) => {
+                handleFileUpload(
+                  e,
+                  "employee_photo",
+                  "kyc",
+                  formik,
+                  setFileSnackbar,
+                  false
+                );
+              }}
+              ref={(el) => (fileInputRefs.current.employeePhoto = el)}
+            />
+          </Suspense>
           <br />
           {formik.values.employee_photo !== "" ? (
             <>
@@ -113,20 +125,22 @@ function CompleteOnboarding() {
           )}
         </Col>
         <Col>
-          <CustomUploadButton
-            name={"Resume"}
-            onChange={(e) =>
-              handleFileUpload(
-                e,
-                "resume",
-                "kyc",
-                formik,
-                setFileSnackbar,
-                false
-              )
-            }
-            ref={(el) => (fileInputRefs.current.resume = el)}
-          />
+          <Suspense fallback={<div>Loading Upload Button...</div>}>
+            <CustomUploadButton
+              name={"Resume"}
+              onChange={(e) =>
+                handleFileUpload(
+                  e,
+                  "resume",
+                  "kyc",
+                  formik,
+                  setFileSnackbar,
+                  false
+                )
+              }
+              ref={(el) => (fileInputRefs.current.resume = el)}
+            />
+          </Suspense>
           <br />
           {formik.touched.resume && formik.errors.resume ? (
             <div style={{ color: "#D32F2F" }}>{formik.errors.resume}</div>
@@ -142,20 +156,22 @@ function CompleteOnboarding() {
         </Col>
 
         <Col>
-          <CustomUploadButton
-            name={"Address Proof"}
-            onChange={(e) =>
-              handleFileUpload(
-                e,
-                "address_proof",
-                "kyc",
-                formik,
-                setFileSnackbar,
-                false
-              )
-            }
-            ref={(el) => (fileInputRefs.current.addressProof = el)}
-          />
+          <Suspense fallback={<div>Loading Upload Button...</div>}>
+            <CustomUploadButton
+              name={"Address Proof"}
+              onChange={(e) =>
+                handleFileUpload(
+                  e,
+                  "address_proof",
+                  "kyc",
+                  formik,
+                  setFileSnackbar,
+                  false
+                )
+              }
+              ref={(el) => (fileInputRefs.current.addressProof = el)}
+            />
+          </Suspense>
           <br />
           {formik.touched.address_proof && formik.errors.address_proof ? (
             <div style={{ color: "#D32F2F" }}>
@@ -175,7 +191,9 @@ function CompleteOnboarding() {
         </Col>
       </Row>
       <br />
-      <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
+      <Suspense fallback={<div>Loading Submit Button...</div>}>
+        <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
+      </Suspense>
       <Snackbar
         open={fileSnackbar}
         message="File uploaded successfully!"

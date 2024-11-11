@@ -1,6 +1,8 @@
-import React from "react";
+import React, { Suspense } from "react";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
+
+// Lazy load MenuItem only when select is true and options are available
+const MenuItem = React.lazy(() => import("@mui/material/MenuItem"));
 
 const CustomTextField = ({
   id,
@@ -31,12 +33,17 @@ const CustomTextField = ({
       InputLabelProps={{ shrink: true }}
       {...rest}
     >
-      {select &&
-        options.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
+      {select && (
+        <Suspense
+          fallback={<div>Loading...</div>} // Optional: Show a loading indicator while loading MenuItem
+        >
+          {options.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Suspense>
+      )}
     </TextField>
   );
 };

@@ -1,7 +1,11 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
+
+// Lazy loading CircularProgress
+const CircularProgress = React.lazy(() =>
+  import("@mui/material/CircularProgress")
+);
 
 const BootstrapButton = styled(Button)({
   backgroundColor: "#111b21",
@@ -35,15 +39,29 @@ function CustomButton(props) {
     <BootstrapButton
       startIcon={
         props.isSubmitting ? (
-          <CircularProgress
-            style={{
-              margin: 0,
-              width: 20,
-              height: 20,
-              marginRight: 10,
-              color: "#fff",
-            }}
-          />
+          <React.Suspense
+            fallback={
+              <CircularProgress
+                style={{
+                  margin: 0,
+                  width: 20,
+                  height: 20,
+                  marginRight: 10,
+                  color: "#fff",
+                }}
+              />
+            }
+          >
+            <CircularProgress
+              style={{
+                margin: 0,
+                width: 20,
+                height: 20,
+                marginRight: 10,
+                color: "#fff",
+              }}
+            />
+          </React.Suspense>
         ) : null
       }
       type="submit"

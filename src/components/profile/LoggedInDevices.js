@@ -28,11 +28,7 @@ function LoggedInDevices(props) {
         return (
           <div key={id}>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <List
-                sx={{
-                  width: "100%",
-                }}
-              >
+              <List sx={{ width: "100%" }}>
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Device Name" />
                   <ListItemText secondary={location.userAgent} />
@@ -78,11 +74,7 @@ function LoggedInDevices(props) {
       return (
         <div key={id} style={{ backgroundColor: "#fff", padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <List
-              sx={{
-                width: "100%",
-              }}
-            >
+            <List sx={{ width: "100%" }}>
               <ListItem alignItems="flex-start">
                 <ListItemText primary="Device Name" />
                 <ListItemText secondary={location.userAgent} />
@@ -111,4 +103,4 @@ function LoggedInDevices(props) {
   );
 }
 
-export default React.memo(LoggedInDevices);
+export default LoggedInDevices;

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense, lazy } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import BasicInfo from "../../profile/BasicInfo";
+
+// Lazy load the BasicInfo component
+const BasicInfo = lazy(() => import("../../profile/BasicInfo"));
 
 function ViewIndividualKyc() {
   const { username } = useParams();
@@ -48,7 +50,9 @@ function ViewIndividualKyc() {
     <>
       {data && (
         <div style={{ padding: 20, backgroundColor: "#fff" }}>
-          <BasicInfo user={data} />
+          <Suspense fallback={<div>Loading Basic Info...</div>}>
+            <BasicInfo user={data} />
+          </Suspense>
           <br />
           <button className="btn" onClick={() => handleKycApproval(true)}>
             Approve

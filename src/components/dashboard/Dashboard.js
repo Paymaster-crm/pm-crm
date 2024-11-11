@@ -1,13 +1,15 @@
-import * as React from "react";
+import React, { Suspense, lazy } from "react";
 import "../../styles/dashboard.scss";
 import { Container, Row, Col } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
-import Info from "./Info";
-import Attendance from "./Attendance";
-import Announcements from "./Announcements";
-import AttendanceHeatmap from "./AttendanceHeatmap";
-import Notifications from "./Notifications";
-import CalendarComponent from "./Calendar";
+
+// Lazy load components
+const Info = lazy(() => import("./Info"));
+const Attendance = lazy(() => import("./Attendance"));
+const Announcements = lazy(() => import("./Announcements"));
+const AttendanceHeatmap = lazy(() => import("./AttendanceHeatmap"));
+const Notifications = lazy(() => import("./Notifications"));
+const CalendarComponent = lazy(() => import("./Calendar"));
 
 function Dashboard() {
   const { user } = React.useContext(UserContext);
@@ -19,29 +21,41 @@ function Dashboard() {
           <Col xs={12} md={6} lg={8}>
             <Row>
               <Col xs={12} lg={5}>
-                <Info user={user} />
+                <Suspense fallback={<div>Loading Info...</div>}>
+                  <Info user={user} />
+                </Suspense>
               </Col>
               <Col xs={12} lg={7}>
-                <Attendance />
+                <Suspense fallback={<div>Loading Attendance...</div>}>
+                  <Attendance />
+                </Suspense>
               </Col>
             </Row>
             <Row>
               <Col>
-                <Announcements />
+                <Suspense fallback={<div>Loading Announcements...</div>}>
+                  <Announcements />
+                </Suspense>
               </Col>
             </Row>
             <Row>
               <Col>
-                <AttendanceHeatmap />
+                <Suspense fallback={<div>Loading Attendance Heatmap...</div>}>
+                  <AttendanceHeatmap />
+                </Suspense>
               </Col>
             </Row>
           </Col>
           <Col xs={12} md={6} lg={4}>
             <Row>
-              <Notifications />
+              <Suspense fallback={<div>Loading Notifications...</div>}>
+                <Notifications />
+              </Suspense>
             </Row>
             <Row>
-              <CalendarComponent />
+              <Suspense fallback={<div>Loading Calendar...</div>}>
+                <CalendarComponent />
+              </Suspense>
             </Row>
           </Col>
         </Row>

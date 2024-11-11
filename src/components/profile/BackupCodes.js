@@ -1,13 +1,21 @@
-import React, { useContext } from "react";
+import React, { useContext, Suspense, lazy } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton, Tooltip } from "@mui/material";
-import Divider from "@mui/material/Divider";
-import { Row, Col } from "react-bootstrap";
-import MailIcon from "@mui/icons-material/Mail";
-import "../../styles/backup-codes.scss";
 import axios from "axios";
+import "../../styles/backup-codes.scss";
+
+// Lazy load material-ui components
+const IconButton = lazy(() => import("@mui/material/IconButton"));
+const Tooltip = lazy(() => import("@mui/material/Tooltip"));
+const Divider = lazy(() => import("@mui/material/Divider"));
+const Row = lazy(() => import("react-bootstrap/Row"));
+const Col = lazy(() => import("react-bootstrap/Col"));
+
+// Lazy load icons
+const ReplayRoundedIcon = lazy(() =>
+  import("@mui/icons-material/ReplayRounded")
+);
+const DeleteIcon = lazy(() => import("@mui/icons-material/Delete"));
+const MailIcon = lazy(() => import("@mui/icons-material/Mail"));
 
 function BackupCodes() {
   const { user, setUser } = useContext(UserContext);
@@ -84,32 +92,38 @@ function BackupCodes() {
           <p>{user.backupCodes?.length} backup codes remaining</p>
         </div>
         <div>
-          <Tooltip title="Request new backup codes">
-            <IconButton onClick={requestNewCodes}>
-              <ReplayRoundedIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete backup codes">
-            <IconButton onClick={deleteCodes}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Email backup codes">
-            <IconButton onClick={sendEmail}>
-              <MailIcon />
-            </IconButton>
-          </Tooltip>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Tooltip title="Request new backup codes">
+              <IconButton onClick={requestNewCodes}>
+                <ReplayRoundedIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete backup codes">
+              <IconButton onClick={deleteCodes}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Email backup codes">
+              <IconButton onClick={sendEmail}>
+                <MailIcon />
+              </IconButton>
+            </Tooltip>
+          </Suspense>
         </div>
       </div>
-      <Divider variant="fullWidth" sx={{ opacity: 1, margin: "20px 0" }} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Divider variant="fullWidth" sx={{ opacity: 1, margin: "20px 0" }} />
+      </Suspense>
 
       {codePairs.map((pair, index) => (
-        <Row key={index} className="backup-codes-row">
-          <Col xs={6}>
-            <p>{pair[0]}</p>
-          </Col>
-          <Col xs={6}>{pair[1] && <p>{pair[1]}</p>}</Col>
-        </Row>
+        <Suspense key={index} fallback={<div>Loading...</div>}>
+          <Row className="backup-codes-row">
+            <Col xs={6}>
+              <p>{pair[0]}</p>
+            </Col>
+            <Col xs={6}>{pair[1] && <p>{pair[1]}</p>}</Col>
+          </Row>
+        </Suspense>
       ))}
     </div>
   );

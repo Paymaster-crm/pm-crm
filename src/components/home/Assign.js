@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import axios from "axios";
 import { TextField, MenuItem } from "@mui/material";
-import AssignModule from "./AssignModule";
-import AssignRole from "./AssignRole";
 import Autocomplete from "@mui/material/Autocomplete";
+
+// Lazy load the AssignModule and AssignRole components
+const AssignModule = React.lazy(() => import("./AssignModule"));
+const AssignRole = React.lazy(() => import("./AssignRole"));
 
 function Assign() {
   const [userList, setUserList] = useState([]);
@@ -76,7 +78,8 @@ function Assign() {
         </div>
       </div>
 
-      {masterComponent()}
+      {/* Suspense for handling loading state */}
+      <Suspense fallback={<div>Loading...</div>}>{masterComponent()}</Suspense>
     </>
   );
 }

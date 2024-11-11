@@ -1,7 +1,9 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+
+// Lazy load CloudUploadIcon
+const CloudUploadIcon = lazy(() => import("@mui/icons-material/CloudUpload"));
 
 const BootstrapButton = styled(Button)({
   backgroundColor: "#111b21",
@@ -51,15 +53,17 @@ const CustomUploadButton = React.forwardRef(({ name, onChange }, ref) => {
       tabIndex={-1}
       onChange={onChange}
       startIcon={
-        <CloudUploadIcon
-          style={{
-            margin: 0,
-            width: 20,
-            height: 20,
-            marginRight: 10,
-            color: "#fff",
-          }}
-        />
+        <Suspense fallback={<div>Loading Icon...</div>}>
+          <CloudUploadIcon
+            style={{
+              margin: 0,
+              width: 20,
+              height: 20,
+              marginRight: 10,
+              color: "#fff",
+            }}
+          />
+        </Suspense>
       }
     >
       {name}
