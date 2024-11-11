@@ -35,7 +35,6 @@
     "ajv": "^8.16.0"
   },
   "scripts": {
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "serve": "serve -s build"
