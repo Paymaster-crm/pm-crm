@@ -1,61 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { Row, Col } from "react-bootstrap";
-import axios from "axios";
-import { getToken } from "firebase/messaging";
-import { messaging } from "../../firebase";
-import { UserContext } from "../../contexts/UserContext";
+import { generateToken } from "../../utils/pushNotifications/generateToken";
+import { disablePushNotifications } from "../../utils/pushNotifications/disablePushNotifications";
 
 function PushNotifications() {
-  const { user } = useContext(UserContext);
-  // Generate FCM token function
-  const generateToken = async () => {
-    const permission = await Notification.requestPermission();
-
-    if (permission === "granted") {
-      try {
-        const token = await getToken(messaging, {
-          vapidKey: process.env.REACT_APP_VAPID_KEY,
-        });
-
-        await saveToken(token);
-      } catch (error) {
-        console.error("Error generating token:", error);
-      }
-    }
-  };
-
-  // Save FCM token function
-  const saveToken = async (token) => {
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_STRING}/save-fcm-token`,
-        { fcmToken: token, username: user.username },
-        { withCredentials: true }
-      );
-
-      alert(res.data.message);
-    } catch (error) {
-      console.error("Error saving token:", error);
-    }
-  };
-
-  const disablePushNotifications = async () => {
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_STRING}/disable-push-notifications`,
-        { username: user.username },
-        { withCredentials: true }
-      );
-
-      alert(res.data.message);
-    } catch (error) {
-      console.error("Error disabling push notifications:", error);
-    }
-  };
-
   return (
     <Row>
       <Col>

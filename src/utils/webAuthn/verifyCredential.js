@@ -4,7 +4,7 @@ import axios from "axios";
 export async function verifyCredential(username, serializedCredential) {
   try {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_STRING}/webauthn/verify-login`,
+      `${process.env.REACT_APP_API_STRING}/webauthn-verify-login`,
       { username, credential: serializedCredential },
       { withCredentials: true }
     );

@@ -1,4 +1,5 @@
 import React from "react";
+import { toggleSpotlightModal } from "../utils/keyboard-shortcuts/toggleSpotlightModal";
 
 function useSpotlightModal(user) {
   const [open, setOpen] = React.useState(false);
@@ -6,20 +7,14 @@ function useSpotlightModal(user) {
   const handleClose = () => setOpen(false);
 
   React.useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.shiftKey && event.key === " ") {
-        event.preventDefault();
-        // Open the modal only if the user is logged in
-        if (user) {
-          handleOpen();
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", (e) =>
+      toggleSpotlightModal(e, user, handleOpen)
+    );
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", (e) =>
+        toggleSpotlightModal(e, user, handleOpen)
+      );
     };
   }, [user]);
   return { open, handleOpen, handleClose };

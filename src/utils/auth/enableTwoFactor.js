@@ -7,9 +7,8 @@ export async function enableTwoFactor(
   setUser
 ) {
   try {
-    const res = await axios.post(
+    const res = await axios(
       `${process.env.REACT_APP_API_STRING}/enable-two-factor`,
-      { username: user.username },
       { withCredentials: true }
     );
     setQr(res.data.qrCodeImage);

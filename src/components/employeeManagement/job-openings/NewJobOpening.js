@@ -2,28 +2,60 @@ import React from "react";
 import { useFormik } from "formik";
 import CustomButton from "../../customComponents/CustomButton";
 import CustomTextField from "../../customComponents/CustomTextField";
+import Slider from "@mui/material/Slider";
+import { validationSchema } from "../../../schemas/hrManagement/jobOpening";
+import axios from "axios";
 
-function PreRecruitment() {
+function valuetext(value) {
+  return `${value} LPA`;
+}
+
+const marks = [
+  {
+    value: 2,
+    label: "2 LPA",
+  },
+
+  {
+    value: 10,
+    label: "10 LPA",
+  },
+];
+
+function JobOpenings() {
   const formik = useFormik({
     initialValues: {
       jobTitle: "",
       jobPostingDate: new Date().toISOString().split("T")[0],
       applicationDeadline: "",
-      department: "",
       jobDescription: "",
       requiredSkills: "",
       experience: "",
       employmentType: "",
-      budget: "",
+      budget: [2, 10],
       hiringManager: "",
     },
-
-    onSubmit: (values) => {},
+    validationSchema,
+    onSubmit: async (values) => {
+      try {
+        const res = await axios.post(
+          `${process.env.REACT_APP_API_STRING}/add-job-opening`,
+          values,
+          { withCredentials: true }
+        );
+        alert(res.data.message);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   });
+
+  const handleSliderChange = (event, newValue) => {
+    formik.setFieldValue("budget", newValue);
+  };
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <h3>Pre-Recruitment Process</h3>
       <CustomTextField
         id="jobTitle"
         name="jobTitle"
@@ -45,24 +77,6 @@ function PreRecruitment() {
         label="Application Deadline"
         formik={formik}
         type="date"
-      />
-
-      <CustomTextField
-        id="applicationDeadline"
-        name="applicationDeadline"
-        label="Application Deadline"
-        formik={formik}
-        select
-        options={[
-          { value: "Retail Banking", label: "Retail Banking" },
-          { value: "Corporate Banking", label: "Corporate Banking" },
-          { value: "Investment Banking", label: "Investment Banking" },
-          { value: "Risk Management", label: "Risk Management" },
-          {
-            value: "Compliance and Regulatory Affairs",
-            label: "Compliance and Regulatory Affairs",
-          },
-        ]}
       />
 
       <CustomTextField
@@ -100,13 +114,28 @@ function PreRecruitment() {
         ]}
       />
 
-      <CustomTextField
-        id="budget"
-        name="budget"
-        label="Budget (LPA)"
-        formik={formik}
-      />
-
+      <br />
+      <br />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <span>Budget</span>
+        <Slider
+          getAriaLabel={() => "Salary range"}
+          value={formik.values.budget}
+          onChange={handleSliderChange}
+          valueLabelDisplay="auto"
+          getAriaValueText={valuetext}
+          marks={marks}
+          min={2}
+          max={10}
+          step={0.1}
+        />
+      </div>
+      <br />
       <CustomTextField
         id="hiringManager"
         name="hiringManager"
@@ -119,4 +148,4 @@ function PreRecruitment() {
   );
 }
 
-export default PreRecruitment;
+export default JobOpenings;

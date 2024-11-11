@@ -29,6 +29,7 @@ function DrawerComponent(props) {
       component="nav"
       sx={{ width: { lg: drawerWidth }, flexShrink: { lg: 0 } }}
       aria-label="mailbox folders"
+      className="sameer"
     >
       {/* Drawer mobile */}
       <SwipeableDrawer

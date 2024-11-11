@@ -16,7 +16,7 @@ function AssignRole(props) {
       }
       const data = { ...values, username: props.selectedUser };
       try {
-        const res = await axios.post(
+        const res = await axios.put(
           `${process.env.REACT_APP_API_STRING}/assign-role`,
           data
         );

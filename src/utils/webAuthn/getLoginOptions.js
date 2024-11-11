@@ -4,7 +4,7 @@ import axios from "axios";
 export async function getLoginOptions(username) {
   try {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_STRING}/webauthn/login`,
+      `${process.env.REACT_APP_API_STRING}/webauthn-login-options`,
       { username },
       { withCredentials: true }
     );

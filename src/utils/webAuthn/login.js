@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getGeolocation } from "../getGeolocation";
+import { getGeolocation } from "../auth/getGeolocation";
 
 // Step 7: Finalize login and update user state
 export async function login(username, serializedCredential, setUser) {

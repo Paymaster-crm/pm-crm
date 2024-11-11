@@ -8,11 +8,14 @@ import useTabs from "../../../hooks/useTabs";
 import { UserContext } from "../../../contexts/UserContext";
 
 function EmployeeKYC() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(
+    Number(localStorage.getItem("kyc_tab_value")) || 0
+  );
   const { a11yProps, CustomTabPanel } = useTabs();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    localStorage.setItem("kyc_tab_value", newValue);
   };
 
   const { user } = React.useContext(UserContext);

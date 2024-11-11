@@ -15,7 +15,7 @@ function ResetPassword() {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const res = await axios.post(
+        const res = await axios.put(
           `${process.env.REACT_APP_API_STRING}/reset-password`,
           values,
           { withCredentials: true }
@@ -31,7 +31,10 @@ function ResetPassword() {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form
+      onSubmit={formik.handleSubmit}
+      style={{ backgroundColor: "#fff", padding: "20px" }}
+    >
       <TextField
         size="small"
         type="password"

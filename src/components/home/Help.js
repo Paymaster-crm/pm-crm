@@ -9,8 +9,9 @@ function Help() {
   const [isMac, setIsMac] = useState(false);
 
   useEffect(() => {
-    // Check the user's platform
-    setIsMac(navigator.platform.toUpperCase().indexOf("MAC") >= 0);
+    // Use userAgent to detect macOS
+    const userAgent = navigator.userAgent.toLowerCase();
+    setIsMac(userAgent.includes("mac"));
   }, []);
 
   return (
@@ -32,7 +33,7 @@ function Help() {
                   <ListItemText primary="Toggle Fullscreen" />
                   <ListItemText
                     secondary={
-                      <div
+                      <span
                         style={{
                           display: "flex",
                           alignItems: "center",
@@ -40,13 +41,36 @@ function Help() {
                         }}
                       >
                         {isMac ? (
-                          <div className="key">Cmd</div>
+                          <span className="key">Cmd</span>
                         ) : (
-                          <div className="key">Ctrl</div>
+                          <span className="key">Ctrl</span>
                         )}
-                        <div className="key">Shift</div>
-                        <div className="key">F</div>
-                      </div>
+                        <span className="key">Shift</span>
+                        <span className="key">F</span>
+                      </span>
+                    }
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                  <ListItemText primary="Show/Hide Sidebar" />
+                  <ListItemText
+                    secondary={
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        {isMac ? (
+                          <span className="key">Cmd</span>
+                        ) : (
+                          <span className="key">Ctrl</span>
+                        )}
+                        <span className="key">Shift</span>
+                        <span className="key">S</span>
+                      </span>
                     }
                   />
                 </ListItem>
@@ -55,16 +79,16 @@ function Help() {
                   <ListItemText primary="Route Query" />
                   <ListItemText
                     secondary={
-                      <div
+                      <span
                         style={{
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "flex-end",
                         }}
                       >
-                        <div className="key">Shift</div>
-                        <div className="key">Space</div>
-                      </div>
+                        <span className="key">Shift</span>
+                        <span className="key">Space</span>
+                      </span>
                     }
                   />
                 </ListItem>
@@ -73,7 +97,7 @@ function Help() {
                   <ListItemText primary="Navigate Between Pages" />
                   <ListItemText
                     secondary={
-                      <div
+                      <span
                         style={{
                           display: "flex",
                           alignItems: "center",
@@ -81,13 +105,36 @@ function Help() {
                         }}
                       >
                         {isMac ? (
-                          <div className="key">Cmd</div>
+                          <span className="key">Cmd</span>
                         ) : (
-                          <div className="key">Ctrl</div>
+                          <span className="key">Ctrl</span>
                         )}
-                        <div className="key">Shift</div>
-                        <div className="key">&larr; &rarr;</div>
-                      </div>
+                        <span className="key">Shift</span>
+                        <span className="key">&larr; &rarr;</span>
+                      </span>
+                    }
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                  <ListItemText primary="Logout" />
+                  <ListItemText
+                    secondary={
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        {isMac ? (
+                          <span className="key">Cmd</span>
+                        ) : (
+                          <span className="key">Ctrl</span>
+                        )}
+                        <span className="key">Shift</span>
+                        <span className="key">L</span>
+                      </span>
                     }
                   />
                 </ListItem>

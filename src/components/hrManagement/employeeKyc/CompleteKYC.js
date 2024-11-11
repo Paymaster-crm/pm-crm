@@ -12,7 +12,7 @@ import { validationSchema } from "../../../schemas/employeeKyc/completeKyc";
 import { useParams } from "react-router-dom";
 import CustomButton from "../../customComponents/CustomButton";
 import CustomUploadButton from "../../customComponents/CustomUploadButton";
-import { handleSingleFileUpload } from "../../../utils/awsSingleFileUpload";
+import { handleFileUpload } from "../../../utils/aws/handleFileUpload";
 import { handleSameAsPermanentAddress } from "../../../utils/kyc/handleSameAsPermanentAddress";
 import { handlePincodeChange } from "../../../utils/kyc/handlePincodeChange";
 import { handleAadharNoChange } from "../../../utils/kyc/handleAadharNoChange";
@@ -388,12 +388,13 @@ function CompleteKYC(props) {
           <CustomUploadButton
             name={"Aadhar Photo Front"}
             onChange={(e) => {
-              handleSingleFileUpload(
+              handleFileUpload(
                 e,
                 "aadhar_photo_front",
                 "kyc",
                 formik,
-                setFileSnackbar
+                setFileSnackbar,
+                false
               );
             }}
             ref={(el) => (fileInputRefs.current.aadharPhotoFront = el)}
@@ -420,12 +421,13 @@ function CompleteKYC(props) {
           <CustomUploadButton
             name={"Aadhar Photo Front"}
             onChange={(e) => {
-              handleSingleFileUpload(
+              handleFileUpload(
                 e,
                 "aadhar_photo_back",
                 "kyc",
                 formik,
-                setFileSnackbar
+                setFileSnackbar,
+                false
               );
             }}
             ref={(el) => (fileInputRefs.current.aadharPhotoBack = el)}
@@ -478,12 +480,13 @@ function CompleteKYC(props) {
       <CustomUploadButton
         name={"PAN Photo"}
         onChange={(e) => {
-          handleSingleFileUpload(
+          handleFileUpload(
             e,
             "pan_photo",
             "kyc",
             formik,
-            setFileSnackbar
+            setFileSnackbar,
+            true
           );
         }}
         ref={(el) => (fileInputRefs.current.panPhoto = el)}

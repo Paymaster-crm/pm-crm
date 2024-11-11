@@ -3,11 +3,10 @@ import { urlBase64ToUint8Array } from "./urlBase64ToUint8Array";
 import { verifyWebauthnRegistration } from "./verifyWebauthnRegistration";
 
 // Initiate WebAuthn Registration
-export async function initiateWebauthnRegistration(username) {
+export async function initiateWebauthnRegistration() {
   try {
-    const registrationOptionsRes = await axios.post(
-      `${process.env.REACT_APP_API_STRING}/webauthn/register`,
-      { username },
+    const registrationOptionsRes = await axios(
+      `${process.env.REACT_APP_API_STRING}/webauthn-register`,
       { withCredentials: true }
     );
 
@@ -31,7 +30,7 @@ export async function initiateWebauthnRegistration(username) {
     });
 
     // Send the generated credential to verify and finalize registration
-    await verifyWebauthnRegistration(username, credential);
+    await verifyWebauthnRegistration(credential);
   } catch (error) {
     console.log("Registration error:", error);
   }

@@ -14,14 +14,11 @@ function useTableConfig(rows, columns, url) {
     enableBottomToolbar: false,
     initialState: {
       density: "compact",
-      columnPinning: { left: ["username", "employee_name", "job_no"] },
     }, // Set initial table density to compact
-    enableColumnPinning: true, // Enable column pinning
     enableGrouping: true, // Enable row grouping
     enableColumnFilters: false, // Disable column filters
     enableColumnActions: false,
     enableStickyHeader: true, // Enable sticky header
-    enablePinning: true, // Enable pinning for sticky columns
     muiTableContainerProps: {
       sx: { maxHeight: "650px", overflowY: "auto" },
     },

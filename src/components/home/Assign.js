@@ -47,7 +47,7 @@ function Assign() {
   return (
     <>
       <div className="flex-div" style={{ marginTop: "20px" }}>
-        <div style={{ flex: 1 }}>
+        <div>
           <Autocomplete
             value={selectedUser}
             onChange={(event, newValue) => {
@@ -61,17 +61,19 @@ function Assign() {
             )}
           />
         </div>
-        <TextField
-          select
-          size="small"
-          label="Select"
-          sx={{ width: "200px", marginBottom: "20px" }}
-          value={masterType}
-          onChange={handleMasterChange}
-        >
-          <MenuItem value="Assign Module">Assign Module</MenuItem>
-          <MenuItem value="Assign Role">Assign Role</MenuItem>
-        </TextField>
+        <div>
+          <TextField
+            select
+            size="small"
+            label="Select"
+            sx={{ marginBottom: "20px", marginLeft: "20px" }}
+            value={masterType}
+            onChange={handleMasterChange}
+          >
+            <MenuItem value="Assign Module">Assign Module</MenuItem>
+            <MenuItem value="Assign Role">Assign Role</MenuItem>
+          </TextField>
+        </div>
       </div>
 
       {masterComponent()}

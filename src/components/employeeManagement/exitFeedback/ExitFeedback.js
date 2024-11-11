@@ -7,10 +7,13 @@ import ViewExitFeedbacks from "./ViewExitFeedbacks";
 import useTabs from "../../../hooks/useTabs";
 
 function ExitFeedback() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(
+    Number(localStorage.getItem("exit_feedback_tab_value")) || 0
+  );
   const { a11yProps, CustomTabPanel } = useTabs();
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    localStorage.setItem("exit_feedback_tab_value", newValue);
   };
 
   return (

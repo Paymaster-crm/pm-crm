@@ -31,7 +31,6 @@ function LoggedInDevices(props) {
               <List
                 sx={{
                   width: "100%",
-                  bgcolor: "background.paper",
                 }}
               >
                 <ListItem alignItems="flex-start">
@@ -43,6 +42,11 @@ function LoggedInDevices(props) {
                 <ListItem alignItems="flex-start">
                   <ListItemText primary="Location" />
                   <ListItemText secondary={location.locationError} />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                  <ListItemText primary="IP" />
+                  <ListItemText secondary={location.ipAddress} />
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem alignItems="flex-start">
@@ -60,7 +64,6 @@ function LoggedInDevices(props) {
 
       // Create an array of the values to display
       const valuesToDisplay = [
-        location.userAgent,
         location.village,
         location.suburb,
         location.stateDistrict,
@@ -73,12 +76,11 @@ function LoggedInDevices(props) {
       const filteredValues = valuesToDisplay.filter((value) => value);
 
       return (
-        <div key={id}>
+        <div key={id} style={{ backgroundColor: "#fff", padding: "20px" }}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <List
               sx={{
                 width: "100%",
-                bgcolor: "background.paper",
               }}
             >
               <ListItem alignItems="flex-start">
@@ -89,7 +91,12 @@ function LoggedInDevices(props) {
               <Divider variant="inset" component="li" />
               <ListItem alignItems="flex-start">
                 <ListItemText primary="Location" />
-                <ListItemText secondary={filteredValues.slice(1)?.join(", ")} />
+                <ListItemText secondary={filteredValues.join(", ")} />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+              <ListItem alignItems="flex-start">
+                <ListItemText primary="IP Address" />
+                <ListItemText secondary={location.ipAddress} />
               </ListItem>
               <Divider variant="inset" component="li" />
               <ListItem alignItems="flex-start">

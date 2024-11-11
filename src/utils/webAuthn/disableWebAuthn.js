@@ -1,10 +1,9 @@
 import axios from "axios";
 
-export async function disableWebAuthn(username) {
+export async function disableWebAuthn() {
   try {
-    const res = await axios.post(
+    const res = await axios(
       `${process.env.REACT_APP_API_STRING}/disable-webauthn`,
-      { username },
       { withCredentials: true }
     );
     alert(res.data.message);

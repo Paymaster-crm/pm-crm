@@ -1,13 +1,12 @@
 import * as React from "react";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import useTabs from "../../hooks/useTabs";
 import LoggedInDevices from "./LoggedInDevices";
 import BasicInfo from "./BasicInfo";
-import { getSessionData } from "../../utils/getSessionData";
-import { logOutFromAllSessions } from "../../utils/logOutFromAllSessions";
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-} from "../customComponents/StyledAccordion";
+import { getSessionData } from "../../utils/auth/getSessionData";
+import { logOutFromAllSessions } from "../../utils/auth/logOutFromAllSessions";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import ResetPassword from "./ResetPassword";
@@ -15,15 +14,22 @@ import BackupCodes from "./BackupCodes";
 import TwoFactorAuthentication from "./TwoFactorAuthentication";
 import PushNotifications from "./PushNotifications";
 
-export default function Profile() {
-  const [expanded, setExpanded] = React.useState("panel1");
+function Profile() {
+  const [value, setValue] = React.useState(0);
   const [geolocation, setGeolocation] = React.useState({});
   const { setUser, user } = React.useContext(UserContext);
-
   const navigate = useNavigate();
-  const handleChange = (panel) => (event, newExpanded) => {
-    setExpanded(newExpanded ? panel : false);
+
+  const { a11yProps, CustomTabPanel } = useTabs();
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    localStorage.setItem("profile_tab_value", newValue);
   };
+
+  React.useEffect(() => {
+    const initialValue = Number(localStorage.getItem("profile_tab_value")) || 0;
+    setValue(initialValue);
+  }, []);
 
   // Initial fetch of geolocation data when the component mounts
   React.useEffect(() => {
@@ -31,31 +37,26 @@ export default function Profile() {
   }, []);
 
   return (
-    <div>
-      <br />
-      {/* Basic Info */}
-      <Accordion
-        expanded={expanded === "panel1"}
-        onChange={handleChange("panel1")}
-      >
-        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <h6 style={{ fontWeight: "bold" }}>Personal Info</h6>
-        </AccordionSummary>
-        <AccordionDetails
-          style={{ maxHeight: "50vh", overflowY: "auto", padding: "30px" }}
+    <Box sx={{ width: "100%" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
         >
+          <Tab label="Basic Info" {...a11yProps(0)} key={0} />,
+          <Tab label="Logged in Devices" {...a11yProps(1)} key={1} />,
+          <Tab label="2FA and Notifications" {...a11yProps(1)} key={2} />,
+          <Tab label="Reset Password" {...a11yProps(1)} key={3} />,
+          <Tab label="Backup Codes" {...a11yProps(1)} key={4} />,
+        </Tabs>
+      </Box>
+
+      <Box>
+        <CustomTabPanel value={value} index={0}>
           <BasicInfo user={user} />
-        </AccordionDetails>
-      </Accordion>
-      {/* Logged in devices */}
-      <Accordion
-        expanded={expanded === "panel2"}
-        onChange={handleChange("panel2")}
-      >
-        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <h6 style={{ fontWeight: "bold" }}>Logged in devices</h6>
-        </AccordionSummary>
-        <AccordionDetails>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
           <LoggedInDevices
             geolocation={geolocation}
             setGeolocation={setGeolocation}
@@ -77,56 +78,22 @@ export default function Profile() {
               Log out from all devices
             </button>
           </div>
-        </AccordionDetails>
-      </Accordion>
-      {/* Reset Password */}
-      <Accordion
-        expanded={expanded === "panel3"}
-        onChange={handleChange("panel3")}
-      >
-        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <h6 style={{ fontWeight: "bold" }}>Reset Password</h6>
-        </AccordionSummary>
-        <AccordionDetails>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          <div style={{ backgroundColor: "#fff", padding: "20px" }}>
+            <TwoFactorAuthentication />
+            <PushNotifications />
+          </div>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={3}>
           <ResetPassword />
-        </AccordionDetails>
-      </Accordion>
-      {/* Two Factor Authentication */}
-      <Accordion
-        expanded={expanded === "panel4"}
-        onChange={handleChange("panel4")}
-      >
-        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <h6 style={{ fontWeight: "bold" }}>Two Factor Authentication</h6>
-        </AccordionSummary>
-        <AccordionDetails>
-          <TwoFactorAuthentication />
-        </AccordionDetails>
-      </Accordion>
-      {/* Backup Codes */}
-      <Accordion
-        expanded={expanded === "panel5"}
-        onChange={handleChange("panel5")}
-      >
-        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <h6 style={{ fontWeight: "bold" }}>Backup Codes</h6>
-        </AccordionSummary>
-        <AccordionDetails>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={4}>
           <BackupCodes />
-        </AccordionDetails>
-      </Accordion>
-      {/* Push Notifications */}
-      <Accordion
-        expanded={expanded === "panel6"}
-        onChange={handleChange("panel6")}
-      >
-        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <h6 style={{ fontWeight: "bold" }}>Push Notifications</h6>
-        </AccordionSummary>
-        <AccordionDetails>
-          <PushNotifications />
-        </AccordionDetails>
-      </Accordion>
-    </div>
+        </CustomTabPanel>
+      </Box>
+    </Box>
   );
 }
+
+export default React.memo(Profile);

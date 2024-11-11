@@ -85,7 +85,7 @@ function AssignModule(props) {
           : `${process.env.REACT_APP_API_STRING}/unassign-modules`;
 
       try {
-        await axios.post(
+        await axios.put(
           apiEndpoint,
           {
             modules: [movedItem],

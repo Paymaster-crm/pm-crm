@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext.js";
 import { Row, Col } from "react-bootstrap";
 import "../../styles/modules.scss";
 import { useNavigate } from "react-router-dom";
 import routesConfig from "../../routes/routesConfig.js";
-import axios from "axios";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -12,41 +11,13 @@ import useTabs from "../../hooks/useTabs.js";
 import { TabValueContext } from "../../contexts/TabValueContext.js";
 
 function Modules() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { tabValue, setTabValue } = useContext(TabValueContext);
   const navigate = useNavigate();
   const { a11yProps, CustomTabPanel } = useTabs();
-
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
-
-  useEffect(() => {
-    async function getUser() {
-      try {
-        const res = await axios(
-          `${process.env.REACT_APP_API_STRING}/get-user-profile`,
-          {
-            withCredentials: true,
-          }
-        );
-
-        if (res.data.username) {
-          setUser(res.data);
-        } else {
-          setUser(null);
-          navigate("/");
-        }
-      } catch (error) {
-        console.error("Error occurred while fetching user profile:", error);
-        setUser(null);
-        navigate("/");
-      }
-    }
-
-    getUser();
-    // eslint-disable-next-line
-  }, []);
 
   // Categorize the user's modules using routesConfig
   const categorizedModules = user?.modules?.reduce((acc, module) => {

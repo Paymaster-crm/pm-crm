@@ -8,11 +8,14 @@ import ViewOnboardings from "./ViewOnboardings";
 import useTabs from "../../../hooks/useTabs";
 
 function EmployeeOnboarding() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(
+    Number(localStorage.getItem("onboarding_tab_value")) || 0
+  );
 
   const { a11yProps, CustomTabPanel } = useTabs();
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    localStorage.setItem("onboarding_tab_value", newValue);
   };
 
   return (

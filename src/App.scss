@@ -62,19 +62,11 @@
   padding-right: 8px !important;
 }
 
-.MuiTableRow-root.MuiDataGrid-cell {
-  display: flex !important;
-  align-items: center !important;
-  text-align: center !important;
-  justify-content: center !important;
-}
-
 .Mui-TableBodyCell-DetailPanel {
   background-color: #f9fafb !important;
 }
 
 .MuiTableCell-root {
-  flex-direction: column !important;
   .MuiInputBase-root {
     font-size: 0.8rem !important;
   }
@@ -173,4 +165,29 @@ a .MuiTypography-body2 {
   padding: 5px;
   border-radius: 5px;
   box-shadow: 0 0 5px 2px rgb(10, 95, 175, 0.3);
+}
+
+.MuiSlider-root {
+  width: 400px !important;
+  height: 2px !important;
+  margin-left: 30px !important;
+  color: #0b61ae !important;
+}
+
+.MuiTableRow-root.inactive-job-opening {
+  background-color: #ffc5c5 !important;
+}
+
+.MuiTableRow-root.inactive-job-opening:hover {
+  background-color: #ffc5c5 !important;
+}
+
+.MuiFormControl-root {
+  width: 100% !important;
+}
+
+ul {
+  .Mui-disabled {
+    display: none !important;
+  }
 }

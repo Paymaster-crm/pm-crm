@@ -4,7 +4,7 @@ import { Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { UserContext } from "../../../contexts/UserContext";
 import Snackbar from "@mui/material/Snackbar";
-import { handleSingleFileUpload } from "../../../utils/awsSingleFileUpload";
+import { handleFileUpload } from "../../../utils/aws/handleFileUpload";
 import { validationSchema } from "../../../schemas/employeeOnboarding/completeOnboarding";
 import CustomButton from "../../customComponents/CustomButton";
 import CustomUploadButton from "../../customComponents/CustomUploadButton";
@@ -89,12 +89,13 @@ function CompleteOnboarding() {
           <CustomUploadButton
             name={"Employee Photo"}
             onChange={(e) => {
-              handleSingleFileUpload(
+              handleFileUpload(
                 e,
                 "employee_photo",
                 "kyc",
                 formik,
-                setFileSnackbar
+                setFileSnackbar,
+                false
               );
             }}
             ref={(el) => (fileInputRefs.current.employeePhoto = el)}
@@ -115,12 +116,13 @@ function CompleteOnboarding() {
           <CustomUploadButton
             name={"Resume"}
             onChange={(e) =>
-              handleSingleFileUpload(
+              handleFileUpload(
                 e,
                 "resume",
                 "kyc",
                 formik,
-                setFileSnackbar
+                setFileSnackbar,
+                false
               )
             }
             ref={(el) => (fileInputRefs.current.resume = el)}
@@ -143,12 +145,13 @@ function CompleteOnboarding() {
           <CustomUploadButton
             name={"Address Proof"}
             onChange={(e) =>
-              handleSingleFileUpload(
+              handleFileUpload(
                 e,
                 "address_proof",
                 "kyc",
                 formik,
-                setFileSnackbar
+                setFileSnackbar,
+                false
               )
             }
             ref={(el) => (fileInputRefs.current.addressProof = el)}

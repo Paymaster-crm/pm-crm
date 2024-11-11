@@ -8,15 +8,6 @@ import { Row, Col } from "react-bootstrap";
 import MailIcon from "@mui/icons-material/Mail";
 import "../../styles/backup-codes.scss";
 import axios from "axios";
-import AWS from "aws-sdk";
-
-AWS.config.update({
-  accessKeyId: process.env.REACT_APP_ACCESS_KEY,
-  secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY,
-  region: "ap-south-1",
-});
-
-const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 function BackupCodes() {
   const { user, setUser } = useContext(UserContext);
@@ -64,51 +55,23 @@ function BackupCodes() {
   };
 
   const sendEmail = async () => {
-    // Create CSV formatted string
-    const header = "Backup Codes\n";
-    const csvContent = user.backupCodes.map((code) => `${code}`).join("\n");
-    const csv = header + csvContent;
-
-    // Create a Blob from the CSV string
-    const blob = new Blob([csv], { type: "text/csv" });
-    const reader = new FileReader();
-
-    reader.onloadend = async () => {
-      const params = {
-        Destinations: [user.email],
-        RawMessage: {
-          Data: [
-            `From: sameery.020@gmail.com\n`,
-            `To: ${user.email}\n`,
-            `Subject: Your Backup Codes\n`,
-            `MIME-Version: 1.0\n`,
-            `Content-Type: multipart/mixed; boundary="NextPart"\n\n`,
-            `--NextPart\n`,
-            `Content-Type: text/plain\n\n`,
-            `Attached are your backup codes.\n\n`,
-            `--NextPart\n`,
-            `Content-Type: text/csv\n`,
-            `Content-Disposition: attachment; filename="backup_codes.csv"\n\n`,
-            `${csv}\n`, // Attach CSV data
-            `--NextPart--`,
-          ].join(""),
-        },
-      };
-
-      try {
-        await ses.sendRawEmail(params).promise();
-        alert("Email sent successfully!");
-      } catch (error) {
-        console.error("Error sending email:", error);
-        alert("Failed to send email.");
-      }
-    };
-
-    reader.readAsDataURL(blob);
+    try {
+      const res = await axios(
+        `${process.env.REACT_APP_API_STRING}/send-backup-codes-email`,
+        { withCredentials: true }
+      );
+      alert(res.data.message);
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Failed to send email.");
+    }
   };
 
   return (
-    <div className="backup-codes">
+    <div
+      className="backup-codes"
+      style={{ backgroundColor: "white", padding: "20px" }}
+    >
       <div
         style={{
           display: "flex",

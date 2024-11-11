@@ -1,6 +1,6 @@
 import "./App.scss";
 import { UserContext } from "./contexts/UserContext";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -14,12 +14,17 @@ import useNavigateWithKeyboard from "./hooks/useNavigateWithKeyboard";
 import useFullScreen from "./hooks/useFullScreen.js";
 import useModuleAssignedAlert from "./hooks/useModuleAssignedAlert.js";
 import OfflineModal from "./modals/OfflineModal.js";
+import BroadcastModal from "./modals/BroadcastModal.js";
+import useToggleSidebar from "./hooks/useToggleSidebar.js";
+import useBroadcastApi from "./hooks/useBroadcastApi.js";
 
 function App() {
   const [user, setUser] = useState();
   const [offline, setOffline] = useState(false);
   const handleLogout = useLogout(setUser);
-
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [broadcastModal, setBroadcastModal] = useState(false);
+  const channel = useMemo(() => new BroadcastChannel("app-tabs"), []);
   const { open, handleOpen, handleClose } = useSpotlightModal(user);
   const loading = useUserVerification(setUser);
   useInactivityTimeout(handleLogout);
@@ -27,6 +32,8 @@ function App() {
   useOnlineStatus(setOffline);
   useNavigateWithKeyboard();
   useFullScreen();
+  useToggleSidebar(setShowSidebar);
+  const handleUseInThisTab = useBroadcastApi(channel, setBroadcastModal);
 
   return (
     <UserContext.Provider value={{ user, setUser, handleLogout }}>
@@ -43,7 +50,7 @@ function App() {
             <CircularProgress />
           </div>
         ) : user ? (
-          <HomePage />
+          <HomePage showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
         ) : (
           <LoginPage />
         )}
@@ -59,6 +66,15 @@ function App() {
         handleClose={(event, reason) => {
           if (reason !== "backdropClick") {
             setOffline(false);
+          }
+        }}
+      />
+      <BroadcastModal
+        open={broadcastModal}
+        handleUseInThisTab={handleUseInThisTab}
+        handleClose={(event, reason) => {
+          if (reason !== "backdropClick") {
+            setBroadcastModal(false);
           }
         }}
       />

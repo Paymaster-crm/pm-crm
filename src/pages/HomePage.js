@@ -12,7 +12,7 @@ import routesConfig from "../routes/routesConfig.js";
 
 const drawerWidth = 60;
 
-function HomePage() {
+function HomePage(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [tabValue, setTabValue] = useState(0);
 
@@ -23,12 +23,16 @@ function HomePage() {
         <AppbarComponent
           mobileOpen={mobileOpen}
           setMobileOpen={setMobileOpen}
+          showSidebar={props.showSidebar}
+          setShowSidebar={props.setShowSidebar}
         />
 
-        <DrawerComponent
-          mobileOpen={mobileOpen}
-          setMobileOpen={setMobileOpen}
-        />
+        {props.showSidebar && (
+          <DrawerComponent
+            mobileOpen={mobileOpen}
+            setMobileOpen={setMobileOpen}
+          />
+        )}
 
         {/* Content */}
         <Box
@@ -63,6 +67,7 @@ function HomePage() {
               />
             ))}
             <Route path="/not-authorized" element={<UnAuthorisedRoute />} />
+            <Route path="*" element={<UnAuthorisedRoute />} />
           </Routes>
         </Box>
       </Box>

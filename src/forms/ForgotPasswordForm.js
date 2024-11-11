@@ -32,11 +32,8 @@ function ForgotPasswordForm(props) {
         }
         alert(res.data.message); // Show success message
       } catch (error) {
-        if (error.response && error.response.status === 400) {
-          alert(error.response.data.message);
-        } else {
-          alert("An unexpected error occurred. Please try again later.");
-        }
+        console.log(error);
+        alert(error.response.data.error);
       }
     },
   });
@@ -50,7 +47,7 @@ function ForgotPasswordForm(props) {
     validationSchema: validationSchemaOtp,
     onSubmit: async (values) => {
       try {
-        const res = await axios.post(
+        const res = await axios.put(
           `${process.env.REACT_APP_API_STRING}/update-password`,
           {
             username,

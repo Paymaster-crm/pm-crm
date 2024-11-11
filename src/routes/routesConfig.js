@@ -10,7 +10,8 @@ import EditEmployeeKyc from "../components/hrManagement/employeeKyc/EditEmployee
 // Employee Onboarding
 import EmployeeOnboarding from "../components/hrManagement/employeeOnboarding/EmployeeOnboarding.js";
 // Employee Management
-import PreRecruitment from "../components/employeeManagement/preRecruitmentProcess/PreRecruitment.js";
+import JobOpenings from "../components/employeeManagement/job-openings/JobOpenings.js";
+import ViewIndividualJob from "../components/employeeManagement/job-openings/ViewIndividualJob.js";
 import RecruitmentProcess from "../components/employeeManagement/recruitmentProcess/Recruitment.js";
 import ExitFeedback from "../components/employeeManagement/exitFeedback/ExitFeedback.js";
 import Appraisal from "../components/employeeManagement/appraisal/Appraisal.js";
@@ -105,12 +106,20 @@ const routesConfig = [
     canBeAssigned: true,
   },
   {
-    path: "/pre-recruitment",
-    element: <PreRecruitment />,
-    allowedModules: ["Pre-Recruitment Process"],
-    name: "Pre-Recruitment Process",
-    category: "Employee Management",
+    path: "/job-openings",
+    element: <JobOpenings />,
+    allowedModules: ["Job Openings"],
+    name: "Job Openings",
+    category: "HR & Management",
     canBeAssigned: true,
+  },
+  {
+    path: "/view-job-opening/:_id",
+    element: <ViewIndividualJob />,
+    allowedModules: ["Job Openings"],
+    name: "View Job",
+    category: "HR & Management",
+    canBeAssigned: false,
   },
   {
     path: "/recruitment",

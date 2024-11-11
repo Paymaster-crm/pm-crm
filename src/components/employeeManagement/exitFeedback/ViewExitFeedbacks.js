@@ -63,7 +63,7 @@ function ViewExitFeedbacks() {
     },
   ];
 
-  const table = useTableConfig(data, columns);
+  const table = useTableConfig(data, columns, "view-exit-feedback");
 
   return (
     <div>

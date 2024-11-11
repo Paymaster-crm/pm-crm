@@ -8,7 +8,7 @@ import { Container, Row, Col } from "react-bootstrap";
 
 function BasicInfo(props) {
   return (
-    <Container>
+    <Container style={{ backgroundColor: "white", padding: "20px" }}>
       <Row>
         <Col>
           <div>
@@ -23,7 +23,6 @@ function BasicInfo(props) {
               <List
                 sx={{
                   width: "100%",
-                  bgcolor: "background.paper",
                 }}
               >
                 <ListItem>
@@ -65,7 +64,6 @@ function BasicInfo(props) {
               <List
                 sx={{
                   width: "100%",
-                  bgcolor: "background.paper",
                 }}
               >
                 <ListItem alignItems="flex-start">
@@ -99,7 +97,6 @@ function BasicInfo(props) {
               <List
                 sx={{
                   width: "100%",
-                  bgcolor: "background.paper",
                 }}
               >
                 <ListItem alignItems="flex-start">
@@ -145,7 +142,6 @@ function BasicInfo(props) {
               <List
                 sx={{
                   width: "100%",
-                  bgcolor: "background.paper",
                 }}
               >
                 <ListItem alignItems="flex-start">
@@ -178,7 +174,6 @@ function BasicInfo(props) {
               <List
                 sx={{
                   width: "100%",
-                  bgcolor: "background.paper",
                 }}
               >
                 <ListItem alignItems="flex-start">
@@ -206,7 +201,6 @@ function BasicInfo(props) {
               <List
                 sx={{
                   width: "100%",
-                  bgcolor: "background.paper",
                 }}
               >
                 <ListItem alignItems="flex-start">

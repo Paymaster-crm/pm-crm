@@ -5,7 +5,7 @@ import { UserContext } from "../contexts/UserContext";
 import { validationSchema } from "../schemas/auth/loginSchema";
 import { InputOtp } from "primereact/inputotp";
 import { Password } from "primereact/password";
-import { getGeolocation } from "../utils/getGeolocation";
+import { getGeolocation } from "../utils/auth/getGeolocation";
 import CustomButton from "../components/customComponents/CustomButton";
 
 function LoginForm(props) {
@@ -23,6 +23,7 @@ function LoginForm(props) {
     validationSchema: validationSchema(props.isTwoFactorEnabled, useBackupCode),
     onSubmit: async (values) => {
       const geoLocation = await getGeolocation();
+
       try {
         const loginRes = await axios.post(
           `${process.env.REACT_APP_API_STRING}/login`,
@@ -45,9 +46,12 @@ function LoginForm(props) {
           setUser(loginRes.data.user);
         } else {
           alert(loginRes.data.message);
+          formik.setFieldValue("twoFAToken", "");
+          formik.setFieldValue("backupCode", "");
         }
       } catch (error) {
         console.log(error);
+        alert(error.response.data.message);
       }
     },
   });

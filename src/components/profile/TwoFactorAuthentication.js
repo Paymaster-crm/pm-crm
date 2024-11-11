@@ -7,8 +7,8 @@ import { Row, Col } from "react-bootstrap";
 import Switch from "@mui/material/Switch";
 import { initiateWebauthnRegistration } from "../../utils/webAuthn/initiateWebauthnRegistration";
 import { disableWebAuthn } from "../../utils/webAuthn/disableWebAuthn";
-import { enableTwoFactor } from "../../utils/enableTwoFactor";
-import { disableTwoFactor } from "../../utils/disableTwoFactor";
+import { enableTwoFactor } from "../../utils/auth/enableTwoFactor";
+import { disableTwoFactor } from "../../utils/auth/disableTwoFactor";
 import Divider from "@mui/material/Divider";
 
 function TwoFactorAuthentication() {
@@ -23,13 +23,11 @@ function TwoFactorAuthentication() {
     }
   }, [user]);
 
-  const username = user.username;
-
   const handleTwoFASwitchChange = (e) => {
     if (e.target.checked) {
       enableTwoFactor(user, setIsTwoFactorEnabled, setQr, setUser);
     } else {
-      disableTwoFactor(username, setIsTwoFactorEnabled);
+      disableTwoFactor(setIsTwoFactorEnabled);
     }
   };
 
@@ -41,7 +39,6 @@ function TwoFactorAuthentication() {
             <List
               sx={{
                 width: "100%",
-                bgcolor: "background.paper",
               }}
             >
               <ListItem alignItems="flex-start">
@@ -52,14 +49,14 @@ function TwoFactorAuthentication() {
                       <button
                         style={{ marginTop: 0 }}
                         className="btn"
-                        onClick={() => initiateWebauthnRegistration(username)}
+                        onClick={() => initiateWebauthnRegistration()}
                       >
                         Enable on this device
                       </button>
                       <button
                         style={{ marginTop: 0, marginLeft: "10px" }}
                         className="btn"
-                        onClick={() => disableWebAuthn(username)}
+                        onClick={() => disableWebAuthn()}
                       >
                         Disable
                       </button>
@@ -79,14 +76,15 @@ function TwoFactorAuthentication() {
                   }
                 />
               </ListItem>
-
-              <ListItem alignItems="flex-start">
-                <ListItemText primary="Scan the QR code below to enable 2FA using Google Authenticator App" />
-                <ListItemText />
-              </ListItem>
-              <span></span>
-              <br />
-              {isTwoFactorEnabled && <img src={qr} alt="QR code" />}
+              {isTwoFactorEnabled && (
+                <>
+                  <ListItem alignItems="flex-start">
+                    <ListItemText primary="Scan the QR code below to enable 2FA using Google Authenticator App" />
+                    <ListItemText />
+                  </ListItem>
+                  <img src={qr} alt="QR code" />
+                </>
+              )}
             </List>
           </div>
         </div>
