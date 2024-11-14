@@ -1,11 +1,9 @@
-import React, { Suspense, lazy } from "react";
+import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import useTabs from "@hooks/useTabs";
 import { UserContext } from "@contexts/UserContext";
-
-// Lazy load the CompleteKYC and ViewKycList components
 import CompleteKYC from "./CompleteKYC";
 import ViewKycList from "./ViewKycList";
 
@@ -37,14 +35,10 @@ function EmployeeKYC() {
         </Box>
 
         <CustomTabPanel value={value} index={0}>
-          <Suspense fallback={<div>Loading View KYC...</div>}>
-            <ViewKycList />
-          </Suspense>
+          <ViewKycList />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <Suspense fallback={<div>Loading Complete KYC...</div>}>
-            <CompleteKYC username={user.username} />
-          </Suspense>
+          <CompleteKYC username={user.username} />
         </CustomTabPanel>
       </>
     </Box>

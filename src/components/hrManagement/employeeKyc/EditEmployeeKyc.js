@@ -1,17 +1,11 @@
-import React, { Suspense, lazy } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-
-// Lazy load the CompleteKYC component
-const CompleteKYC = lazy(() => import("./CompleteKYC"));
+import CompleteKYC from "./CompleteKYC";
 
 function EditEmployeeKyc() {
   const { username } = useParams();
 
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <CompleteKYC username={username} />
-    </Suspense>
-  );
+  return <CompleteKYC username={username} />;
 }
 
 export default React.memo(EditEmployeeKyc);
