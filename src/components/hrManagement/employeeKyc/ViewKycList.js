@@ -11,8 +11,6 @@ function ViewKycList() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let isMounted = true; // Track whether the component is mounted
-
     async function getData() {
       try {
         const res = await axios.get(
@@ -21,20 +19,13 @@ function ViewKycList() {
             withCredentials: true,
           }
         );
-        if (isMounted) {
-          // Update state only if still mounted
-          setData(res.data);
-        }
+        setData(res.data);
       } catch (error) {
         console.error("Error occurred while fetching KYC data:", error);
       }
     }
 
     getData();
-
-    return () => {
-      isMounted = false; // Set to false on unmount to cancel state updates
-    };
   }, []);
 
   const columns = [
