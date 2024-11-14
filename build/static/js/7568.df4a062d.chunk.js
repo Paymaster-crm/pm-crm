@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[7568],{7568:(e,s,a)=>{a.r(s),a.d(s,{default:()=>r.A,dividerClasses:()=>t.A,getDividerUtilityClass:()=>t.K});var r=a(4745),t=a(777)}}]);
