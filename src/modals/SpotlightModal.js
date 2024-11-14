@@ -2,10 +2,10 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "@contexts/UserContext";
+import { UserContext } from "../contexts/UserContext";
 import Fuse from "fuse.js";
 import SearchIcon from "@mui/icons-material/Search";
-import routesConfig from "@routes/routesConfig";
+import routesConfig from "../routes/routesConfig";
 
 const style = {
   position: "absolute",

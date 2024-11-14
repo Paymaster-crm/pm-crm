@@ -2,10 +2,10 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import useTabs from "@hooks/useTabs";
-import { getSessionData } from "@utils/auth/getSessionData";
-import { logOutFromAllSessions } from "@utils/auth/logOutFromAllSessions";
-import { UserContext } from "@contexts/UserContext";
+import useTabs from "../../hooks/useTabs";
+import { getSessionData } from "../../utils/auth/getSessionData";
+import { logOutFromAllSessions } from "../../utils/auth/logOutFromAllSessions";
+import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 
 // Lazy load components

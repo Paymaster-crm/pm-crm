@@ -2,23 +2,23 @@ import "./App.scss";
 import { UserContext } from "./contexts/UserContext";
 import React, { useState, useMemo, Suspense, lazy } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import useInactivityTimeout from "@hooks/useInactivityTimeout";
-import useUserVerification from "@hooks/useUserVerification";
-import useOnlineStatus from "@hooks/useOnlineStatus";
-import useLogout from "@hooks/useLogout";
-import SpotlightModal from "@modals/SpotlightModal";
-import useSpotlightModal from "@hooks/useSpotlightModal";
-import useNavigateWithKeyboard from "@hooks/useNavigateWithKeyboard";
-import useFullScreen from "@hooks/useFullScreen.js";
-import useModuleAssignedAlert from "@hooks/useModuleAssignedAlert.js";
-import OfflineModal from "@modals/OfflineModal.js";
-import BroadcastModal from "@modals/BroadcastModal.js";
-import useToggleSidebar from "@hooks/useToggleSidebar.js";
-import useBroadcastApi from "@hooks/useBroadcastApi.js";
+import useInactivityTimeout from "./hooks/useInactivityTimeout";
+import useUserVerification from "./hooks/useUserVerification";
+import useOnlineStatus from "./hooks/useOnlineStatus";
+import useLogout from "./hooks/useLogout";
+import SpotlightModal from "./modals/SpotlightModal";
+import useSpotlightModal from "./hooks/useSpotlightModal";
+import useNavigateWithKeyboard from "./hooks/useNavigateWithKeyboard";
+import useFullScreen from "./hooks/useFullScreen.js";
+import useModuleAssignedAlert from "./hooks/useModuleAssignedAlert.js";
+import OfflineModal from "./modals/OfflineModal.js";
+import BroadcastModal from "./modals/BroadcastModal.js";
+import useToggleSidebar from "./hooks/useToggleSidebar.js";
+import useBroadcastApi from "./hooks/useBroadcastApi.js";
 
 // Lazy load pages
-const LoginPage = lazy(() => import("@pages/LoginPage"));
-const HomePage = lazy(() => import("@pages/HomePage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const HomePage = lazy(() => import("./pages/HomePage"));
 
 function App() {
   const [user, setUser] = useState();

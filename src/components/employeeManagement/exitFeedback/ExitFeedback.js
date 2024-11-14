@@ -2,7 +2,7 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import useTabs from "@hooks/useTabs";
+import useTabs from "../../../hooks/useTabs";
 
 // Lazy load components
 const ExitFeedbackForm = React.lazy(() => import("./ExitFeedbackForm"));

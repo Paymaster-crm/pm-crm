@@ -3,7 +3,7 @@ import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import { SwipeableDrawer } from "@mui/material";
 import Sidebar from "./Sidebar";
-import sidebarBg from "@assets/images/sidebar-bg.webp";
+import sidebarBg from "../../assets/images/sidebar-bg.webp";
 
 const drawerWidth = 60;
 

@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
-import "@styles/dashboard.scss";
+import "../../styles/dashboard.scss";
 import { Container, Row, Col } from "react-bootstrap";
-import { UserContext } from "@contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
 // Lazy load components
 const Info = lazy(() => import("./Info"));

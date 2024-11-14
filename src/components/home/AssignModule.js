@@ -5,7 +5,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
 import axios from "axios";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import routesConfig from "@routes/routesConfig";
+import routesConfig from "../../routes/routesConfig";
 
 function AssignModule(props) {
   const [left, setLeft] = useState([]);

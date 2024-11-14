@@ -1,9 +1,9 @@
 import React from "react";
 import { useFormik } from "formik";
 import { TextField } from "@mui/material";
-import { validationSchema } from "@schemas/auth/resetPasswordSchema";
+import { validationSchema } from "../../schemas/auth/resetPasswordSchema";
 import axios from "axios";
-import CustomButton from "@components/customComponents/CustomButton";
+import CustomButton from "../../components/customComponents/CustomButton";
 
 function ResetPassword() {
   const formik = useFormik({

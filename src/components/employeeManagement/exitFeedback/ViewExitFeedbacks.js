@@ -1,6 +1,6 @@
 import React from "react";
 import { MaterialReactTable } from "material-react-table";
-import useTableConfig from "@hooks/useTableConfig";
+import useTableConfig from "../../../hooks/useTableConfig";
 
 function ViewExitFeedbacks() {
   const data = [];

@@ -1,14 +1,12 @@
 import React, { Suspense, lazy } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
-import { validationSchema } from "@schemas/hrManagement/jobOpening";
+import { validationSchema } from "../../../schemas/hrManagement/jobOpening";
 
 // Lazy load the components
-const CustomButton = lazy(() =>
-  import("@components/customComponents/CustomButton")
-);
+const CustomButton = lazy(() => import("../../customComponents/CustomButton"));
 const CustomTextField = lazy(() =>
-  import("@components/customComponents/CustomTextField")
+  import("../../customComponents/CustomTextField")
 );
 const Slider = lazy(() => import("@mui/material/Slider"));
 

@@ -3,8 +3,8 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { InputOtp } from "primereact/inputotp";
 import { Password } from "primereact/password";
-import { validationSchema } from "@schemas/auth/updatePasswordSchema";
-import CustomButton from "@components/customComponents/CustomButton";
+import { validationSchema } from "../schemas/auth/updatePasswordSchema";
+import CustomButton from "../components/customComponents/CustomButton";
 
 function ForgotPasswordForm(props) {
   useEffect(() => {

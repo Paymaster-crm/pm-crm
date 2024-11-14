@@ -1,16 +1,16 @@
 import React, { useContext, useRef, useEffect } from "react";
 import { InputText } from "primereact/inputtext";
-import { UserContext } from "@contexts/UserContext";
-import { checkCredentials } from "@utils/webAuthn/checkCredentials";
-import { getLoginOptions } from "@utils/webAuthn/getLoginOptions";
-import { formatLoginOptions } from "@utils/webAuthn/formatLoginOptions";
-import { getCredential } from "@utils/webAuthn/getCredential";
-import { serializeCredential } from "@utils/webAuthn/serializeCredential";
-import { verifyCredential } from "@utils/webAuthn/verifyCredential";
-import { login } from "@utils/webAuthn/login";
-import CustomButton from "@components/customComponents/CustomButton";
+import { UserContext } from "../contexts/UserContext";
+import { checkCredentials } from "../utils/webAuthn/checkCredentials";
+import { getLoginOptions } from "../utils/webAuthn/getLoginOptions";
+import { formatLoginOptions } from "../utils/webAuthn/formatLoginOptions";
+import { getCredential } from "../utils/webAuthn/getCredential";
+import { serializeCredential } from "../utils/webAuthn/serializeCredential";
+import { verifyCredential } from "../utils/webAuthn/verifyCredential";
+import { login } from "../utils/webAuthn/login";
+import CustomButton from "../components/customComponents/CustomButton";
 import { useFormik } from "formik";
-import { validationSchema } from "@schemas/auth/webAuthnLoginSchema";
+import { validationSchema } from "../schemas/auth/webAuthnLoginSchema";
 
 function WebAuthnLoginForm(props) {
   const { setUser } = useContext(UserContext);

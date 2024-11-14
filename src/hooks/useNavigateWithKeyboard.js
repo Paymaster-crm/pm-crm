@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { navigateWithKeyboard } from "@utils/navigateWithKeyboard";
+import { navigateWithKeyboard } from "../utils/navigateWithKeyboard";
 
 function useNavigateWithKeyboard() {
   const navigate = useNavigate();

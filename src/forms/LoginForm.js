@@ -1,12 +1,12 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
-import { UserContext } from "@contexts/UserContext";
-import { validationSchema } from "@schemas/auth/loginSchema";
+import { UserContext } from "../contexts/UserContext";
+import { validationSchema } from "../schemas/auth/loginSchema";
 import { InputOtp } from "primereact/inputotp";
 import { Password } from "primereact/password";
-import { getGeolocation } from "@utils/auth/getGeolocation";
-import CustomButton from "@components/customComponents/CustomButton";
+import { getGeolocation } from "../utils/auth/getGeolocation";
+import CustomButton from "../components/customComponents/CustomButton";
 
 function LoginForm(props) {
   const { setUser } = useContext(UserContext);

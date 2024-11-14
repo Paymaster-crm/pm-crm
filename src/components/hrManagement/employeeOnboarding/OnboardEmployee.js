@@ -2,14 +2,12 @@ import React, { Suspense, lazy } from "react";
 import { useFormik } from "formik";
 import { Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { validationSchema } from "@schemas/employeeOnboarding/onboardEmployee";
+import { validationSchema } from "../../../schemas/employeeOnboarding/onboardEmployee";
 
 // Lazy load CustomButton and CustomTextField
-const CustomButton = lazy(() =>
-  import("@components/customComponents/CustomButton")
-);
+const CustomButton = lazy(() => import("../../customComponents/CustomButton"));
 const CustomTextField = lazy(() =>
-  import("@components/customComponents/CustomTextField")
+  import("../../customComponents/CustomTextField")
 );
 
 function OnboardEmployee() {
