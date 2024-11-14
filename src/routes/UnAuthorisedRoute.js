@@ -1,5 +1,5 @@
 import React from "react";
-import NotFound from "../assets/lottie/not-found.json";
+import NotFound from "@assets/lottie/not-found.json";
 import Lottie from "lottie-react";
 
 function UnAuthorisedRoute() {

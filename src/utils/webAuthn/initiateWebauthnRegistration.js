@@ -32,6 +32,6 @@ export async function initiateWebauthnRegistration() {
     // Send the generated credential to verify and finalize registration
     await verifyWebauthnRegistration(credential);
   } catch (error) {
-    console.log("Registration error:", error);
+    console.error("Registration error:", error);
   }
 }

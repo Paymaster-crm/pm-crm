@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { toggleFullScreen } from "../utils/keyboard-shortcuts/toggleFullScreen";
+import { toggleFullScreen } from "@utils/keyboard-shortcuts/toggleFullScreen";
 
 function useFullScreen() {
   useEffect(() => {

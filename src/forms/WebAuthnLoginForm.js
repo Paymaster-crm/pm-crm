@@ -1,16 +1,16 @@
 import React, { useContext, useRef, useEffect } from "react";
 import { InputText } from "primereact/inputtext";
-import { UserContext } from "../contexts/UserContext";
-import { checkCredentials } from "../utils/webAuthn/checkCredentials";
-import { getLoginOptions } from "../utils/webAuthn/getLoginOptions";
-import { formatLoginOptions } from "../utils/webAuthn/formatLoginOptions";
-import { getCredential } from "../utils/webAuthn/getCredential";
-import { serializeCredential } from "../utils/webAuthn/serializeCredential";
-import { verifyCredential } from "../utils/webAuthn/verifyCredential";
-import { login } from "../utils/webAuthn/login";
-import CustomButton from "../components/customComponents/CustomButton";
+import { UserContext } from "@contexts/UserContext";
+import { checkCredentials } from "@utils/webAuthn/checkCredentials";
+import { getLoginOptions } from "@utils/webAuthn/getLoginOptions";
+import { formatLoginOptions } from "@utils/webAuthn/formatLoginOptions";
+import { getCredential } from "@utils/webAuthn/getCredential";
+import { serializeCredential } from "@utils/webAuthn/serializeCredential";
+import { verifyCredential } from "@utils/webAuthn/verifyCredential";
+import { login } from "@utils/webAuthn/login";
+import CustomButton from "@components/customComponents/CustomButton";
 import { useFormik } from "formik";
-import { validationSchema } from "../schemas/auth/webAuthnLoginSchema";
+import { validationSchema } from "@schemas/auth/webAuthnLoginSchema";
 
 function WebAuthnLoginForm(props) {
   const { setUser } = useContext(UserContext);
@@ -36,8 +36,8 @@ function WebAuthnLoginForm(props) {
       try {
         credentialRes = await checkCredentials(values.username);
 
-        if (credentialRes.message === "User not found") {
-          alert(credentialRes.message);
+        if (!credentialRes) {
+          alert("User not found");
           return;
         }
 
@@ -68,10 +68,11 @@ function WebAuthnLoginForm(props) {
           props.setUseWebAuthn(false);
         }
       } catch (err) {
+        console.error(err);
         if (err.name === "NotAllowedError") {
           console.log("User canceled the WebAuthn prompt.");
         } else {
-          console.log(err);
+          console.error(err);
         }
 
         if (credentialRes) {

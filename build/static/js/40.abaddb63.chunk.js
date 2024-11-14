@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[40],{40:(e,a,c)=>{var t=c(4994);Object.defineProperty(a,"__esModule",{value:!0}),a.default=void 0;var h=t(c(9526)),r=c(4414);a.default=(0,h.default)((0,r.jsx)("path",{d:"M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m-7 12h-2v-2h2zm0-4h-2V6h2z"}),"Feedback")}}]);

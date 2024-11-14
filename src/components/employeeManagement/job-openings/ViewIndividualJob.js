@@ -17,9 +17,11 @@ function ViewIndividualJob() {
   const [data, setData] = useState();
   const [jobApplications, setJobApplications] = useState([]);
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = (email) => {
+  const handleOpen = (name, email) => {
+    setName(name);
     setEmail(email);
     setOpen(true);
   };
@@ -36,7 +38,7 @@ function ViewIndividualJob() {
         );
         setData(res.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
 
@@ -55,7 +57,7 @@ function ViewIndividualJob() {
       // Re-fetch job applications after rejection
       getJobApplications();
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -69,7 +71,7 @@ function ViewIndividualJob() {
       );
       setJobApplications(res.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -120,7 +122,9 @@ function ViewIndividualJob() {
       Cell: ({ cell }) => (
         <span
           className="link"
-          onClick={() => handleOpen(cell.row.original.email)}
+          onClick={() =>
+            handleOpen(cell.row.original.name, cell.row.original.email)
+          }
         >
           Schedule
         </span>
@@ -245,6 +249,7 @@ function ViewIndividualJob() {
         open={open}
         handleClose={handleClose}
         jobTitle={data?.jobTitle}
+        name={name}
         email={email}
       />
     </Container>

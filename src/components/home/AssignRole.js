@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import { MenuItem, TextField } from "@mui/material";
 import axios from "axios";
-import CustomButton from "../customComponents/CustomButton";
+import CustomButton from "@components/customComponents/CustomButton";
 
 function AssignRole(props) {
   const formik = useFormik({

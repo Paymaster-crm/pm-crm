@@ -49,6 +49,7 @@ function ScheduleInterviewModal(props) {
         {
           jobTitle: props.jobTitle,
           email: props.email,
+          name: props.name,
           interviewDateTime: startDate,
           interviewStartTime: startFormatted,
           interviewEndTime: endFormatted,

@@ -3,9 +3,11 @@ import { useFormik } from "formik";
 import Rating from "@mui/material/Rating";
 
 // Lazy load custom components
-const CustomButton = lazy(() => import("../../customComponents/CustomButton"));
+const CustomButton = lazy(() =>
+  import("@components/customComponents/CustomButton")
+);
 const CustomTextField = lazy(() =>
-  import("../../customComponents/CustomTextField")
+  import("@components/customComponents/CustomTextField")
 );
 
 function PerformanceAppraisal() {

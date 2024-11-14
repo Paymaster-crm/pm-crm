@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { toggleSidebar } from "../utils/keyboard-shortcuts/toggleSidebar";
+import { toggleSidebar } from "@utils/keyboard-shortcuts/toggleSidebar";
 
 function useToggleSidebar(setShowSidebar) {
   useEffect(() => {

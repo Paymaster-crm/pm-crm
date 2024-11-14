@@ -1,14 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
-import { UserContext } from "../../contexts/UserContext";
+import { UserContext } from "@contexts/UserContext";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { Row, Col } from "react-bootstrap";
 import Switch from "@mui/material/Switch";
-import { initiateWebauthnRegistration } from "../../utils/webAuthn/initiateWebauthnRegistration";
-import { disableWebAuthn } from "../../utils/webAuthn/disableWebAuthn";
-import { enableTwoFactor } from "../../utils/auth/enableTwoFactor";
-import { disableTwoFactor } from "../../utils/auth/disableTwoFactor";
+import { initiateWebauthnRegistration } from "@utils/webAuthn/initiateWebauthnRegistration";
+import { disableWebAuthn } from "@utils/webAuthn/disableWebAuthn";
+import { enableTwoFactor } from "@utils/auth/enableTwoFactor";
+import { disableTwoFactor } from "@utils/auth/disableTwoFactor";
 import Divider from "@mui/material/Divider";
 
 function TwoFactorAuthentication() {

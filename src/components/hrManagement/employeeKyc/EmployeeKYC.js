@@ -2,12 +2,12 @@ import React, { Suspense, lazy } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import useTabs from "../../../hooks/useTabs";
-import { UserContext } from "../../../contexts/UserContext";
+import useTabs from "@hooks/useTabs";
+import { UserContext } from "@contexts/UserContext";
 
 // Lazy load the CompleteKYC and ViewKycList components
-const CompleteKYC = lazy(() => import("./CompleteKYC"));
-const ViewKycList = lazy(() => import("./ViewKycList"));
+import CompleteKYC from "./CompleteKYC";
+import ViewKycList from "./ViewKycList";
 
 function EmployeeKYC() {
   const [value, setValue] = React.useState(

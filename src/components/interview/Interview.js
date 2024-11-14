@@ -3,9 +3,11 @@ import { useFormik } from "formik";
 
 // Lazy load CustomTextField and CustomButton components
 const CustomTextField = lazy(() =>
-  import("../customComponents/CustomTextField")
+  import("@components/customComponents/CustomTextField")
 );
-const CustomButton = lazy(() => import("../customComponents/CustomButton"));
+const CustomButton = lazy(() =>
+  import("@components/customComponents/CustomButton")
+);
 
 function Interview() {
   const formik = useFormik({

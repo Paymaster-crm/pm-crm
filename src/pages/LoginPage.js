@@ -1,14 +1,14 @@
 import React, { useState, Suspense } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import "../styles/login.scss";
+import "@styles/login.scss";
 
 // Lazy load child components
-const LoginForm = React.lazy(() => import("../forms/LoginForm"));
+const LoginForm = React.lazy(() => import("@forms/LoginForm"));
 const ForgotPasswordForm = React.lazy(() =>
-  import("../forms/ForgotPasswordForm.js")
+  import("@forms/ForgotPasswordForm.js")
 );
 const WebAuthnLoginForm = React.lazy(() =>
-  import("../forms/WebAuthnLoginForm.js")
+  import("@forms/WebAuthnLoginForm.js")
 );
 
 function LoginPage() {
@@ -48,7 +48,10 @@ function LoginPage() {
                 </>
               ) : (
                 <>
-                  <ForgotPasswordForm setForgotPassword={setForgotPassword} />
+                  <ForgotPasswordForm
+                    username={username}
+                    setForgotPassword={setForgotPassword}
+                  />
                 </>
               )}
             </Suspense>

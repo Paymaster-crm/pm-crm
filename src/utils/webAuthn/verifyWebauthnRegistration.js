@@ -13,6 +13,6 @@ export const verifyWebauthnRegistration = async (credential) => {
       alert("Registration failed. Please try again.");
     }
   } catch (error) {
-    console.log("Registration verification error:", error);
+    console.error("Registration verification error:", error);
   }
 };

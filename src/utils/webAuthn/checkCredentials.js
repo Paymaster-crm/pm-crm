@@ -8,6 +8,7 @@ export async function checkCredentials(username) {
       { username },
       { withCredentials: true }
     );
+
     return response.data;
   } catch (error) {
     console.error("Credential check error:", error);

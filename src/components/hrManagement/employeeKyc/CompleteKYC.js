@@ -3,21 +3,21 @@ import { useFormik } from "formik";
 import { TextField } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { states } from "../../../assets/data/statesData";
+import { states } from "@assets/data/statesData";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Snackbar from "@mui/material/Snackbar";
-import { validationSchema } from "../../../schemas/employeeKyc/completeKyc";
+import { validationSchema } from "@schemas/employeeKyc/completeKyc";
 import { useParams } from "react-router-dom";
-import CustomButton from "../../customComponents/CustomButton";
-import CustomUploadButton from "../../customComponents/CustomUploadButton";
-import { handleFileUpload } from "../../../utils/aws/handleFileUpload";
-import { handleSameAsPermanentAddress } from "../../../utils/kyc/handleSameAsPermanentAddress";
-import { handlePincodeChange } from "../../../utils/kyc/handlePincodeChange";
-import { handleAadharNoChange } from "../../../utils/kyc/handleAadharNoChange";
-import { handleInsuranceDetailsChange } from "../../../utils/kyc/handleInsuranceDetailsChange";
-import CustomTextField from "../../customComponents/CustomTextField";
+import CustomButton from "@components/customComponents/CustomButton";
+import CustomUploadButton from "@components/customComponents/CustomUploadButton";
+import { handleFileUpload } from "@utils/aws/handleFileUpload";
+import { handleSameAsPermanentAddress } from "@utils/kyc/handleSameAsPermanentAddress";
+import { handlePincodeChange } from "@utils/kyc/handlePincodeChange";
+import { handleAadharNoChange } from "@utils/kyc/handleAadharNoChange";
+import { handleInsuranceDetailsChange } from "@utils/kyc/handleInsuranceDetailsChange";
+import CustomTextField from "@components/customComponents/CustomTextField";
 
 function CompleteKYC(props) {
   const [fileSnackbar, setFileSnackbar] = useState(false);
@@ -361,30 +361,30 @@ function CompleteKYC(props) {
       </Row>
       <br />
       <h5>Documents</h5>
-      <TextField
-        size="small"
-        margin="dense"
-        variant="filled"
-        fullWidth
-        id="aadhar_no"
-        name="aadhar_no"
-        label="Aadhar Number"
-        value={formik.values.aadhar_no}
-        onChange={(e) => handleAadharNoChange(e, formik)}
-        inputProps={{
-          inputMode: "numeric", // Set input mode to numeric for better mobile support
-          pattern: "[0-9]*", // Pattern to allow only numeric input
-          maxLength: 12, // Limit the input to 12 characters
-        }}
-        error={formik.touched.aadhar_no && Boolean(formik.errors.aadhar_no)}
-        helperText={formik.touched.aadhar_no && formik.errors.aadhar_no}
-        className="login-input"
-        InputLabelProps={{ shrink: true }}
-      />
-      <br />
-      <br />
       <Row>
-        <Col xs={6}>
+        <Col xs={4}>
+          <TextField
+            size="small"
+            margin="dense"
+            variant="filled"
+            fullWidth
+            id="aadhar_no"
+            name="aadhar_no"
+            label="Aadhar Number"
+            value={formik.values.aadhar_no}
+            onChange={(e) => handleAadharNoChange(e, formik)}
+            inputProps={{
+              inputMode: "numeric", // Set input mode to numeric for better mobile support
+              pattern: "[0-9]*", // Pattern to allow only numeric input
+              maxLength: 12, // Limit the input to 12 characters
+            }}
+            error={formik.touched.aadhar_no && Boolean(formik.errors.aadhar_no)}
+            helperText={formik.touched.aadhar_no && formik.errors.aadhar_no}
+            className="login-input"
+            InputLabelProps={{ shrink: true }}
+          />
+        </Col>
+        <Col xs={4}>
           <CustomUploadButton
             name={"Aadhar Photo Front"}
             onChange={(e) => {
@@ -417,7 +417,7 @@ function CompleteKYC(props) {
             </div>
           ) : null}
         </Col>
-        <Col xs={6}>
+        <Col xs={4}>
           <CustomUploadButton
             name={"Aadhar Photo Front"}
             onChange={(e) => {
@@ -451,59 +451,64 @@ function CompleteKYC(props) {
           ) : null}
         </Col>
       </Row>
-      <TextField
-        size="small"
-        margin="dense"
-        variant="filled"
-        fullWidth
-        id="pan_no"
-        name="pan_no"
-        label="PAN Number"
-        value={formik.values.pan_no}
-        onChange={(e) => {
-          if (e.target.value?.length <= 10) {
-            formik.handleChange(e);
-          }
-        }}
-        inputProps={{
-          maxLength: 10,
-          pattern: "[A-Za-z0-9]*",
-        }}
-        error={formik.touched.pan_no && Boolean(formik.errors.pan_no)}
-        helperText={formik.touched.pan_no && formik.errors.pan_no}
-        className="login-input"
-        InputLabelProps={{ shrink: true }}
-      />
-      <br />
-      <br />
 
-      <CustomUploadButton
-        name={"PAN Photo"}
-        onChange={(e) => {
-          handleFileUpload(
-            e,
-            "pan_photo",
-            "kyc",
-            formik,
-            setFileSnackbar,
-            true
-          );
-        }}
-        ref={(el) => (fileInputRefs.current.panPhoto = el)}
-      />
+      <Row>
+        <Col xs={4}>
+          <TextField
+            size="small"
+            margin="dense"
+            variant="filled"
+            fullWidth
+            id="pan_no"
+            name="pan_no"
+            label="PAN Number"
+            value={formik.values.pan_no}
+            onChange={(e) => {
+              if (e.target.value?.length <= 10) {
+                formik.handleChange(e);
+              }
+            }}
+            inputProps={{
+              maxLength: 10,
+              pattern: "[A-Za-z0-9]*",
+            }}
+            error={formik.touched.pan_no && Boolean(formik.errors.pan_no)}
+            helperText={formik.touched.pan_no && formik.errors.pan_no}
+            className="login-input"
+            InputLabelProps={{ shrink: true }}
+          />
+        </Col>
+        <Col xs={4}>
+          <CustomUploadButton
+            name={"PAN Photo"}
+            onChange={(e) => {
+              handleFileUpload(
+                e,
+                "pan_photo",
+                "kyc",
+                formik,
+                setFileSnackbar,
+                true
+              );
+            }}
+            ref={(el) => (fileInputRefs.current.panPhoto = el)}
+          />
 
-      <br />
-      {formik.values.pan_photo !== "" ? (
-        <>
           <br />
-          <a href={formik.values.pan_photo}>{formik.values.pan_photo}</a>
-        </>
-      ) : (
-        ""
-      )}
-      {formik.touched.pan_photo && formik.errors.pan_photo ? (
-        <div style={{ color: "red" }}>{formik.errors.pan_photo}</div>
-      ) : null}
+          {formik.values.pan_photo !== "" ? (
+            <>
+              <br />
+              <a href={formik.values.pan_photo}>{formik.values.pan_photo}</a>
+            </>
+          ) : (
+            ""
+          )}
+          {formik.touched.pan_photo && formik.errors.pan_photo ? (
+            <div style={{ color: "red" }}>{formik.errors.pan_photo}</div>
+          ) : null}
+        </Col>
+      </Row>
+
       <br />
       <CustomTextField
         id="pf_no"

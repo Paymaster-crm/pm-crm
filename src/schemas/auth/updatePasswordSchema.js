@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const validationSchemaOtp = Yup.object({
+export const validationSchema = Yup.object({
   otp: Yup.string()
     .required("OTP is required")
     .length(6, "OTP must be exactly 6 digits"),

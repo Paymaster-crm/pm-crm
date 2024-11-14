@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@assets": ["./assets"],
+      "@components": ["./components"],
+      "@contexts": ["./contexts"],
+      "@forms": ["./forms"],
+      "@hooks": ["./hooks"],
+      "@modals": ["./modals"],
+      "@pages": ["./pages"],
+      "@routes": ["./routes"],
+      "@schemas": ["./schemas"],
+      "@styles": ["./styles"],
+      "@utils": ["./utils"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

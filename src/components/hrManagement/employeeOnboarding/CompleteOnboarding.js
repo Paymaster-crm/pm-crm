@@ -2,18 +2,20 @@ import React, { useContext, useRef, useState, Suspense, lazy } from "react";
 import { useFormik } from "formik";
 import { Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { UserContext } from "../../../contexts/UserContext";
+import { UserContext } from "@contexts/UserContext";
 import Snackbar from "@mui/material/Snackbar";
-import { handleFileUpload } from "../../../utils/aws/handleFileUpload";
-import { validationSchema } from "../../../schemas/employeeOnboarding/completeOnboarding";
+import { handleFileUpload } from "@utils/aws/handleFileUpload";
+import { validationSchema } from "@schemas/employeeOnboarding/completeOnboarding";
 
 // Lazy load custom components
-const CustomButton = lazy(() => import("../../customComponents/CustomButton"));
+const CustomButton = lazy(() =>
+  import("@components/customComponents/CustomButton")
+);
 const CustomUploadButton = lazy(() =>
-  import("../../customComponents/CustomUploadButton")
+  import("@components/customComponents/CustomUploadButton")
 );
 const CustomTextField = lazy(() =>
-  import("../../customComponents/CustomTextField")
+  import("@components/customComponents/CustomTextField")
 );
 
 function CompleteOnboarding() {

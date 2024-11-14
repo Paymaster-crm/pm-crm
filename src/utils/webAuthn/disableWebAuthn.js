@@ -8,6 +8,6 @@ export async function disableWebAuthn() {
     );
     alert(res.data.message);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }

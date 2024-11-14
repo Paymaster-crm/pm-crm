@@ -1,11 +1,15 @@
 import React, { Suspense, lazy } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
-import { validationSchema } from "../../../schemas/hrManagement/jobOpening";
+import { validationSchema } from "@schemas/hrManagement/jobOpening";
 
 // Lazy load the components
-const CustomButton = lazy(() => import("../../customComponents/CustomButton"));
-const CustomTextField = lazy(() => import("../../customComponents/CustomTextField"));
+const CustomButton = lazy(() =>
+  import("@components/customComponents/CustomButton")
+);
+const CustomTextField = lazy(() =>
+  import("@components/customComponents/CustomTextField")
+);
 const Slider = lazy(() => import("@mui/material/Slider"));
 
 function valuetext(value) {
@@ -46,7 +50,7 @@ function NewJobOpenings() {
         );
         alert(res.data.message);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   });

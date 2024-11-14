@@ -12,6 +12,6 @@ export async function disableTwoFactor(setIsTwoFactorEnabled) {
       alert(res.data.message);
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }

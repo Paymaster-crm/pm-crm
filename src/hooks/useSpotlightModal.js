@@ -1,5 +1,5 @@
 import React from "react";
-import { toggleSpotlightModal } from "../utils/keyboard-shortcuts/toggleSpotlightModal";
+import { toggleSpotlightModal } from "@utils/keyboard-shortcuts/toggleSpotlightModal";
 
 function useSpotlightModal(user) {
   const [open, setOpen] = React.useState(false);

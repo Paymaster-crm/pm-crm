@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[4438],{4438:(s,t,a)=>{a.r(t),a.d(t,{default:()=>e.A,getIconButtonUtilityClass:()=>c.G,iconButtonClasses:()=>c.A});var e=a(7073),c=a(7921)}}]);

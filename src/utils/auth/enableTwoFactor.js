@@ -20,6 +20,6 @@ export async function enableTwoFactor(
       qrCodeImage: res.data.qrCodeImage,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }

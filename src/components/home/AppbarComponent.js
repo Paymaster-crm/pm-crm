@@ -58,7 +58,7 @@ function AppbarComponent(props) {
               style={{ cursor: "pointer" }}
             />
           </div>
-          <Tooltip title="SHow/Hide Sidebar">
+          <Tooltip title="Show/Hide Sidebar">
             <IconButton
               aria-label="open drawer"
               edge="start"

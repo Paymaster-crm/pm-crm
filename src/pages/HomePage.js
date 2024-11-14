@@ -3,12 +3,12 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
 import { Route, Routes } from "react-router-dom";
-import { TabValueContext } from "../contexts/TabValueContext.js";
-import AppbarComponent from "../components/home/AppbarComponent.js";
-import DrawerComponent from "../components/home/DrawerComponent.js";
-import ProtectedRoute from "../routes/ProtectedRoute.js";
-import UnAuthorisedRoute from "../routes/UnAuthorisedRoute.js";
-import routesConfig from "../routes/routesConfig.js";
+import { TabValueContext } from "@contexts/TabValueContext.js";
+import AppbarComponent from "@components/home/AppbarComponent.js";
+import DrawerComponent from "@components/home/DrawerComponent.js";
+import ProtectedRoute from "@routes/ProtectedRoute.js";
+import UnAuthorisedRoute from "@routes/UnAuthorisedRoute.js";
+import routesConfig from "@routes/routesConfig.js";
 
 const drawerWidth = 60;
 

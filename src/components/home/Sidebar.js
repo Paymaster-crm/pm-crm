@@ -1,8 +1,8 @@
 import React, { useContext, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/sidebar.scss";
+import "@styles/sidebar.scss";
 import { Avatar, IconButton, ListItemButton, Tooltip } from "@mui/material";
-import { UserContext } from "../../contexts/UserContext";
+import { UserContext } from "@contexts/UserContext";
 
 // Lazy load the icons
 const SpaceDashboardIcon = React.lazy(() =>

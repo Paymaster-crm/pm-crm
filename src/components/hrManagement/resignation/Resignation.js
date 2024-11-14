@@ -2,9 +2,9 @@ import React, { Suspense, lazy } from "react";
 import { useFormik } from "formik";
 
 // Lazy load CustomButton and CustomTextField
-const CustomButton = lazy(() => import("../../customComponents/CustomButton"));
+const CustomButton = lazy(() => import("@components/customComponents/CustomButton"));
 const CustomTextField = lazy(() =>
-  import("../../customComponents/CustomTextField")
+  import("@components/customComponents/CustomTextField")
 );
 
 function Resignation() {

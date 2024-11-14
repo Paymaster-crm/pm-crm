@@ -1,7 +1,7 @@
 import React, { useContext, Suspense, lazy } from "react";
-import { UserContext } from "../../contexts/UserContext";
+import { UserContext } from "@contexts/UserContext";
 import axios from "axios";
-import "../../styles/backup-codes.scss";
+import "@styles/backup-codes.scss";
 
 // Lazy load material-ui components
 const IconButton = lazy(() => import("@mui/material/IconButton"));

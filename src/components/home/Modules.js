@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
-import { UserContext } from "../../contexts/UserContext.js";
+import { UserContext } from "@contexts/UserContext.js";
 import { Row, Col } from "react-bootstrap";
-import "../../styles/modules.scss";
+import "@styles/modules.scss";
 import { useNavigate } from "react-router-dom";
-import routesConfig from "../../routes/routesConfig.js";
+import routesConfig from "@routes/routesConfig.js";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import useTabs from "../../hooks/useTabs.js";
-import { TabValueContext } from "../../contexts/TabValueContext.js";
+import useTabs from "@hooks/useTabs.js";
+import { TabValueContext } from "@contexts/TabValueContext.js";
 
 function Modules() {
   const { user } = useContext(UserContext);

@@ -3,10 +3,10 @@ import { useFormik } from "formik";
 
 // Lazy load CustomTextField and CustomButton
 const CustomTextField = React.lazy(() =>
-  import("../../customComponents/CustomTextField")
+  import("@components/customComponents/CustomTextField")
 );
 const CustomButton = React.lazy(() =>
-  import("../../customComponents/CustomButton")
+  import("@components/customComponents/CustomButton")
 );
 
 function EmployeeRelation() {
