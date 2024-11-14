@@ -3,11 +3,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import useTabs from "../../../hooks/useTabs";
-import { Suspense, lazy } from "react";
-
-// Lazy load the components
-const NewJobOpening = lazy(() => import("./NewJobOpening"));
-const ViewJobOpenings = lazy(() => import("./ViewJobOpenings"));
+import NewJobOpening from "./NewJobOpening";
+import ViewJobOpenings from "./ViewJobOpenings";
 
 function JobOpenings() {
   const [tabValue, setTabValue] = React.useState(
@@ -35,14 +32,10 @@ function JobOpenings() {
 
       <Box>
         <CustomTabPanel value={tabValue} index={0}>
-          <Suspense fallback={<div>Loading New Job Opening...</div>}>
-            <NewJobOpening />
-          </Suspense>
+          <NewJobOpening />
         </CustomTabPanel>
         <CustomTabPanel value={tabValue} index={1}>
-          <Suspense fallback={<div>Loading View Job Openings...</div>}>
-            <ViewJobOpenings />
-          </Suspense>
+          <ViewJobOpenings />
         </CustomTabPanel>
       </Box>
     </Box>

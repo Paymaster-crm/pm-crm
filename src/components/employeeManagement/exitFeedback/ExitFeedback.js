@@ -3,10 +3,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import useTabs from "../../../hooks/useTabs";
-
-// Lazy load components
-const ExitFeedbackForm = React.lazy(() => import("./ExitFeedbackForm"));
-const ViewExitFeedbacks = React.lazy(() => import("./ViewExitFeedbacks"));
+import ExitFeedbackForm from "./ExitFeedbackForm";
+import ViewExitFeedbacks from "./ViewExitFeedbacks";
 
 function ExitFeedback() {
   const [value, setValue] = React.useState(
@@ -34,14 +32,10 @@ function ExitFeedback() {
 
       <Box>
         <CustomTabPanel value={value} index={0}>
-          <React.Suspense fallback={<div>Loading Exit Feedback Form...</div>}>
-            <ExitFeedbackForm />
-          </React.Suspense>
+          <ExitFeedbackForm />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <React.Suspense fallback={<div>Loading View Exit Feedbacks...</div>}>
-            <ViewExitFeedbacks />
-          </React.Suspense>
+          <ViewExitFeedbacks />
         </CustomTabPanel>
       </Box>
     </Box>

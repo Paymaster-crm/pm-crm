@@ -1,13 +1,11 @@
-import React, { Suspense, lazy, useState } from "react";
+import React, { useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import useTabs from "../../../hooks/useTabs";
-
-// Lazily load the components
-const OnboardEmployee = lazy(() => import("./OnboardEmployee"));
-const CompleteOnboarding = lazy(() => import("./CompleteOnboarding"));
-const ViewOnboardings = lazy(() => import("./ViewOnboardings"));
+import OnboardEmployee from "./OnboardEmployee";
+import CompleteOnboarding from "./CompleteOnboarding";
+import ViewOnboardings from "./ViewOnboardings";
 
 function EmployeeOnboarding() {
   const [value, setValue] = useState(
@@ -36,17 +34,15 @@ function EmployeeOnboarding() {
       </Box>
 
       <Box>
-        <Suspense fallback={<div>Loading...</div>}>
-          <CustomTabPanel value={value} index={0}>
-            <OnboardEmployee />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            <ViewOnboardings />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-            <CompleteOnboarding />
-          </CustomTabPanel>
-        </Suspense>
+        <CustomTabPanel value={value} index={0}>
+          <OnboardEmployee />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <ViewOnboardings />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          <CompleteOnboarding />
+        </CustomTabPanel>
       </Box>
     </Box>
   );

@@ -1,11 +1,7 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-
-// Lazy loading CircularProgress
-const CircularProgress = React.lazy(() =>
-  import("@mui/material/CircularProgress")
-);
+import CircularProgress from "@mui/material/CircularProgress";
 
 const BootstrapButton = styled(Button)({
   backgroundColor: "#111b21",

@@ -1,15 +1,9 @@
-import React, { useState, Suspense } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import "../styles/login.scss";
-
-// Lazy load child components
-const LoginForm = React.lazy(() => import("../forms/LoginForm"));
-const ForgotPasswordForm = React.lazy(() =>
-  import("../forms/ForgotPasswordForm.js")
-);
-const WebAuthnLoginForm = React.lazy(() =>
-  import("../forms/WebAuthnLoginForm.js")
-);
+import LoginForm from "../forms/LoginForm";
+import ForgotPasswordForm from "../forms/ForgotPasswordForm.js";
+import WebAuthnLoginForm from "../forms/WebAuthnLoginForm.js";
 
 function LoginPage() {
   const [forgotPassword, setForgotPassword] = useState(false);
@@ -28,33 +22,31 @@ function LoginPage() {
               alt="logo"
               width="100%"
             />
-            {/* Suspense for lazy-loaded components */}
-            <Suspense fallback={<div>Loading...</div>}>
-              {!forgotPassword ? (
-                <>
-                  {useWebAuthn ? (
-                    <WebAuthnLoginForm
-                      setUseWebAuthn={setUseWebAuthn}
-                      username={username}
-                      setUsername={setUsername}
-                      setIsTwoFactorEnabled={setIsTwoFactorEnabled}
-                    />
-                  ) : (
-                    <LoginForm
-                      username={username}
-                      isTwoFactorEnabled={isTwoFactorEnabled}
-                    />
-                  )}
-                </>
-              ) : (
-                <>
-                  <ForgotPasswordForm
+
+            {!forgotPassword ? (
+              <>
+                {useWebAuthn ? (
+                  <WebAuthnLoginForm
+                    setUseWebAuthn={setUseWebAuthn}
                     username={username}
-                    setForgotPassword={setForgotPassword}
+                    setUsername={setUsername}
+                    setIsTwoFactorEnabled={setIsTwoFactorEnabled}
                   />
-                </>
-              )}
-            </Suspense>
+                ) : (
+                  <LoginForm
+                    username={username}
+                    isTwoFactorEnabled={isTwoFactorEnabled}
+                  />
+                )}
+              </>
+            ) : (
+              <>
+                <ForgotPasswordForm
+                  username={username}
+                  setForgotPassword={setForgotPassword}
+                />
+              </>
+            )}
           </div>
 
           {/* Conditionally render "Forgot Password" and "Login Instead" */}

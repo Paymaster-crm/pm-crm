@@ -1,9 +1,7 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense } from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-
-// Lazy load CloudUploadIcon
-const CloudUploadIcon = lazy(() => import("@mui/icons-material/CloudUpload"));
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const BootstrapButton = styled(Button)({
   backgroundColor: "#111b21",

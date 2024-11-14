@@ -7,16 +7,12 @@ import { getSessionData } from "../../utils/auth/getSessionData";
 import { logOutFromAllSessions } from "../../utils/auth/logOutFromAllSessions";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-
-// Lazy load components
-const LoggedInDevices = React.lazy(() => import("./LoggedInDevices"));
-const BasicInfo = React.lazy(() => import("./BasicInfo"));
-const ResetPassword = React.lazy(() => import("./ResetPassword"));
-const BackupCodes = React.lazy(() => import("./BackupCodes"));
-const TwoFactorAuthentication = React.lazy(() =>
-  import("./TwoFactorAuthentication")
-);
-const PushNotifications = React.lazy(() => import("./PushNotifications"));
+import LoggedInDevices from "./LoggedInDevices";
+import BasicInfo from "./BasicInfo";
+import ResetPassword from "./ResetPassword";
+import BackupCodes from "./BackupCodes";
+import TwoFactorAuthentication from "./TwoFactorAuthentication";
+import PushNotifications from "./PushNotifications";
 
 function Profile() {
   const [value, setValue] = React.useState(0);
@@ -53,47 +49,44 @@ function Profile() {
       </Box>
 
       <Box>
-        {/* Use Suspense to lazy load the components */}
-        <React.Suspense fallback={<div>Loading...</div>}>
-          <CustomTabPanel value={value} index={0}>
-            <BasicInfo user={user} />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            <LoggedInDevices
-              geolocation={geolocation}
-              setGeolocation={setGeolocation}
-            />
-            <div
+        <CustomTabPanel value={value} index={0}>
+          <BasicInfo user={user} />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <LoggedInDevices
+            geolocation={geolocation}
+            setGeolocation={setGeolocation}
+          />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "flex-end",
+            }}
+          >
+            <button
+              className="btn"
               style={{
-                display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "flex-end",
+                marginTop: "20px",
               }}
+              onClick={() => logOutFromAllSessions(setUser, navigate)}
             >
-              <button
-                className="btn"
-                style={{
-                  marginTop: "20px",
-                }}
-                onClick={() => logOutFromAllSessions(setUser, navigate)}
-              >
-                Log out from all devices
-              </button>
-            </div>
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-            <div style={{ backgroundColor: "#fff", padding: "20px" }}>
-              <TwoFactorAuthentication />
-              <PushNotifications />
-            </div>
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={3}>
-            <ResetPassword />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={4}>
-            <BackupCodes />
-          </CustomTabPanel>
-        </React.Suspense>
+              Log out from all devices
+            </button>
+          </div>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          <div style={{ backgroundColor: "#fff", padding: "20px" }}>
+            <TwoFactorAuthentication />
+            <PushNotifications />
+          </div>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={3}>
+          <ResetPassword />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={4}>
+          <BackupCodes />
+        </CustomTabPanel>
       </Box>
     </Box>
   );
