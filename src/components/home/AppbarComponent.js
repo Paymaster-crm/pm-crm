@@ -53,9 +53,8 @@ function AppbarComponent(props) {
             <img
               src="https://d1mfah44qwue3n.cloudfront.net/logo.webp"
               alt="logo"
-              height="70px"
               onClick={() => navigate("/")}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", width: "120px", height: "60px" }}
             />
           </div>
           <Tooltip title="Show/Hide Sidebar">
