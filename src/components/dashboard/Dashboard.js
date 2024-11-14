@@ -7,7 +7,6 @@ import Attendance from "./Attendance";
 import Announcements from "./Announcements";
 import AttendanceHeatmap from "./AttendanceHeatmap";
 import Notifications from "./Notifications";
-import CalendarComponent from "./Calendar";
 
 function Dashboard() {
   const { user } = React.useContext(UserContext);
@@ -39,9 +38,6 @@ function Dashboard() {
           <Col xs={12} md={6} lg={4}>
             <Row>
               <Notifications />
-            </Row>
-            <Row>
-              <CalendarComponent />
             </Row>
           </Col>
         </Row>
