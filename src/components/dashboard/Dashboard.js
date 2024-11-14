@@ -7,7 +7,7 @@ import Attendance from "./Attendance";
 import Announcements from "./Announcements";
 import AttendanceHeatmap from "./AttendanceHeatmap";
 import Notifications from "./Notifications";
-import Calendar from "./Calendar";
+import CalendarComponent from "./Calendar";
 
 function Dashboard() {
   const { user } = React.useContext(UserContext);
