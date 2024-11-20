@@ -8,6 +8,9 @@ const panNumberRegex = /^[A-Z]{5}\d{4}[A-Z]$/;
 const pinCodeRegex = /^\d{6}$/;
 
 export const validationSchema = yup.object({
+  employee_photo: yup
+    .string("Upload Employee photo")
+    .required("Employee photo is required"),
   designation: yup
     .string("Enter designation")
     .required("Designation is required"),
@@ -65,20 +68,36 @@ export const validationSchema = yup.object({
     .string("Enter highest qualification")
     .required("Highest qualification is required"),
   aadhar_no: yup
-    .string("Enter aadhar no")
-    .required("Aadhar no is required")
-    .matches(aadharNumberRegex, "Invalid aadhar no"),
+    .string("Enter AADHAR no")
+    .required("AADHAR no is required")
+    .matches(aadharNumberRegex, "Invalid AADHAR no"),
   aadhar_photo_front: yup
-    .string("Enter aadhar photo front")
-    .required("Aadhar photo front is required"),
+    .string("Enter AADHAR photo front")
+    .required("AADHAR photo front is required"),
   aadhar_photo_back: yup
-    .string("Enter aadhar photo back")
-    .required("Aadhar photo back is required"),
+    .string("Enter AADHAR photo back")
+    .required("AADHAR photo back is required"),
   pan_no: yup
-    .string("Enter pan no")
-    .required("Pan no is required")
-    .matches(panNumberRegex, "Invalid pan no"),
-  pan_photo: yup.string("Enter pan photo").required("Pan photo is required"),
+    .string("Enter PAN no")
+    .required("PAN no is required")
+    .matches(panNumberRegex, "Invalid PAN no"),
+  pan_photo: yup.string("Upload PAN photo").required("PAN photo is required"),
+  education_certificates: yup
+    .array()
+    .of(
+      yup
+        .string("Each file should be a valid URL")
+        .url("Invalid file URL")
+        .required("File URL is required")
+    )
+    .min(1, "At least one education certificate is required")
+    .required("Education certificates are required"),
+  experience_certificate: yup
+    .string("Upload experience certificates")
+    .required("Experience certificates are required"),
+  electricity_bill: yup
+    .string("Upload electricity bill/ rent agreement")
+    .required("Electricity bill/ rent agreement is required"),
   insurance_status: yup
     .array()
     .of(yup.string())

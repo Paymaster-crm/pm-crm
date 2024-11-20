@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useFormik } from "formik";
-import { TextField } from "@mui/material";
+import { IconButton, TextField } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { states } from "../../../assets/data/statesData";
@@ -18,14 +18,19 @@ import { handlePincodeChange } from "../../../utils/kyc/handlePincodeChange";
 import { handleAadharNoChange } from "../../../utils/kyc/handleAadharNoChange";
 import { handleInsuranceDetailsChange } from "../../../utils/kyc/handleInsuranceDetailsChange";
 import CustomTextField from "../../customComponents/CustomTextField";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function CompleteKYC(props) {
   const [fileSnackbar, setFileSnackbar] = useState(false);
   const { username } = useParams();
   const fileInputRefs = useRef({
+    employeePhoto: null,
     aadharPhotoFront: null,
     aadharPhotoBack: null,
     panPhoto: null,
+    educationCertificates: null,
+    experienceCertificate: null,
+    electricityBill: null,
   });
 
   const formik = useFormik({
@@ -33,9 +38,6 @@ function CompleteKYC(props) {
       first_name: "",
       middle_name: "",
       last_name: "",
-      designation: "",
-      department: "",
-      joining_date: "",
       dob: "",
       permanent_address_line_1: "",
       permanent_address_line_2: "",
@@ -57,6 +59,9 @@ function CompleteKYC(props) {
       aadhar_photo_back: "",
       pan_no: "",
       pan_photo: "",
+      education_certificates: [],
+      experience_certificate: "",
+      electricity_bill: "",
       pf_no: "",
       esic_no: "",
       insurance_status: [],
@@ -108,41 +113,47 @@ function CompleteKYC(props) {
     <form onSubmit={formik.handleSubmit}>
       <Row>
         <Col xs={4}>
-          <CustomTextField
-            id="designation"
-            name="designation"
-            label="Designation"
-            formik={formik}
+          <CustomUploadButton
+            name={"Photo"}
+            onChange={(e) => {
+              handleFileUpload(
+                e,
+                "employee_photo",
+                "kyc",
+                formik,
+                setFileSnackbar,
+                false
+              );
+            }}
+            ref={(el) => (fileInputRefs.current.employeePhoto = el)}
           />
-        </Col>
 
-        <Col xs={4}>
-          <CustomTextField
-            id="department"
-            name="department"
-            label="Department"
-            formik={formik}
-            select
-            options={[
-              { value: "Operations", label: "Operations" },
-              { value: "Accounts", label: "Accounts" },
-              { value: "Field", label: "Field" },
-              { value: "Office Assistant", label: "Office Assistant" },
-              { value: "Software Development", label: "Software Development" },
-              { value: "Designing", label: "Designing" },
-              { value: "Sales & Marketing", label: "Sales & Marketing" },
-              { value: "HR Admin", label: "HR Admin" },
-            ]}
-          />
-        </Col>
-        <Col xs={4}>
-          <CustomTextField
-            id="joining_date"
-            name="joining_date"
-            label="Joining Date"
-            formik={formik}
-            type="date"
-          />
+          <br />
+          {formik.values.employee_photo &&
+          formik.values.employee_photo.length > 0 ? (
+            <>
+              <br />
+              <div
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
+                <div>
+                  <a href={formik.values.employee_photo}>View</a>
+                  <br />
+                </div>
+                <IconButton
+                  onClick={() => formik.setFieldValue("employee_photo", [])}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+
+          {formik.touched.employee_photo && formik.errors.employee_photo ? (
+            <div style={{ color: "red" }}>{formik.errors.employee_photo}</div>
+          ) : null}
         </Col>
       </Row>
       <Row>
@@ -150,7 +161,7 @@ function CompleteKYC(props) {
           <CustomTextField
             id="dob"
             name="dob"
-            label="dob"
+            label="Date of Birth"
             formik={formik}
             type="date"
           />
@@ -400,15 +411,20 @@ function CompleteKYC(props) {
             ref={(el) => (fileInputRefs.current.aadharPhotoFront = el)}
           />
           <br />
-          {formik.values.aadhar_photo_front !== "" ? (
+          {formik.values.aadhar_photo_front && (
             <>
               <br />
-              <a href={formik.values.aadhar_photo_front}>
-                {formik.values.aadhar_photo_front}
-              </a>
+              <div
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
+                <a href={formik.values.aadhar_photo_front}>View</a>
+                <IconButton
+                  onClick={() => formik.setFieldValue("aadhar_photo_front", "")}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
             </>
-          ) : (
-            ""
           )}
           {formik.touched.aadhar_photo_front &&
           formik.errors.aadhar_photo_front ? (
@@ -433,15 +449,20 @@ function CompleteKYC(props) {
             ref={(el) => (fileInputRefs.current.aadharPhotoBack = el)}
           />
           <br />
-          {formik.values.aadhar_photo_back !== "" ? (
+          {formik.values.aadhar_photo_back && (
             <>
               <br />
-              <a href={formik.values.aadhar_photo_back}>
-                {formik.values.aadhar_photo_back}
-              </a>
+              <div
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
+                <a href={formik.values.aadhar_photo_back}>View</a>
+                <IconButton
+                  onClick={() => formik.setFieldValue("aadhar_photo_back", "")}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
             </>
-          ) : (
-            ""
           )}
           {formik.touched.aadhar_photo_back &&
           formik.errors.aadhar_photo_back ? (
@@ -488,7 +509,7 @@ function CompleteKYC(props) {
                 "kyc",
                 formik,
                 setFileSnackbar,
-                true
+                false
               );
             }}
             ref={(el) => (fileInputRefs.current.panPhoto = el)}
@@ -498,13 +519,156 @@ function CompleteKYC(props) {
           {formik.values.pan_photo !== "" ? (
             <>
               <br />
-              <a href={formik.values.pan_photo}>{formik.values.pan_photo}</a>
+              <div
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
+                <a href={formik.values.pan_photo}>View</a>
+                <IconButton
+                  onClick={() => formik.setFieldValue("pan_photo", "")}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
             </>
           ) : (
             ""
           )}
           {formik.touched.pan_photo && formik.errors.pan_photo ? (
             <div style={{ color: "red" }}>{formik.errors.pan_photo}</div>
+          ) : null}
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={4}>
+          <CustomUploadButton
+            name={"Education Certificates"}
+            onChange={(e) => {
+              handleFileUpload(
+                e,
+                "education_certificates",
+                "kyc",
+                formik,
+                setFileSnackbar,
+                true
+              );
+            }}
+            ref={(el) => (fileInputRefs.current.educationCertificates = el)}
+          />
+
+          <br />
+          {formik.values.education_certificates &&
+          formik.values.education_certificates.length > 0 ? (
+            <>
+              <br />
+              <div
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
+                <div>
+                  {formik.values.education_certificates.map((file, index) => (
+                    <div key={index}>
+                      <a href={file}>View</a>
+                      <br />
+                    </div>
+                  ))}
+                </div>
+                <IconButton
+                  onClick={() =>
+                    formik.setFieldValue("education_certificates", [])
+                  }
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+
+          {formik.touched.education_certificates &&
+          formik.errors.education_certificates ? (
+            <div style={{ color: "red" }}>
+              {formik.errors.education_certificates}
+            </div>
+          ) : null}
+        </Col>
+
+        <Col xs={4}>
+          <CustomUploadButton
+            name={"Experience Certificate / Relieving Letter"}
+            onChange={(e) => {
+              handleFileUpload(
+                e,
+                "experience_certificate",
+                "kyc",
+                formik,
+                setFileSnackbar,
+                false
+              );
+            }}
+            ref={(el) => (fileInputRefs.current.experienceCertificate = el)}
+          />
+
+          <br />
+          {formik.values.experience_certificate && (
+            <>
+              <br />
+              <div
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
+                <a href={formik.values.experience_certificate}>View</a>
+                <IconButton
+                  onClick={() =>
+                    formik.setFieldValue("experience_certificate", "")
+                  }
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            </>
+          )}
+          {formik.touched.experience_certificate &&
+          formik.errors.experience_certificate ? (
+            <div style={{ color: "red" }}>
+              {formik.errors.experience_certificate}
+            </div>
+          ) : null}
+        </Col>
+
+        <Col xs={4}>
+          <CustomUploadButton
+            name={"Electricity Bill / Rent Agreement"}
+            onChange={(e) => {
+              handleFileUpload(
+                e,
+                "electricity_bill",
+                "kyc",
+                formik,
+                setFileSnackbar,
+                false
+              );
+            }}
+            ref={(el) => (fileInputRefs.current.electricityBill = el)}
+          />
+
+          <br />
+          {formik.values.electricity_bill && (
+            <>
+              <br />
+              <div
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
+                <a href={formik.values.electricity_bill}>View</a>
+                <IconButton
+                  onClick={() => formik.setFieldValue("electricity_bill", "")}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            </>
+          )}
+          {formik.touched.electricity_bill && formik.errors.electricity_bill ? (
+            <div style={{ color: "red" }}>{formik.errors.electricity_bill}</div>
           ) : null}
         </Col>
       </Row>

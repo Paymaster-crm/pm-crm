@@ -45,6 +45,22 @@ function ViewIndividualJob() {
     getData();
   }, [_id]);
 
+  const hireCandidate = async (aadharNo, jobTitle) => {
+    try {
+      const res = await axios.put(
+        `${process.env.REACT_APP_API_STRING}/hire-candidate`,
+        { aadharNo, jobTitle },
+        { withCredentials: true }
+      );
+      alert(res.data.message);
+
+      // Re-fetch job applications after rejection
+      getJobApplications();
+    } catch (err) {
+      alert(err.response.data.message);
+    }
+  };
+
   const rejectApplication = async (aadharNo, jobTitle) => {
     try {
       const res = await axios.put(
@@ -131,6 +147,22 @@ function ViewIndividualJob() {
       ),
     },
     {
+      accessorKey: "hire",
+      header: "Hire",
+      enableSorting: false,
+      size: 100,
+      Cell: ({ cell }) => (
+        <span
+          className="link"
+          onClick={() =>
+            hireCandidate(cell.row.original.aadharNo, data.jobTitle)
+          }
+        >
+          Hire
+        </span>
+      ),
+    },
+    {
       accessorKey: "reject",
       header: "Reject",
       enableSorting: false,
@@ -210,18 +242,26 @@ function ViewIndividualJob() {
               <ListItemText primary="Required Skills" />
               <ListItemText secondary={data?.requiredSkills} />
             </ListItem>
+            <ListItem alignItems="flex-start">
+              <ListItemText primary="Number of Vacancies" />
+              <ListItemText secondary={data?.numberOfVacancies} />
+            </ListItem>
           </List>
         </Col>
         <Col>
           <List>
             <ListItem alignItems="flex-start">
+              <ListItemText primary="Candidates Hired" />
+              <ListItemText secondary={data?.candidatesHired} />
+            </ListItem>
+            <ListItem alignItems="flex-start">
               <ListItemText primary="Required Experience" />
-              <ListItemText secondary={data?.requiredExperience} />
+              <ListItemText secondary={data?.experience} />
             </ListItem>
             <Divider variant="inset" component="li" />
             <ListItem alignItems="flex-start">
-              <ListItemText primary="Employment Type" />
-              <ListItemText secondary={data?.employmentType} />
+              <ListItemText primary="Location" />
+              <ListItemText secondary={data?.location} />
             </ListItem>
             <Divider variant="inset" component="li" />
             <ListItem alignItems="flex-start">

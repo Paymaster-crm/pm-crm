@@ -25,12 +25,13 @@ function NewJobOpenings() {
   const formik = useFormik({
     initialValues: {
       jobTitle: "",
+      numberOfVacancies: "",
       jobPostingDate: new Date().toISOString().split("T")[0],
       applicationDeadline: "",
       jobDescription: "",
       requiredSkills: "",
       experience: "",
-      employmentType: "",
+      location: "",
       budget: [2, 10],
       hiringManager: "",
     },
@@ -59,6 +60,13 @@ function NewJobOpenings() {
         id="jobTitle"
         name="jobTitle"
         label="Job Title"
+        formik={formik}
+      />
+
+      <CustomTextField
+        id="numberOfVacancies"
+        name="numberOfVacancies"
+        label="Number of Vacancies"
         formik={formik}
       />
 
@@ -100,17 +108,10 @@ function NewJobOpenings() {
       />
 
       <CustomTextField
-        id="employmentType"
-        name="employmentType"
-        label="Employment Type"
+        id="location"
+        name="location"
+        label="Location"
         formik={formik}
-        select
-        options={[
-          { value: "Full-Time", label: "Full-Time" },
-          { value: "Part-Time", label: "Part-Time" },
-          { value: "Contract", label: "Contract" },
-          { value: "Temporary", label: "Temporary" },
-        ]}
       />
 
       <br />

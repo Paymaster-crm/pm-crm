@@ -4,8 +4,8 @@ import { UserContext } from "../contexts/UserContext";
 
 const ProtectedRoute = ({ children, allowedModules }) => {
   const { user } = useContext(UserContext);
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   // Check if user exists and has access to at least one allowed module
   const hasAccess =
     user && allowedModules.some((module) => user.modules.includes(module));

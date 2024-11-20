@@ -34,12 +34,11 @@ function ViewJobOpenings() {
       enableSorting: false,
       size: 160,
     },
-
     {
       accessorKey: "jobPostingDate",
       header: "Job Posting Date",
       enableSorting: false,
-      size: 140,
+      size: 160,
       Cell: ({ cell }) => {
         return (
           <>
@@ -59,7 +58,7 @@ function ViewJobOpenings() {
       accessorKey: "applicationDeadline",
       header: "Application Deadline",
       enableSorting: false,
-      size: 120,
+      size: 200,
       Cell: ({ cell }) => {
         return (
           <>
@@ -76,22 +75,22 @@ function ViewJobOpenings() {
       },
     },
     {
-      accessorKey: "requiredSkills",
-      header: "Required Skills",
+      accessorKey: "numberOfVacancies",
+      header: "Number of Vacancies",
       enableSorting: false,
-      size: 120,
+      size: 200,
     },
     {
-      accessorKey: "experience",
-      header: "Experience",
+      accessorKey: "candidatesHired",
+      header: "Candidates Hired",
       enableSorting: false,
       size: 160,
     },
     {
-      accessorKey: "employmentType",
-      header: "Employment Type",
+      accessorKey: "location",
+      header: "Location",
       enableSorting: false,
-      size: 230,
+      size: 120,
     },
     {
       accessorKey: "budget",
@@ -106,12 +105,6 @@ function ViewJobOpenings() {
           </>
         );
       },
-    },
-    {
-      accessorKey: "hiringManager",
-      header: "Hiring Manager",
-      enableSorting: false,
-      size: 180,
     },
   ];
 

@@ -1,114 +1,44 @@
-import React from "react";
-import { useFormik } from "formik";
-import CustomTextField from "../../customComponents/CustomTextField";
-import CustomButton from "../../customComponents/CustomButton";
+import * as React from "react";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import useTabs from "../../../hooks/useTabs";
+import AttendanceForm from "./AttendanceForm";
+import LeaveApplication from "./LeaveApplication";
 
 function Attendance() {
-  const formik = useFormik({
-    initialValues: {
-      employeeName: "",
-      employeeEmail: "",
-      department: "",
-      attendanceDate: "",
-      attendanceStatus: "",
-      timeIn: "",
-      timeOut: "",
-      remarks: "",
-    },
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
+  const [value, setValue] = React.useState(
+    Number(localStorage.getItem("exit_feedback_tab_value")) || 0
+  );
+  const { a11yProps, CustomTabPanel } = useTabs();
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    localStorage.setItem("exit_feedback_tab_value", newValue);
+  };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <h4>Employee Attendance</h4>
+    <Box sx={{ width: "100%" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="Attendance" {...a11yProps(0)} key={0} />
+          <Tab label="Leave Application" {...a11yProps(1)} key={1} />
+        </Tabs>
+      </Box>
 
-      <CustomTextField
-        id="employeeName"
-        name="employeeName"
-        label="Employee Name"
-        formik={formik}
-      />
-
-      <CustomTextField
-        id="employeeEmail"
-        name="employeeEmail"
-        label="Employee Email"
-        type="email"
-        formik={formik}
-      />
-
-      <CustomTextField
-        id="department"
-        name="department"
-        label="Department"
-        formik={formik}
-        select
-        options={[
-          { value: "Retail Banking", label: "Retail Banking" },
-          { value: "Corporate Banking", label: "Corporate Banking" },
-          { value: "Investment Banking", label: "Investment Banking" },
-          { value: "Risk Management", label: "Risk Management" },
-          {
-            value: "Compliance and Regulatory Affairs",
-            label: "Compliance and Regulatory Affairs",
-          },
-          { value: "Wealth Management", label: "Wealth Management" },
-          { value: "Operations", label: "Operations" },
-          { value: "IT Support", label: "IT Support" },
-        ]}
-      />
-
-      <CustomTextField
-        id="attendanceDate"
-        name="attendanceDate"
-        label="Attendance Date"
-        type="date"
-        formik={formik}
-      />
-
-      <CustomTextField
-        id="attendanceStatus"
-        name="attendanceStatus"
-        label="Attendance Status"
-        formik={formik}
-        select
-        options={[
-          { value: "Present", label: "Present" },
-          { value: "Absent", label: "Absent" },
-          { value: "On Leave", label: "On Leave" },
-          { value: "Late", label: "Late" },
-        ]}
-      />
-
-      <CustomTextField
-        id="timeIn"
-        name="timeIn"
-        label="Time In"
-        type="time"
-        formik={formik}
-      />
-
-      <CustomTextField
-        id="timeOut"
-        name="timeOut"
-        label="Time Out"
-        type="time"
-        formik={formik}
-      />
-
-      <CustomTextField
-        id="remarks"
-        name="remarks"
-        label="Remarks"
-        multiline
-        rows={4}
-        formik={formik}
-      />
-
-      <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
-    </form>
+      <Box>
+        <CustomTabPanel value={value} index={0}>
+          <AttendanceForm />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <LeaveApplication />
+        </CustomTabPanel>
+      </Box>
+    </Box>
   );
 }
 

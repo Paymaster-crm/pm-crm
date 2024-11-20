@@ -56,6 +56,7 @@ function ScheduleInterviewModal(props) {
         },
         { withCredentials: true }
       );
+
       props.handleClose();
       alert(res.data.message);
     } catch (err) {

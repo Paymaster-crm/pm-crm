@@ -172,8 +172,8 @@ const routesConfig = [
   {
     path: "/attendance",
     element: <Attendance />,
-    allowedModules: ["Attendance"],
-    name: "Attendance",
+    allowedModules: ["Attendance & Leaves"],
+    name: "Attendance & Leaves",
     category: "HR & Management",
     canBeAssigned: true,
   },

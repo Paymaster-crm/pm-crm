@@ -39,7 +39,7 @@ function Sidebar() {
       </Tooltip>
 
       {navItems.map((item, index) => (
-        <Tooltip title={item.title} placement="right">
+        <Tooltip title={item.title} placement="right" key={index}>
           <ListItemButton
             className="appbar-links"
             aria-label="list-item"
