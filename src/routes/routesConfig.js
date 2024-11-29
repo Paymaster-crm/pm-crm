@@ -3,6 +3,7 @@ import Modules from "../components/home/Modules.js";
 import Assign from "../components/home/Assign.js";
 import Profile from "../components/profile/Profile.js";
 import Help from "../components/home/Help.js";
+import Dashboard from "../components/dashboard/Dashboard.js";
 // Employee KYC
 import EmployeeKYC from "../components/hrManagement/employeeKyc/EmployeeKYC.js";
 import ViewIndividualKyc from "../components/hrManagement/employeeKyc/ViewIndividualKyc.js";
@@ -10,17 +11,17 @@ import EditEmployeeKyc from "../components/hrManagement/employeeKyc/EditEmployee
 // Employee Onboarding
 import EmployeeOnboarding from "../components/hrManagement/employeeOnboarding/EmployeeOnboarding.js";
 // Employee Management
-import JobOpenings from "../components/employeeManagement/job-openings/JobOpenings.js";
-import ViewIndividualJob from "../components/employeeManagement/job-openings/ViewIndividualJob.js";
-import RecruitmentProcess from "../components/employeeManagement/recruitmentProcess/Recruitment.js";
-import ExitFeedback from "../components/employeeManagement/exitFeedback/ExitFeedback.js";
-import Appraisal from "../components/employeeManagement/appraisal/Appraisal.js";
-import TrainingAndDevelopment from "../components/employeeManagement/training/TrainingAndDevelopment.js";
+import JobOpenings from "../components/hrManagement/job-openings/JobOpenings.js";
+import ViewIndividualJob from "../components/hrManagement/job-openings/ViewIndividualJob.js";
+import ExitFeedback from "../components/hrManagement/exitFeedback/ExitFeedback.js";
+import Appraisal from "../components/hrManagement/appraisal/Appraisal.js";
+import TrainingAndDevelopment from "../components/hrManagement/training/TrainingAndDevelopment.js";
 import EmployeeRelation from "../components/employeeManagement/employeeRelation/EmployeeRelation.js";
 import IsoCompliance from "../components/employeeManagement/iso/IsoCompliance.js";
+// Announcements
+import HrActivities from "../components/hrManagement/hrActivities/HrActivities.js";
 // Attendance
 import Attendance from "../components/hrManagement/attendance/Attendance.js";
-import Dashboard from "../components/dashboard/Dashboard.js";
 // Document Request Form
 import DocumentRequest from "../components/hrManagement/documentRequest/DocumentRequest.js";
 // DRA Profile
@@ -31,6 +32,7 @@ import Resignation from "../components/hrManagement/resignation/Resignation.js";
 import SalariesAndCommissions from "../components/hrManagement/salariesAndCommissions/SalariesAndCommissions.js";
 // Interview
 import Interview from "../components/interview/Interview.js";
+import WarningMemo from "../components/hrManagement/warningMemo/WarningMemo.js";
 
 const routesConfig = [
   {
@@ -72,6 +74,22 @@ const routesConfig = [
     name: "Help",
     category: null,
     canBeAssigned: false,
+  },
+  {
+    path: "/hr-activities",
+    element: <HrActivities />,
+    allowedModules: ["HR Activities"],
+    name: "HR Activities",
+    category: "HR & Management",
+    canBeAssigned: true,
+  },
+  {
+    path: "/warning-memo",
+    element: <WarningMemo />,
+    allowedModules: ["Warning Memo"],
+    name: "Warning Memo",
+    category: "HR & Management",
+    canBeAssigned: true,
   },
   {
     path: "/kyc",
@@ -120,14 +138,6 @@ const routesConfig = [
     name: "View Job",
     category: "HR & Management",
     canBeAssigned: false,
-  },
-  {
-    path: "/recruitment",
-    element: <RecruitmentProcess />,
-    allowedModules: ["Recruitment Process"],
-    name: "Recruitment Process",
-    category: "Employee Management",
-    canBeAssigned: true,
   },
   {
     path: "/exit-feedback",

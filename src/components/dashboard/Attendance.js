@@ -1,9 +1,15 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 function Attendance() {
+  const navigate = useNavigate();
   return (
-    <div className="dashboard-container">
+    <div
+      onClick={() => navigate("/attendance")}
+      style={{ cursor: "pointer" }}
+      className="dashboard-container"
+    >
       <h5>
         <strong>Attendance and Leaves</strong>
       </h5>

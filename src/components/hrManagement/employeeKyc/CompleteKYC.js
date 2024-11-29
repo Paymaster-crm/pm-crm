@@ -31,6 +31,7 @@ function CompleteKYC(props) {
     educationCertificates: null,
     experienceCertificate: null,
     electricityBill: null,
+    draCertificate: null,
   });
 
   const formik = useFormik({
@@ -62,6 +63,8 @@ function CompleteKYC(props) {
       education_certificates: [],
       experience_certificate: "",
       electricity_bill: "",
+      dra: false,
+      dra_certificate: "",
       pf_no: "",
       esic_no: "",
       insurance_status: [],
@@ -670,6 +673,73 @@ function CompleteKYC(props) {
           {formik.touched.electricity_bill && formik.errors.electricity_bill ? (
             <div style={{ color: "red" }}>{formik.errors.electricity_bill}</div>
           ) : null}
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={4}>
+          <FormGroup row>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="Mediclaim"
+                  onChange={(e) =>
+                    formik.setFieldValue("dra", e.target.checked)
+                  }
+                />
+              }
+              label="DRA"
+            />
+          </FormGroup>
+        </Col>
+        <Col xs={4}>
+          {formik.values.dra && (
+            <>
+              <CustomUploadButton
+                name={"DRA Certificate"}
+                onChange={(e) => {
+                  handleFileUpload(
+                    e,
+                    "dra_certificate",
+                    "kyc",
+                    formik,
+                    setFileSnackbar,
+                    false
+                  );
+                }}
+                ref={(el) => (fileInputRefs.current.draCertificate = el)}
+              />
+
+              <br />
+              {formik.values.dra_certificate && (
+                <>
+                  <br />
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <a href={formik.values.dra_certificate}>View</a>
+                    <IconButton
+                      onClick={() =>
+                        formik.setFieldValue("dra_certificate", "")
+                      }
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </div>
+                </>
+              )}
+              {formik.errors.dra_certificate ? (
+                <div style={{ color: "red" }}>
+                  <br />
+                  {formik.errors.dra_certificate}
+                </div>
+              ) : null}
+            </>
+          )}
         </Col>
       </Row>
 

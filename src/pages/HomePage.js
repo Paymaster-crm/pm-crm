@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
@@ -9,12 +9,42 @@ import DrawerComponent from "../components/home/DrawerComponent.js";
 import ProtectedRoute from "../routes/ProtectedRoute.js";
 import UnAuthorisedRoute from "../routes/UnAuthorisedRoute.js";
 import routesConfig from "../routes/routesConfig.js";
+import EventModal from "../modals/EventModal.js";
+import axios from "axios";
 
 const drawerWidth = 60;
 
 function HomePage(props) {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [tabValue, setTabValue] = useState(0);
+  const [events, setEvents] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Check if modal has been closed before
+    const modalClosed = localStorage.getItem("eventModalClosed") === "true";
+
+    async function getEvents() {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_STRING}/get-events`
+        );
+        setEvents(res.data);
+        if (res.data.length > 0 && !modalClosed) {
+          setIsModalOpen(true);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    getEvents();
+  }, []);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    localStorage.setItem("eventModalClosed", "true");
+  };
 
   return (
     <TabValueContext.Provider value={{ tabValue, setTabValue }}>
@@ -41,12 +71,12 @@ function HomePage(props) {
             flexGrow: 1,
             width: {
               lg: `calc(100% - ${drawerWidth}px)`,
-              backgroundColor: "#F9FAFB",
-              height: "100vh",
-              overflow: "scroll",
-              padding: "20px",
-              paddingTop: 0,
             },
+            backgroundColor: "#F9FAFB",
+            height: "100vh",
+            overflow: "scroll",
+            padding: "20px",
+            paddingTop: 0,
           }}
         >
           <Toolbar />
@@ -71,6 +101,13 @@ function HomePage(props) {
           </Routes>
         </Box>
       </Box>
+
+      {/* Modal */}
+      <EventModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        events={events}
+      />
     </TabValueContext.Provider>
   );
 }

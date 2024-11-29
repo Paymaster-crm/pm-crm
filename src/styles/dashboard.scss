@@ -9,7 +9,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-image: url("https://d1mfah44qwue3n.cloudfront.net/kyc/personal.webp");
+    background-image: url("https://paymaster-document.s3.ap-south-1.amazonaws.com/kyc/personal.webp");
     background-repeat: no-repeat !important;
     background-position: right !important;
     height: 185px;
@@ -68,21 +68,12 @@
 
   .notification-container {
     background-color: #efefef;
-    padding: 20px;
+    padding: 15px;
     margin: 10px 0;
     border-radius: 10px;
 
-    h6 {
-      font-weight: 600;
-    }
-    span {
-      color: #888a92;
-      font-weight: 500;
-    }
     p {
-      color: #6a6c71;
       font-size: 14px;
-      margin-top: 10px !important;
     }
   }
 }

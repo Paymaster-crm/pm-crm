@@ -4,34 +4,16 @@ import { TextField, MenuItem } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import AssignModule from "./AssignModule";
 import AssignRole from "./AssignRole";
+import useUserList from "../../hooks/useUserList";
 
 function Assign() {
-  const [userList, setUserList] = useState([]);
+  const userList = useUserList();
   const [selectedUser, setSelectedUser] = useState("");
   const [masterType, setMasterType] = useState("Assign Module");
 
   const handleMasterChange = (e) => {
     setMasterType(e.target.value);
   };
-
-  useEffect(() => {
-    async function getUsers() {
-      try {
-        const res = await axios(
-          `${process.env.REACT_APP_API_STRING}/get-all-users`,
-          {
-            withCredentials: true,
-          }
-        );
-        setUserList(res.data.map((user) => user.username));
-      } catch (error) {
-        console.error("Error fetching user list:", error);
-      }
-    }
-
-    getUsers();
-    // eslint-disable-next-line
-  }, [selectedUser]);
 
   const masterComponent = () => {
     switch (masterType) {

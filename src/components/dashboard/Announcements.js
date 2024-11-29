@@ -1,43 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
+import axios from "axios";
 
 function Announcements() {
-  const data = [
-    {
-      title: "Quarterly Financial Results",
-      date: "01-01-2022",
-      time: "10:00 AM",
-      description: "Q2 2024 financial performance.",
-    },
-    {
-      title: "Quarterly Financial Results",
-      date: "01-01-2022",
-      time: "10:00 AM",
-      description: "Q2 2024 financial performance.",
-    },
-    {
-      title: "Quarterly Financial Results",
-      date: "01-01-2022",
-      time: "10:00 AM",
-      description: "Q2 2024 financial performance.",
-    },
-    {
-      title: "Quarterly Financial Results",
-      date: "01-01-2022",
-      time: "10:00 AM",
-      description: "Q2 2024 financial performance.",
-    },
-  ];
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    async function getData() {
+      const res = await axios(
+        `${process.env.REACT_APP_API_STRING}/get-hr-activities`
+      );
+      setData(res.data);
+    }
+    getData();
+  }, []);
 
   const columns = [
     {
       accessorKey: "title",
       header: "Title",
       enableSorting: false,
-      size: 260,
+      size: 160,
+    },
+    {
+      accessorKey: "description",
+      header: "Description",
+      enableSorting: false,
+      size: 160,
     },
     {
       accessorKey: "date",
@@ -50,12 +42,6 @@ function Announcements() {
       header: "Time",
       enableSorting: false,
       size: 160,
-    },
-    {
-      accessorKey: "description",
-      header: "Description",
-      enableSorting: false,
-      size: 260,
     },
   ];
 

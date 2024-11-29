@@ -4,9 +4,6 @@ import ChevronLefttIcon from "@mui/icons-material/ChevronLeft";
 import { IconButton, Tooltip } from "@mui/material";
 
 const CustomCalendar = (props) => {
-  const currentDate = new Date();
-  const [month, setMonth] = useState(currentDate.getMonth());
-  const [year, setYear] = useState(currentDate.getFullYear());
   const [daysInMonth, setDaysInMonth] = useState([]);
 
   const months = [
@@ -48,10 +45,11 @@ const CustomCalendar = (props) => {
 
   // Function to calculate the start day and number of days in the month
   const calculateMonthDetails = () => {
-    const firstDayOfMonth = (new Date(year, month, 1).getDay() + 6) % 7;
+    const firstDayOfMonth =
+      (new Date(props.year, props.month, 1).getDay() + 6) % 7;
     // Adjust first day to Monday (0 = Monday, 6 = Sunday)
-    const lastDateOfMonth = new Date(year, month + 1, 0).getDate(); // Get the last date of the month
-    const prevMonthLastDate = new Date(year, month, 0).getDate(); // Last date of the previous month
+    const lastDateOfMonth = new Date(props.year, props.month + 1, 0).getDate(); // Get the last date of the month
+    const prevMonthLastDate = new Date(props.year, props.month, 0).getDate(); // Last date of the previous month
 
     const daysInCurrentMonth = [];
 
@@ -66,9 +64,9 @@ const CustomCalendar = (props) => {
     // Add the days of the current month
     for (let i = 1; i <= lastDateOfMonth; i++) {
       const isToday =
-        i === currentDate.getDate() &&
-        month === currentDate.getMonth() &&
-        year === currentDate.getFullYear();
+        i === props.currentDate.getDate() &&
+        props.month === props.currentDate.getMonth() &&
+        props.year === props.currentDate.getFullYear();
       daysInCurrentMonth.push({ day: i, isCurrentMonth: true, isToday });
     }
 
@@ -87,7 +85,7 @@ const CustomCalendar = (props) => {
   const getStatusClass = (day, isCurrentMonth) => {
     if (!isCurrentMonth) return "";
 
-    const date = new Date(year, month, day);
+    const date = new Date(props.year, props.month, day);
     if (date.getDay() === 0) return "";
 
     const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC +5:30
@@ -113,11 +111,11 @@ const CustomCalendar = (props) => {
   useEffect(() => {
     calculateMonthDetails();
     // eslint-disable-next-line
-  }, [month, year]);
+  }, [props.month, props.year]);
 
   const handleNavigation = (direction) => {
-    let newMonth = month + direction;
-    let newYear = year;
+    let newMonth = props.month + direction;
+    let newYear = props.year;
 
     if (newMonth < 0) {
       newMonth = 11;
@@ -127,14 +125,14 @@ const CustomCalendar = (props) => {
       newYear += 1;
     }
 
-    setMonth(newMonth);
-    setYear(newYear);
+    props.setMonth(newMonth);
+    props.setYear(newYear);
   };
 
   const getTooltipTitle = (day, isCurrentMonth) => {
     if (!isCurrentMonth) return ""; // No tooltip for inactive days
 
-    const date = new Date(year, month, day);
+    const date = new Date(props.year, props.month, day);
     if (date.getDay() === 0) return "Week off"; // Sundays
 
     const istOffset = 5.5 * 60 * 60 * 1000; // IST offset
@@ -169,7 +167,9 @@ const CustomCalendar = (props) => {
   return (
     <div className="calendar-container">
       <header className="calendar-header">
-        <p className="calendar-current-date">{`${months[month]} ${year}`}</p>
+        <p className="calendar-current-date">{`${months[props.month]} ${
+          props.year
+        }`}</p>
         <div className="calendar-navigation">
           <IconButton onClick={() => handleNavigation(-1)}>
             <ChevronLefttIcon />

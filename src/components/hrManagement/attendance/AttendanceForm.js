@@ -13,6 +13,9 @@ function Attendance() {
     timeIn: false,
     timeOut: false,
   });
+  const currentDate = new Date();
+  const [month, setMonth] = useState(currentDate.getMonth());
+  const [year, setYear] = useState(currentDate.getFullYear());
 
   const [validationSchema, setValidationSchema] = useState(
     Yup.object({
@@ -24,7 +27,9 @@ function Attendance() {
   async function getAttendances() {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_STRING}/get-attendances`,
+        `${process.env.REACT_APP_API_STRING}/get-attendances/${
+          month + 1
+        }/${year}`,
         { withCredentials: true }
       );
       setAttendances(res.data);
@@ -114,7 +119,7 @@ function Attendance() {
   useEffect(() => {
     getAttendances();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [month, year]);
 
   return (
     <Container>
@@ -127,7 +132,7 @@ function Attendance() {
               label="Time In"
               type="time"
               formik={formik}
-              disabled={disableFields.timeIn} // Disable timeIn dynamically
+              disabled={disableFields.timeIn}
             />
 
             <CustomTextField
@@ -136,7 +141,7 @@ function Attendance() {
               label="Time Out"
               type="time"
               formik={formik}
-              disabled={disableFields.timeOut} // Disable timeOut dynamically
+              disabled={disableFields.timeOut}
             />
 
             <CustomTextField
@@ -152,7 +157,14 @@ function Attendance() {
           </form>
         </Col>
         <Col>
-          <CustomCalendar attendances={attendances} />
+          <CustomCalendar
+            attendances={attendances}
+            month={month}
+            setMonth={setMonth}
+            year={year}
+            setYear={setYear}
+            currentDate={currentDate}
+          />
         </Col>
       </Row>
     </Container>

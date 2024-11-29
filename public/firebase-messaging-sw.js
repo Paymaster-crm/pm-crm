@@ -25,7 +25,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationBody = payload.notification?.body || "Default Body";
   const notificationIcon =
     payload.notification?.image ||
-    "https://d1mfah44qwue3n.cloudfront.net/kyc/personal.webp/favicon.png";
+    "https://paymaster-document.s3.ap-south-1.amazonaws.com/kyc/personal.webp/favicon.png";
 
   const notificationOptions = {
     body: notificationBody,

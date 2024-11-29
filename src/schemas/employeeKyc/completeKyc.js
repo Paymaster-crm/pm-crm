@@ -98,6 +98,12 @@ export const validationSchema = yup.object({
   electricity_bill: yup
     .string("Upload electricity bill/ rent agreement")
     .required("Electricity bill/ rent agreement is required"),
+  dra: yup.boolean(),
+  dra_certificate: yup.string().when("dra", {
+    is: true,
+    then: (schema) => schema.required("DRA certificate is required"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   insurance_status: yup
     .array()
     .of(yup.string())

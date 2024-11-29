@@ -18,7 +18,7 @@ function LoginPage() {
         <Col className="login-right-col">
           <div className="login-right-col-inner-container">
             <img
-              src="https://d1mfah44qwue3n.cloudfront.net/logo.webp"
+              src="https://paymaster-document.s3.ap-south-1.amazonaws.com/logo.webp"
               alt="logo"
               width="100%"
             />
