@@ -28,7 +28,8 @@ function SpotlightModal(props) {
   const [filteredRoutes, setFilteredRoutes] = React.useState([]);
   const [highlightedIndex, setHighlightedIndex] = React.useState(0);
   const suggestionListRef = React.useRef(null);
-  const alwaysVisibleRoutes = routesConfig
+  const routes = routesConfig(user);
+  const alwaysVisibleRoutes = routes
     .filter((route) => route.allowedModules.length === 0)
     .map((route) => route.path);
 
@@ -47,7 +48,7 @@ function SpotlightModal(props) {
       return;
     }
 
-    const fuse = new Fuse(routesConfig, {
+    const fuse = new Fuse(routes, {
       keys: ["name"],
       threshold: 0.6,
       includeScore: true,

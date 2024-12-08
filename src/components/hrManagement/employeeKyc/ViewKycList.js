@@ -80,7 +80,7 @@ function ViewKycList() {
     enableStickyHeader: true, // Enable sticky header
     enablePinning: true, // Enable pinning for sticky columns
     muiTableContainerProps: {
-      sx: { maxHeight: "650px", overflowY: "auto" },
+      sx: { maxHeight: "570px", overflowY: "auto" },
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => navigate(`/view-kyc/${row.original.username}`),

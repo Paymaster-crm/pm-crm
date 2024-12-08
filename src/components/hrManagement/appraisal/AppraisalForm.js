@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import Rating from "@mui/material/Rating";
@@ -33,7 +33,7 @@ function AppraisalForm() {
         );
         alert(res.data.message);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     },
   });

@@ -9,6 +9,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import LiveHelpIcon from "@mui/icons-material/LiveHelp";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -20,8 +21,18 @@ function Sidebar() {
 
   const navItems = [
     { title: "Dashboard", icon: <SpaceDashboardIcon />, path: "/" },
+    { title: "Calendar", icon: <CalendarMonthIcon />, path: "/calendar" },
     { title: "Modules", icon: <ViewModuleIcon />, path: "/modules" },
-    { title: "Assign Module", icon: <AssignmentIndIcon />, path: "/assign" },
+    // Conditionally render "Assign Module" based on user.rank
+    ...(user.rank <= 2
+      ? [
+          {
+            title: "Assign Module",
+            icon: <AssignmentIndIcon />,
+            path: "/assign",
+          },
+        ]
+      : []),
     { title: "Feedback", icon: <FeedbackIcon />, path: null },
     { title: "Help", icon: <LiveHelpIcon />, path: "/help" },
   ];

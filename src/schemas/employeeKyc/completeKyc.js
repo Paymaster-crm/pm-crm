@@ -64,7 +64,7 @@ export const validationSchema = yup.object({
   blood_group: yup
     .string("Enter blood group")
     .required("Blood group is required"),
-  highest_qualification: yup
+  qualification: yup
     .string("Enter highest qualification")
     .required("Highest qualification is required"),
   aadhar_no: yup

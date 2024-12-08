@@ -4,9 +4,10 @@ import { Container, Row, Col } from "react-bootstrap";
 import { UserContext } from "../../contexts/UserContext";
 import Info from "./Info";
 import Attendance from "./Attendance";
-import Announcements from "./Announcements";
-import AttendanceHeatmap from "./AttendanceHeatmap";
+import HrActivities from "./HrActivities";
+import MarkAttendance from "./MarkAttendance";
 import Notifications from "./Notifications";
+import StickyNotes from "./StickyNotes";
 
 function Dashboard() {
   const { user } = React.useContext(UserContext);
@@ -26,18 +27,23 @@ function Dashboard() {
             </Row>
             <Row>
               <Col>
-                <Announcements />
+                <HrActivities />
               </Col>
             </Row>
             <Row>
               <Col>
-                <AttendanceHeatmap />
+                <MarkAttendance />
               </Col>
             </Row>
           </Col>
           <Col xs={12} md={6} lg={4}>
             <Row>
               <Notifications />
+            </Row>
+            <Row>
+              <Col style={{ padding: 0 }}>
+                <StickyNotes />
+              </Col>
             </Row>
           </Col>
         </Row>

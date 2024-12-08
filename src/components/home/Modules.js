@@ -18,13 +18,12 @@ function Modules() {
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
+  const routes = routesConfig(user);
 
-  // Categorize the user's modules using routesConfig
+  // Categorize the user's modules using routes
   const categorizedModules = user?.modules?.reduce((acc, module) => {
     // Find the route config for the module
-    const route = routesConfig.find((route) =>
-      route.allowedModules.includes(module)
-    );
+    const route = routes.find((route) => route.allowedModules.includes(module));
     const category = route ? route.category : "Uncategorized"; // Use category from the route
 
     if (!acc[category]) acc[category] = [];

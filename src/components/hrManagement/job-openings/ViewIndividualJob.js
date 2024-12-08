@@ -108,7 +108,7 @@ function ViewIndividualJob() {
       accessorKey: "mobile",
       header: "Mobile",
       enableSorting: false,
-      size: 150,
+      size: 120,
     },
     {
       accessorKey: "email",
@@ -117,10 +117,36 @@ function ViewIndividualJob() {
       size: 250,
     },
     {
+      accessorKey: "resume",
+      header: "Resume",
+      enableSorting: false,
+      size: 120,
+      Cell: ({ cell }) => {
+        const base64PDF = cell.row.original.resume;
+
+        const handleDownload = () => {
+          const link = document.createElement("a");
+          link.href = `data:application/pdf;base64,${base64PDF}`;
+          link.download = "Resume.pdf";
+          link.click();
+        };
+
+        return (
+          <div>
+            {base64PDF && (
+              <span onClick={handleDownload} className="link">
+                Download
+              </span>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: "aadharNo",
       header: "Aadhar No.",
       enableSorting: false,
-      size: 150,
+      size: 120,
     },
     {
       accessorKey: "interviewDate",
@@ -128,13 +154,16 @@ function ViewIndividualJob() {
       enableSorting: false,
       size: 150,
       Cell: ({ cell }) =>
-        new Date(cell.row.original.interviewDate).toLocaleString(),
+        new Date(cell.row.original.interviewDate).toLocaleString() ===
+        "Invalid Date"
+          ? ""
+          : new Date(cell.row.original.interviewDate).toLocaleString(),
     },
     {
       accessorKey: "scheduleInterviewDate",
       header: "Schedule Interview",
       enableSorting: false,
-      size: 200,
+      size: 180,
       Cell: ({ cell }) => (
         <span
           className="link"
@@ -147,35 +176,29 @@ function ViewIndividualJob() {
       ),
     },
     {
-      accessorKey: "hire",
-      header: "Hire",
+      accessorKey: "action",
+      header: "Action",
       enableSorting: false,
       size: 100,
       Cell: ({ cell }) => (
-        <span
-          className="link"
-          onClick={() =>
-            hireCandidate(cell.row.original.aadharNo, data.jobTitle)
-          }
-        >
-          Hire
-        </span>
-      ),
-    },
-    {
-      accessorKey: "reject",
-      header: "Reject",
-      enableSorting: false,
-      size: 100,
-      Cell: ({ cell }) => (
-        <span
-          className="link"
-          onClick={() =>
-            rejectApplication(cell.row.original.aadharNo, data.jobTitle)
-          }
-        >
-          Reject
-        </span>
+        <>
+          <span
+            className="link"
+            onClick={() =>
+              hireCandidate(cell.row.original.aadharNo, data.jobTitle)
+            }
+          >
+            Hire&nbsp;|&nbsp;
+          </span>
+          <span
+            className="link"
+            onClick={() =>
+              rejectApplication(cell.row.original.aadharNo, data.jobTitle)
+            }
+          >
+            Reject
+          </span>
+        </>
       ),
     },
   ];

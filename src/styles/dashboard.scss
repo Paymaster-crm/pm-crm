@@ -1,15 +1,20 @@
 .dashboard {
-  padding: 20px 0;
-
+  padding-bottom: 20px;
   .dashboard-container {
     margin: 10px 0;
+    max-height: 600px;
+    overflow: auto;
+    box-shadow: 2px 2px 50px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
   }
 
   #dashboard-personal {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-image: url("https://paymaster-document.s3.ap-south-1.amazonaws.com/kyc/personal.webp");
+    background-image: url("../assets/images/personal.png");
     background-repeat: no-repeat !important;
     background-position: right !important;
     height: 185px;
@@ -71,6 +76,14 @@
     padding: 15px;
     margin: 10px 0;
     border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      font-size: 13px;
+      font-weight: 600;
+    }
 
     p {
       font-size: 14px;

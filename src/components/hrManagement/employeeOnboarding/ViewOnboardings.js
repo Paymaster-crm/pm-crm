@@ -11,7 +11,7 @@ function ViewOnboardings() {
   useEffect(() => {
     async function getData() {
       try {
-        const res = await axios.get(
+        const res = await axios(
           `${process.env.REACT_APP_API_STRING}/view-onboardings`,
           {
             withCredentials: true,

@@ -8,6 +8,7 @@ import {
 
 function ViewAttendances() {
   const [data, setData] = useState([]);
+
   const [date, setDate] = useState(() => {
     const today = new Date();
     return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
@@ -36,10 +37,36 @@ function ViewAttendances() {
       size: 160,
     },
     {
-      accessorKey: "leaves",
-      header: "Leaves",
+      accessorKey: "weekOffs",
+      header: "Week Offs",
       enableSorting: false,
       size: 160,
+    },
+    {
+      accessorKey: "leaves",
+      header: "Total Leaves",
+      enableSorting: false,
+      size: 160,
+    },
+    {
+      accessorKey: "paidLeaves",
+      header: "Paid Leaves",
+      enableSorting: false,
+      size: 160,
+      Cell: ({ cell }) => {
+        const leaves = cell.row.original.leaves;
+        return <>{Math.min(leaves, 1.5)}</>; // Capped at 1.5
+      },
+    },
+    {
+      accessorKey: "unpaidLeaves",
+      header: "Unpaid Leaves",
+      enableSorting: false,
+      size: 160,
+      Cell: ({ cell }) => {
+        const leaves = cell.row.original.leaves;
+        return <>{Math.max(0, leaves - 1.5)}</>; // Only the excess
+      },
     },
   ];
 
@@ -92,7 +119,7 @@ function ViewAttendances() {
         );
         setData(res.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
 
@@ -106,4 +133,4 @@ function ViewAttendances() {
   );
 }
 
-export default ViewAttendances;
+export default React.memo(ViewAttendances);

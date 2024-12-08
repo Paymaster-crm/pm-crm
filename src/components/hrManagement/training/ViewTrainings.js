@@ -11,7 +11,7 @@ function ViewTrainings() {
   const [data, setData] = useState([]);
   const [userList, setUserList] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
-  console.log(data);
+
   useEffect(() => {
     async function getUsers() {
       try {
@@ -132,4 +132,4 @@ function ViewTrainings() {
   );
 }
 
-export default ViewTrainings;
+export default React.memo(ViewTrainings);

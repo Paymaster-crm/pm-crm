@@ -13,9 +13,7 @@ function Resignation() {
       lastWorkingDay: "",
       feedback: "",
     },
-    onSubmit: (values) => {
-      console.log("Resignation form submitted:", values);
-    },
+    onSubmit: (values) => {},
   });
 
   return (

@@ -20,7 +20,7 @@ function ViewLeaveApplications() {
     try {
       const [month, year] = date.split("-");
       const res = await axios.get(
-        `${process.env.REACT_APP_API_STRING}/get-leave-applications/${year}-${month}`,
+        `${process.env.REACT_APP_API_STRING}/get-week-offs/${year}-${month}`,
         { withCredentials: true }
       );
 
@@ -30,10 +30,10 @@ function ViewLeaveApplications() {
     }
   }
 
-  const handleLeaveApproval = async (_id, status) => {
+  const handleWeekOffAction = async (_id, status) => {
     try {
       await axios.put(
-        `${process.env.REACT_APP_API_STRING}/update-leave-status`,
+        `${process.env.REACT_APP_API_STRING}/update-week-off-status`,
         { _id, status },
         { withCredentials: true }
       );
@@ -50,34 +50,19 @@ function ViewLeaveApplications() {
       size: 180,
     },
     {
-      accessorKey: "from",
-      header: "From",
+      accessorKey: "date",
+      header: "Date",
       enableSorting: false,
       size: 120,
-    },
-    {
-      accessorKey: "to",
-      header: "To",
-      enableSorting: false,
-      size: 120,
-    },
-    {
-      accessorKey: "reason",
-      header: "Reason",
-      enableSorting: false,
-      size: 240,
-    },
-    {
-      accessorKey: "sick_leave",
-      header: "Sick Leave",
-      enableSorting: false,
-      size: 130,
-    },
-    {
-      accessorKey: "medical_certificate",
-      header: "Medical Certificate",
-      enableSorting: false,
-      size: 180,
+      Cell: ({ cell }) => {
+        return (
+          <>
+            {new Date(cell.row.original.date)
+              .toLocaleDateString("en-GB")
+              .replace(/\//g, "-")}
+          </>
+        );
+      },
     },
     {
       accessorKey: "status",
@@ -96,7 +81,7 @@ function ViewLeaveApplications() {
             <span
               style={{ color: "blue", cursor: "pointer" }}
               onClick={() =>
-                handleLeaveApproval(cell.row.original._id, "Approve")
+                handleWeekOffAction(cell.row.original._id, "Approve")
               }
             >
               Approve&nbsp;|&nbsp;
@@ -104,7 +89,7 @@ function ViewLeaveApplications() {
             <span
               style={{ color: "blue", cursor: "pointer" }}
               onClick={() =>
-                handleLeaveApproval(cell.row.original._id, "Reject")
+                handleWeekOffAction(cell.row.original._id, "Reject")
               }
             >
               Reject&nbsp;|&nbsp;
@@ -112,7 +97,7 @@ function ViewLeaveApplications() {
             <span
               style={{ color: "blue", cursor: "pointer" }}
               onClick={() =>
-                handleLeaveApproval(cell.row.original._id, "Withdraw")
+                handleWeekOffAction(cell.row.original._id, "Withdraw")
               }
             >
               Withdraw

@@ -12,12 +12,36 @@ import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Snackbar from "@mui/material/Snackbar";
 import { validationSchema } from "../../../schemas/hrManagement/attendanceAndLeaves/leaveSchema";
+import ViewOwnLeaves from "./ViewOwnLeaves";
 
 function LeaveApplication() {
   const [fileSnackbar, setFileSnackbar] = useState(false);
+  const [data, setData] = useState([]);
+  const [date, setDate] = useState(() => {
+    const today = new Date();
+    return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}`;
+  });
   const fileInputRefs = useRef({
     medicalCertificate: null,
   });
+
+  async function getOwnLeaves() {
+    try {
+      const [month, year] = date.split("-");
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_STRING}/get-own-leaves/${year}-${month}`,
+        { withCredentials: true }
+      );
+
+      setData(res.data);
+      getOwnLeaves();
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -30,15 +54,13 @@ function LeaveApplication() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const res = await axios.post(
+        await axios.post(
           `${process.env.REACT_APP_API_STRING}/add-leave`,
           values,
           { withCredentials: true }
         );
-        alert(res.data.message);
       } catch (error) {
-        console.log(error);
-        alert(error);
+        console.error(error);
       }
     },
   });
@@ -132,6 +154,15 @@ function LeaveApplication() {
       )}
 
       <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
+      <br />
+      <br />
+      <h4>My Leave Applications</h4>
+      <ViewOwnLeaves
+        getOwnLeaves={getOwnLeaves}
+        data={data}
+        date={date}
+        setDate={setDate}
+      />
 
       <Snackbar
         open={fileSnackbar}
@@ -142,4 +173,4 @@ function LeaveApplication() {
   );
 }
 
-export default LeaveApplication;
+export default React.memo(LeaveApplication);

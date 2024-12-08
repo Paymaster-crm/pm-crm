@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -6,16 +6,19 @@ import Divider from "@mui/material/Divider";
 import axios from "axios";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import routesConfig from "../../routes/routesConfig";
+import { UserContext } from "../../contexts/UserContext";
 
 function AssignModule(props) {
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
+  const { user } = useContext(UserContext);
+  const routes = routesConfig(user);
 
-  const excludedModules = routesConfig
+  const excludedModules = routes
     .filter((route) => !route.canBeAssigned)
     .map((route) => route.name);
 
-  const allModules = routesConfig
+  const allModules = routes
     .map((route) => route.name)
     .filter((name) => !excludedModules.includes(name));
 
@@ -128,7 +131,7 @@ function AssignModule(props) {
             }}
           >
             {items.map((item, index) => (
-              <Draggable key={item} draggableId={item} index={index}>
+              <Draggable key={index} draggableId={item} index={index}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}

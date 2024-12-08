@@ -11,7 +11,7 @@ function ViewWarningMemos() {
   const [data, setData] = useState([]);
   const [userList, setUserList] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
-  console.log(data);
+
   useEffect(() => {
     async function getUsers() {
       try {
@@ -35,7 +35,7 @@ function ViewWarningMemos() {
       if (selectedUser) {
         try {
           const res = await axios(
-            `${process.env.REACT_APP_API_STRING}/view-trainings/${selectedUser}`,
+            `${process.env.REACT_APP_API_STRING}/view-warning-memos/${selectedUser}`,
             {
               withCredentials: true,
             }
@@ -52,34 +52,16 @@ function ViewWarningMemos() {
 
   const columns = [
     {
-      accessorKey: "trainingProgram",
-      header: "Training Program",
+      accessorKey: "subject",
+      header: "Subject",
       enableSorting: false,
       size: 300,
     },
     {
-      accessorKey: "trainingDate",
-      header: "Training Date",
+      accessorKey: "description",
+      header: "Description",
       enableSorting: false,
       size: 140,
-    },
-    {
-      accessorKey: "trainingProvider",
-      header: "Training Provider",
-      enableSorting: false,
-      size: 300,
-    },
-    {
-      accessorKey: "duration",
-      header: "Duration",
-      enableSorting: false,
-      size: 180,
-    },
-    {
-      accessorKey: "feedback",
-      header: "Feedback",
-      enableSorting: false,
-      size: 320,
     },
   ];
 
@@ -132,4 +114,4 @@ function ViewWarningMemos() {
   );
 }
 
-export default ViewWarningMemos;
+export default React.memo(ViewWarningMemos);

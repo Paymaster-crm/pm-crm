@@ -9,17 +9,18 @@ function ViewHrActivities() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    async function getData() {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_STRING}/get-hr-activities`
+        const res = await axios(
+          `${process.env.REACT_APP_API_STRING}/get-hr-activities`,
+          { withCredentials: true }
         );
-        setData(response.data);
+        setData(res.data);
       } catch (error) {
-        console.error("Error fetching HR activities:", error);
+        console.error(error);
       }
-    };
-    fetchData();
+    }
+    getData();
   }, []);
 
   const columns = [
@@ -33,13 +34,24 @@ function ViewHrActivities() {
       accessorKey: "description",
       header: "Description",
       enableSorting: false,
-      size: 160,
+      size: 250,
     },
     {
       accessorKey: "date",
       header: "Date",
       enableSorting: false,
       size: 160,
+      Cell: ({ cell }) => {
+        const date = cell.getValue();
+
+        // Convert the date to dd-mm-yyyy format
+        const formatDate = (dateString) => {
+          const [year, month, day] = dateString.split("-");
+          return `${day}-${month}-${year}`;
+        };
+
+        return date ? formatDate(date) : "";
+      },
     },
     {
       accessorKey: "time",
@@ -81,4 +93,4 @@ function ViewHrActivities() {
   );
 }
 
-export default ViewHrActivities;
+export default React.memo(ViewHrActivities);

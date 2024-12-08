@@ -30,7 +30,7 @@ function TrainingForm() {
         );
         alert(res.data.message);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     },
   });

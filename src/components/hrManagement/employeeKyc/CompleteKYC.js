@@ -54,7 +54,7 @@ function CompleteKYC(props) {
       official_email: "",
       mobile: "",
       blood_group: "",
-      highest_qualification: "",
+      qualification: "",
       aadhar_no: "",
       aadhar_photo_front: "",
       aadhar_photo_back: "",
@@ -224,8 +224,8 @@ function CompleteKYC(props) {
         </Col>
         <Col xs={4}>
           <CustomTextField
-            id="highest_qualification"
-            name="highest_qualification"
+            id="qualification"
+            name="qualification"
             label="Highest Qualification"
             formik={formik}
           />

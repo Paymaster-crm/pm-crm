@@ -5,15 +5,20 @@ import {
 } from "material-react-table";
 import axios from "axios";
 
-function Announcements() {
+function HrActivities() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     async function getData() {
-      const res = await axios(
-        `${process.env.REACT_APP_API_STRING}/get-hr-activities`
-      );
-      setData(res.data);
+      try {
+        const res = await axios(
+          `${process.env.REACT_APP_API_STRING}/get-hr-activities`,
+          { withCredentials: true }
+        );
+        setData(res.data);
+      } catch (error) {
+        console.error(error);
+      }
     }
     getData();
   }, []);
@@ -36,6 +41,17 @@ function Announcements() {
       header: "Date",
       enableSorting: false,
       size: 160,
+      Cell: ({ cell }) => {
+        const date = cell.getValue();
+
+        // Convert the date to dd-mm-yyyy format
+        const formatDate = (dateString) => {
+          const [year, month, day] = dateString.split("-");
+          return `${day}-${month}-${year}`;
+        };
+
+        return date ? formatDate(date) : "";
+      },
     },
     {
       accessorKey: "time",
@@ -52,7 +68,7 @@ function Announcements() {
     enableTopToolbar: false,
     enableStickyHeader: true,
     muiTableContainerProps: {
-      sx: { maxHeight: "300px", overflowY: "auto" },
+      sx: { maxHeight: "250px", overflowY: "auto" },
     },
     muiTableHeadCellProps: {
       sx: {
@@ -66,7 +82,7 @@ function Announcements() {
   return (
     <div className="dashboard-container">
       <h5>
-        <strong>Announcements</strong>
+        <strong>HR Activities</strong>
         <br />
         <br />
         <MaterialReactTable table={table} />
@@ -75,4 +91,4 @@ function Announcements() {
   );
 }
 
-export default React.memo(Announcements);
+export default React.memo(HrActivities);

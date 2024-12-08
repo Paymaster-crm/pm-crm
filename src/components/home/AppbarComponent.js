@@ -51,7 +51,7 @@ function AppbarComponent(props) {
         <div style={{ display: "flex", width: "100%", alignItems: "center" }}>
           <div style={{ flex: 1 }}>
             <img
-              src="https://paymaster-document.s3.ap-south-1.amazonaws.com/logo.webp"
+              src={require("../../assets/images/logo.webp")}
               alt="logo"
               onClick={() => navigate("/")}
               style={{ cursor: "pointer", width: "120px", height: "60px" }}

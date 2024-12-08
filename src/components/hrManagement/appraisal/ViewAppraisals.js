@@ -132,4 +132,4 @@ function ViewAppraisals() {
   );
 }
 
-export default ViewAppraisals;
+export default React.memo(ViewAppraisals);

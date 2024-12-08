@@ -61,6 +61,36 @@ function NewJobOpenings() {
         name="jobTitle"
         label="Job Title"
         formik={formik}
+        select
+        options={[
+          { value: "CENTER HEAD", label: "CENTER HEAD" },
+          { value: "HOD", label: "HOD" },
+          { value: "BACK OFFICE MANAGER ", label: "BACK OFFICE MANAGER " },
+          { value: "OPERATION MANAGER", label: "OPERATION MANAGER" },
+          { value: "MANAGER", label: "MANAGER" },
+          { value: "ASSISTANT MANAGER", label: "ASSISTANT MANAGER" },
+          { value: "HR MANAGER", label: "HR MANAGER" },
+          { value: "HR ADMIN", label: "HR ADMIN" },
+          {
+            value: "HR-BACK OFFICE EXECUTIVE",
+            label: "HR-BACK OFFICE EXECUTIVE",
+          },
+          {
+            value: "HR-BACK OFFICE EXECUTIVE",
+            label: "HR-BACK OFFICE EXECUTIVE",
+          },
+          { value: "HR EXECUTIVE", label: "HR EXECUTIVE" },
+          { value: "HR & BACKEND", label: "HR & BACKEND" },
+          { value: "FIELD EXECUTIVE", label: "FIELD EXECUTIVE" },
+          { value: "TEAM LEADER", label: "TEAM LEADER" },
+          { value: "ASSISTANT TEAM LEADER", label: "ASSISTANT TEAM LEADER" },
+          { value: "MIS EXECUTIVE", label: "MIS EXECUTIVE" },
+          { value: "Q.A.", label: "Q.A." },
+          { value: "TRAINER", label: "TRAINER" },
+          { value: "TELECALLER", label: "TELECALLER" },
+          { value: "HOUSEKEEPING", label: "HOUSEKEEPING" },
+          { value: "GUARD", label: "GUARD" },
+        ]}
       />
 
       <CustomTextField

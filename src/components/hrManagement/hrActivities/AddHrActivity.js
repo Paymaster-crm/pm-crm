@@ -1,3 +1,4 @@
+import React from "react";
 import { useFormik } from "formik";
 import CustomTextField from "../../customComponents/CustomTextField";
 import CustomButton from "../../customComponents/CustomButton";
@@ -17,11 +18,12 @@ function AddHrActivity() {
       try {
         const res = await axios.post(
           `${process.env.REACT_APP_API_STRING}/add-hr-activity`,
-          values
+          values,
+          { withCredentials: true }
         );
         alert(res.data.message);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     },
   });
@@ -65,4 +67,4 @@ function AddHrActivity() {
   );
 }
 
-export default AddHrActivity;
+export default React.memo(AddHrActivity);

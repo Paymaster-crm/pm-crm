@@ -13,16 +13,13 @@ function WarningMemoForm() {
   const formik = useFormik({
     initialValues: {
       username: "",
-      trainingProgram: "",
-      trainingDate: "",
-      duration: "",
-      trainingProvider: "",
-      feedback: "",
+      subject: "",
+      description: "",
     },
     onSubmit: async (values) => {
       try {
         const res = await axios.post(
-          `${process.env.REACT_APP_API_STRING}/add-training`,
+          `${process.env.REACT_APP_API_STRING}/add-warning-memo`,
           values,
           {
             withCredentials: true,
@@ -30,7 +27,7 @@ function WarningMemoForm() {
         );
         alert(res.data.message);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     },
   });
@@ -60,39 +57,16 @@ function WarningMemoForm() {
       />
 
       <CustomTextField
-        id="trainingProgram"
-        name="trainingProgram"
-        label="Training Program"
+        id="subject"
+        name="subject"
+        label="Subject"
         formik={formik}
       />
 
       <CustomTextField
-        id="trainingDate"
-        name="trainingDate"
-        label="Training Date"
-        type="date"
-        formik={formik}
-      />
-
-      <CustomTextField
-        id="duration"
-        name="duration"
-        label="Duration (in hours)"
-        type="number"
-        formik={formik}
-      />
-
-      <CustomTextField
-        id="trainingProvider"
-        name="trainingProvider"
-        label="Training Provider"
-        formik={formik}
-      />
-
-      <CustomTextField
-        id="feedback"
-        name="feedback"
-        label="Feedback"
+        id="description"
+        name="description"
+        label="Description"
         multiline
         rows={4}
         formik={formik}
