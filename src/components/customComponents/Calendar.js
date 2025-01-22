@@ -1,11 +1,11 @@
+import "../../styles/calendar.scss";
 import React, { useState, useEffect } from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ChevronLefttIcon from "@mui/icons-material/ChevronLeft";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { IconButton, Tooltip } from "@mui/material";
 import { months } from "../../assets/data/months";
 import { weekdays } from "../../assets/data/weekdays";
 import { calculateMonthDetails } from "../../utils/calculateMonthDetails";
-import { handleCalendarNavigation } from "../../utils/handleCalendarNavigation";
 
 const CustomCalendar = (props) => {
   const [daysInMonth, setDaysInMonth] = useState([]);
@@ -13,17 +13,14 @@ const CustomCalendar = (props) => {
   const getStatusClass = (day, isCurrentMonth) => {
     if (!isCurrentMonth) return "";
 
-    const date = new Date(props.year, props.month, day);
-    const dateString = date.toISOString().split("T")[0];
+    const dateString = `${props.year}-${String(props.month + 1).padStart(
+      2,
+      "0"
+    )}-${String(day).padStart(2, "0")}`;
 
-    const status = props.attendances.find(
-      (entry) => entry.date.split("T")[0] === dateString
-    );
+    const status = props.attendances.find((entry) => entry.date === dateString);
 
-    if (status) {
-      return status?.status?.toLowerCase();
-    }
-    return "";
+    return status?.status?.toLowerCase() || "";
   };
 
   useEffect(() => {
@@ -39,28 +36,13 @@ const CustomCalendar = (props) => {
   const getTooltipTitle = (day, isCurrentMonth) => {
     if (!isCurrentMonth) return ""; // No tooltip for inactive days
 
-    const date = new Date(props.year, props.month, day);
+    const dateString = `${props.year}-${String(props.month + 1).padStart(
+      2,
+      "0"
+    )}-${String(day).padStart(2, "0")}`;
 
-    // Check if the date is the current date
-    const currentDate = new Date();
-    if (
-      date.getDate() === currentDate.getDate() &&
-      date.getMonth() === currentDate.getMonth() &&
-      date.getFullYear() === currentDate.getFullYear()
-    ) {
-      return ""; // No tooltip for the current date
-    }
+    const status = props.attendances.find((entry) => entry.date === dateString);
 
-    const dateString = date.toISOString().split("T")[0];
-
-    // Find the matching attendance entry for the date
-    const status = props.attendances.find((entry) => {
-      const entryDateString = new Date(entry.date).toISOString().split("T")[0];
-
-      return entryDateString === dateString;
-    });
-
-    // Return appropriate tooltip based on the status
     if (status) {
       switch (status?.status?.toLowerCase()) {
         case "present":
@@ -79,7 +61,6 @@ const CustomCalendar = (props) => {
     return ""; // No tooltip for dates without status
   };
 
-  // Disable navigation to the next month if it's the current month
   const isNextButtonDisabled = () => {
     const currentDate = new Date();
     return (
@@ -102,28 +83,36 @@ const CustomCalendar = (props) => {
         }`}</p>
         <div className="calendar-navigation">
           <IconButton
-            onClick={() =>
+            aria-label="previous-month"
+            onClick={async () => {
+              const { handleCalendarNavigation } = await import(
+                "../../utils/handleCalendarNavigation"
+              );
               handleCalendarNavigation(
                 -1,
                 props.month,
                 props.year,
                 props.setMonth,
                 props.setYear
-              )
-            }
+              );
+            }}
           >
-            <ChevronLefttIcon />
+            <ChevronLeftIcon />
           </IconButton>
           <IconButton
-            onClick={() =>
+            aria-label="next-month"
+            onClick={async () => {
+              const { handleCalendarNavigation } = await import(
+                "../../utils/handleCalendarNavigation"
+              );
               handleCalendarNavigation(
                 1,
                 props.month,
                 props.year,
                 props.setMonth,
                 props.setYear
-              )
-            }
+              );
+            }}
             disabled={isNextButtonDisabled()}
           >
             <ChevronRightIcon />

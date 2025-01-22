@@ -1,29 +1,25 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs from "dayjs";
-import axios from "axios";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
+import { AlertContext } from "../../../contexts/AlertContext";
+import apiClient from "../../../config/axiosConfig";
+import { style } from "../../../utils/modalStyle";
 
 function ScheduleInterviewModal(props) {
   const [dateTime, setDateTime] = useState(null);
+  const { setAlert } = useContext(AlertContext);
 
   const handleSubmit = async () => {
     if (!dateTime) {
-      alert("Please select date and time");
+      setAlert({
+        open: "true",
+        message: "Please select date and time",
+        severity: "warning",
+      });
       return;
     }
 
@@ -44,23 +40,31 @@ function ScheduleInterviewModal(props) {
     const endFormatted = formatDate(endDate);
 
     try {
-      const res = await axios.put(
-        `${process.env.REACT_APP_API_STRING}/schedule-interview`,
-        {
-          jobTitle: props.jobTitle,
-          email: props.email,
-          name: props.name,
-          interviewDateTime: startDate,
-          interviewStartTime: startFormatted,
-          interviewEndTime: endFormatted,
-        },
-        { withCredentials: true }
-      );
+      const res = await apiClient.put(`/schedule-interview`, {
+        jobTitle: props.jobTitle,
+        email: props.email,
+        name: props.name,
+        interviewDateTime: startDate,
+        interviewStartTime: startFormatted,
+        interviewEndTime: endFormatted,
+      });
 
       props.handleClose();
-      alert(res.data.message);
+
+      setAlert({
+        open: true,
+        message: res.data.message,
+        severity: "success",
+      });
     } catch (err) {
-      alert(err.response.data.message);
+      setAlert({
+        open: true,
+        message:
+          err.message === "Network Error"
+            ? "Network Error, your details will be submitted when you are back online"
+            : err.response.data.message,
+        severity: "error",
+      });
     }
   };
 

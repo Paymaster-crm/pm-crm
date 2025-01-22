@@ -3,8 +3,33 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
+import { Skeleton } from "@mui/material";
 
-function LoggedInDevices(props) {
+// Reusable component for displaying device information
+function DeviceInfo({ deviceName, location, loginAt }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <List sx={{ width: "100%" }}>
+        <ListItem alignItems="flex-start">
+          <ListItemText primary="Device Name" />
+          <ListItemText secondary={deviceName || <Skeleton width="50%" />} />
+        </ListItem>
+        <Divider variant="inset" component="li" />
+        <ListItem alignItems="flex-start">
+          <ListItemText primary="Location" />
+          <ListItemText secondary={location || <Skeleton />} />
+        </ListItem>
+        <Divider variant="inset" component="li" />
+        <ListItem alignItems="flex-start">
+          <ListItemText primary="Logged in at" />
+          <ListItemText secondary={loginAt || <Skeleton />} />
+        </ListItem>
+      </List>
+    </div>
+  );
+}
+
+function LoggedInDevices({ loading, geolocation }) {
   // Helper function to format date to dd-mm-yyyy hh:mm:ss
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -20,87 +45,42 @@ function LoggedInDevices(props) {
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
   };
 
-  // Check if geolocation is an array and map over it
-  return (
-    Array.isArray(props.geolocation) &&
-    props.geolocation?.map((location, id) => {
-      if (location.locationError) {
-        return (
-          <div key={id}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <List sx={{ width: "100%" }}>
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Device Name" />
-                  <ListItemText secondary={location.userAgent} />
-                </ListItem>
+  if (loading) {
+    // Render loading skeletons
+    return <DeviceInfo deviceName={null} location={null} loginAt={null} />;
+  }
 
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Location" />
-                  <ListItemText secondary={location.locationError} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="IP" />
-                  <ListItemText secondary={location.ipAddress} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Logged in at" />
-                  <ListItemText secondary={formatDate(location.loginAt)} />
-                </ListItem>
-              </List>
-            </div>
-            <br />
-            <Divider variant="fullWidth" sx={{ opacity: 1 }} />
-            <br />
-          </div>
-        );
-      }
+  return geolocation.map((location, id) => {
+    const deviceName = location.userAgent || "Unknown Device";
+    const locationError = location.locationError;
 
-      // Create an array of the values to display
-      const valuesToDisplay = [
-        location.village,
-        location.suburb,
-        location.stateDistrict,
-        location.state,
-        location.postcode,
-        location.country,
-      ];
+    // Combine and filter valid location values
+    const locationDetails = locationError
+      ? locationError
+      : [
+          location.village,
+          location.suburb,
+          location.stateDistrict,
+          location.state,
+          location.postcode,
+          location.country,
+        ]
+          .filter(Boolean)
+          .join(", ");
 
-      // Filter out empty or undefined values
-      const filteredValues = valuesToDisplay.filter((value) => value);
-
-      return (
-        <div key={id} style={{ backgroundColor: "#fff", padding: "20px" }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <List sx={{ width: "100%" }}>
-              <ListItem alignItems="flex-start">
-                <ListItemText primary="Device Name" />
-                <ListItemText secondary={location.userAgent} />
-              </ListItem>
-
-              <Divider variant="inset" component="li" />
-              <ListItem alignItems="flex-start">
-                <ListItemText primary="Location" />
-                <ListItemText secondary={filteredValues.join(", ")} />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-              <ListItem alignItems="flex-start">
-                <ListItemText primary="IP Address" />
-                <ListItemText secondary={location.ipAddress} />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-              <ListItem alignItems="flex-start">
-                <ListItemText primary="Logged in at" />
-                <ListItemText secondary={formatDate(location.loginAt)} />
-              </ListItem>
-            </List>
-          </div>
-        </div>
-      );
-    })
-  );
+    return (
+      <div key={id} className="profile-container">
+        <DeviceInfo
+          deviceName={deviceName}
+          location={locationDetails}
+          loginAt={formatDate(location.loginAt)}
+        />
+        <br />
+        <Divider variant="fullWidth" sx={{ opacity: 1 }} />
+        <br />
+      </div>
+    );
+  });
 }
 
 export default LoggedInDevices;

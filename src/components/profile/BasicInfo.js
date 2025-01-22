@@ -1,216 +1,162 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
-import { Container, Row, Col } from "react-bootstrap";
+import Grid from "@mui/material/Grid2";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 
-function BasicInfo(props) {
+// Reusable component for rendering a section
+function Section({ title, children }) {
   return (
-    <Container style={{ backgroundColor: "white", padding: "20px" }}>
-      <Row>
-        <Col>
-          <div>
-            <h5>Profile Info</h5>
-            <div
-              style={{ display: "flex", alignItems: "center", width: "100%" }}
-            >
-              <Avatar
-                src={props.user.employee_photo}
-                style={{ width: 80, height: 80 }}
-              />
+    <div>
+      <h5>{title}</h5>
+      <div style={{ display: "flex", alignItems: "center" }}>{children}</div>
+    </div>
+  );
+}
 
-              <List sx={{ width: "100%" }}>
-                <ListItem>
-                  <ListItemText primary="Username" />
-                  <ListItemText secondary={props.user.username} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Name" />
-                  <ListItemText
-                    secondary={[
-                      props.user.first_name,
-                      props.user.middle_name,
-                      props.user.last_name,
-                    ]
-                      .filter(Boolean)
-                      .join(" ")}
-                  />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Birth Date" />
-                  <ListItemText secondary={props.user.dob} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Blood Group" />
-                  <ListItemText secondary={props.user.blood_group} />
-                </ListItem>
-              </List>
-            </div>
-          </div>
-        </Col>
+// Reusable component for rendering a list of info items
+function InfoList({ data }) {
+  return (
+    <List sx={{ width: "100%" }}>
+      {data.map((item, index) => (
+        <React.Fragment key={index}>
+          <ListItem alignItems="flex-start">
+            <ListItemText primary={item.label} />
+            {item.link ? (
+              <a href={item.link}>
+                <ListItemText
+                  sx={{ color: "blue !important" }}
+                  secondary={item.value}
+                />
+              </a>
+            ) : (
+              <ListItemText secondary={item.value} />
+            )}
+          </ListItem>
+          {index < data.length - 1 && (
+            <Divider variant="inset" component="li" />
+          )}
+        </React.Fragment>
+      ))}
+    </List>
+  );
+}
 
-        <Col>
-          <div>
-            <h5>Contact Info</h5>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <List sx={{ width: "100%" }}>
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Email" />
-                  <ListItemText secondary={props.user.email} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Official Email" />
-                  <ListItemText secondary={props.user.official_email} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Mobile" />
-                  <ListItemText secondary={props.user.mobile} />
-                </ListItem>
-              </List>
-            </div>
-          </div>
-        </Col>
-      </Row>
+// Main component
+function BasicInfo({ user }) {
+  const addressInfo = [
+    {
+      label: "Communication Address",
+      value: [
+        user.communication_address_line_1,
+        user.communication_address_line_2,
+        user.communication_address_city,
+        user.communication_address_area,
+        user.communication_address_state,
+        user.communication_address_pincode,
+      ]
+        .filter(Boolean)
+        .join(", "),
+    },
+    {
+      label: "Permanent Address",
+      value: [
+        user.permanent_address_line_1,
+        user.permanent_address_line_2,
+        user.permanent_address_city,
+        user.permanent_address_area,
+        user.permanent_address_state,
+        user.permanent_address_pincode,
+      ]
+        .filter(Boolean)
+        .join(", "),
+    },
+  ];
 
-      <Divider variant="fullWidth" sx={{ opacity: 1 }} />
-      <br />
-      <Row>
-        <Col>
-          <div>
-            <h5>Address Info</h5>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <List sx={{ width: "100%" }}>
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Communication Address" />
-                  <ListItemText
-                    secondary={[
-                      props.user.communication_address_line_1,
-                      props.user.communication_address_line_2,
-                      props.user.communication_address_city,
-                      props.user.communication_address_area,
-                      props.user.communication_address_state,
-                      props.user.communication_address_pincode,
-                    ]
-                      .filter(Boolean)
-                      .join(", ")}
-                  />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Permanent Address" />
-                  <ListItemText
-                    secondary={[
-                      props.user.permanent_address_line_1,
-                      props.user.permanent_address_line_2,
-                      props.user.permanent_address_city,
-                      props.user.permanent_address_area,
-                      props.user.permanent_address_state,
-                      props.user.permanent_address_pincode,
-                    ]
-                      .filter(Boolean)
-                      .join(", ")}
-                  />
-                </ListItem>
-              </List>
-            </div>
-          </div>
-        </Col>
-
-        <Col>
-          <div>
-            <h5>Bank Info</h5>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <List sx={{ width: "100%" }}>
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Bank Account Number" />
-                  <ListItemText secondary={props.user.bank_account_no} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Bank Name" />
-                  <ListItemText secondary={props.user.bank_name} />
-                </ListItem>
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="IFSC" />
-                  <ListItemText secondary={props.user.ifsc_code} />
-                </ListItem>
-              </List>
-            </div>
-          </div>
-        </Col>
-      </Row>
+  return (
+    <Grid container className="profile-container">
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Section title="Profile Info">
+          <Avatar src={user.employee_photo} style={{ width: 80, height: 80 }} />
+          <InfoList
+            data={[
+              { label: "Username", value: user.username },
+              { label: "Name", value: user.fullName },
+              { label: "Birth Date", value: user.dob },
+              { label: "Blood Group", value: user.blood_group },
+            ]}
+          />
+        </Section>
+      </Grid>
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Section title="Contact Info">
+          <InfoList
+            data={[
+              { label: "Email", value: user.email },
+              { label: "Official Email", value: user.official_email },
+              { label: "Mobile", value: user.mobile },
+            ]}
+          />
+        </Section>
+      </Grid>
 
       <Divider variant="fullWidth" sx={{ opacity: 1 }} />
       <br />
 
-      <Row>
-        <Col>
-          <div>
-            <h5>Employment Info</h5>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <List sx={{ width: "100%" }}>
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Designation" />
-                  <ListItemText secondary={props.user.designation} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Department" />
-                  <ListItemText secondary={props.user.department} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="Joining Date" />
-                  <ListItemText secondary={props.user.joining_date} />
-                </ListItem>
-              </List>
-            </div>
-          </div>
-        </Col>
-        <Col>
-          <div>
-            <h5>Documents</h5>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <List sx={{ width: "100%" }}>
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="AADHAR Number" />
-                  <a href={props.user.aadhar_photo_front}>
-                    <ListItemText
-                      sx={{ color: "blue !important" }}
-                      secondary={props.user.aadhar_no}
-                    />
-                  </a>
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="PAN Number" />
-                  <a href={props.user.pan_photo}>
-                    <ListItemText secondary={props.user.pan_no} />
-                  </a>
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="PF Number" />
-                  <ListItemText secondary={props.user.pf_no} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemText primary="ESIC Number" />
-                  <ListItemText secondary={props.user.esic_no} />
-                </ListItem>
-              </List>
-            </div>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Section title="Address Info">
+          <InfoList data={addressInfo} />
+        </Section>
+      </Grid>
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Section title="Bank Info">
+          <InfoList
+            data={[
+              { label: "Bank Account Number", value: user.bank_account_no },
+              { label: "Bank Name", value: user.bank_name },
+              { label: "IFSC", value: user.ifsc_code },
+            ]}
+          />
+        </Section>
+      </Grid>
+
+      <Divider variant="fullWidth" sx={{ opacity: 1 }} />
+      <br />
+
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Section title="Employment Info">
+          <InfoList
+            data={[
+              { label: "Designation", value: user.designation },
+              { label: "Department", value: user.department },
+              { label: "Joining Date", value: user.joining_date },
+            ]}
+          />
+        </Section>
+      </Grid>
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Section title="Documents">
+          <InfoList
+            data={[
+              {
+                label: "AADHAR Number",
+                value: user.aadhar_no,
+                link: user.aadhar_photo_front,
+              },
+              {
+                label: "PAN Number",
+                value: user.pan_no,
+                link: user.pan_photo,
+              },
+              { label: "PF Number", value: user.pf_no },
+              { label: "ESIC Number", value: user.esic_no },
+            ]}
+          />
+        </Section>
+      </Grid>
+    </Grid>
   );
 }
 

@@ -1,9 +1,8 @@
 import { useEffect } from "react";
-import { toggleFullScreen } from "../utils/keyboard-shortcuts/toggleFullScreen";
 
 function useFullScreen() {
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = async (event) => {
       // Check for Shift + S (Shift key and 'S' key)
       if (
         (event.ctrlKey || event.metaKey) &&
@@ -11,6 +10,9 @@ function useFullScreen() {
         event.key === "f"
       ) {
         event.preventDefault();
+        const { toggleFullScreen } = await import(
+          "../utils/keyboard-shortcuts/toggleFullScreen"
+        );
         toggleFullScreen();
       }
     };

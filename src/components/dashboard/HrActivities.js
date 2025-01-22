@@ -3,49 +3,48 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import axios from "axios";
+import { Skeleton } from "@mui/material";
+import useTableConfig from "../../hooks/useTableConfig";
+import apiClient from "../../config/axiosConfig";
+import { getTableColumns } from "../../utils/table/getTableColumns";
 
 function HrActivities() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getData() {
       try {
-        const res = await axios(
-          `${process.env.REACT_APP_API_STRING}/get-hr-activities`,
-          { withCredentials: true }
-        );
+        const res = await apiClient(`/get-hr-activities`);
         setData(res.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
   }, []);
 
-  const columns = [
+  const baseColumns = [
     {
       accessorKey: "title",
       header: "Title",
-      enableSorting: false,
-      size: 160,
     },
     {
       accessorKey: "description",
       header: "Description",
-      enableSorting: false,
-      size: 160,
     },
     {
       accessorKey: "date",
       header: "Date",
-      enableSorting: false,
-      size: 160,
+
       Cell: ({ cell }) => {
         const date = cell.getValue();
-
-        // Convert the date to dd-mm-yyyy format
         const formatDate = (dateString) => {
+          if (!dateString || typeof dateString !== "string") {
+            return <Skeleton width="50%" />;
+          }
           const [year, month, day] = dateString.split("-");
           return `${day}-${month}-${year}`;
         };
@@ -56,37 +55,24 @@ function HrActivities() {
     {
       accessorKey: "time",
       header: "Time",
-      enableSorting: false,
-      size: 160,
     },
   ];
 
+  const columns = getTableColumns(baseColumns);
+  const baseConfig = useTableConfig(data, columns, loading);
+  baseConfig.enableTopToolbar = false;
+
   const table = useMaterialReactTable({
-    columns,
-    data,
-    enableBottomToolbar: false,
-    enableTopToolbar: false,
-    enableStickyHeader: true,
-    muiTableContainerProps: {
-      sx: { maxHeight: "250px", overflowY: "auto" },
-    },
-    muiTableHeadCellProps: {
-      sx: {
-        position: "sticky",
-        top: 0,
-        zIndex: 1,
-      },
-    },
+    ...baseConfig,
   });
 
   return (
-    <div className="dashboard-container">
-      <h5>
+    <div className="dashboard-container hr-activities">
+      <h2>
         <strong>HR Activities</strong>
-        <br />
-        <br />
-        <MaterialReactTable table={table} />
-      </h5>
+      </h2>
+      <br />
+      <MaterialReactTable table={table} />
     </div>
   );
 }

@@ -1,20 +1,15 @@
 import React, { useContext, useRef, useEffect } from "react";
 import { InputText } from "primereact/inputtext";
 import { UserContext } from "../contexts/UserContext";
-import { checkCredentials } from "../utils/webAuthn/checkCredentials";
-import { getLoginOptions } from "../utils/webAuthn/getLoginOptions";
-import { formatLoginOptions } from "../utils/webAuthn/formatLoginOptions";
-import { getCredential } from "../utils/webAuthn/getCredential";
-import { serializeCredential } from "../utils/webAuthn/serializeCredential";
-import { verifyCredential } from "../utils/webAuthn/verifyCredential";
-import { login } from "../utils/webAuthn/login";
 import CustomButton from "../components/customComponents/CustomButton";
 import { useFormik } from "formik";
 import { validationSchema } from "../schemas/auth/webAuthnLoginSchema";
+import { AlertContext } from "../contexts/AlertContext";
 
 function WebAuthnLoginForm(props) {
   const { setUser } = useContext(UserContext);
   const usernameRef = useRef(null);
+  const { setAlert } = useContext(AlertContext);
 
   useEffect(() => {
     // Focus on the username input when the component mounts
@@ -34,10 +29,17 @@ function WebAuthnLoginForm(props) {
       let credentialRes;
 
       try {
+        const { checkCredentials } = await import(
+          "../utils/webAuthn/checkCredentials"
+        );
         credentialRes = await checkCredentials(values.username);
 
         if (!credentialRes) {
-          alert("User not found");
+          setAlert({
+            open: true,
+            message: "User not found",
+            severity: "error",
+          });
           return;
         }
 
@@ -47,23 +49,40 @@ function WebAuthnLoginForm(props) {
           return;
         }
 
+        const { getLoginOptions } = await import(
+          "../utils/webAuthn/getLoginOptions"
+        );
         const loginOptions = await getLoginOptions(values.username);
         if (!loginOptions) {
           props.setUseWebAuthn(false);
           return;
         }
 
+        const { formatLoginOptions } = await import(
+          "../utils/webAuthn/formatLoginOptions"
+        );
         const formattedOptions = formatLoginOptions(loginOptions);
 
+        const { getCredential } = await import(
+          "../utils/webAuthn/getCredential"
+        );
         const credential = await getCredential(formattedOptions);
+
+        const { serializeCredential } = await import(
+          "../utils/webAuthn/serializeCredential"
+        );
         const serializedCredential = serializeCredential(credential);
 
+        const { verifyCredential } = await import(
+          "../utils/webAuthn/verifyCredential"
+        );
         const isVerified = await verifyCredential(
           values.username,
           serializedCredential
         );
         if (isVerified) {
-          await login(values.username, serializedCredential, setUser);
+          const { login } = await import("../utils/webAuthn/login");
+          await login(values.username, serializedCredential, setUser, setAlert);
         } else {
           props.setUseWebAuthn(false);
         }

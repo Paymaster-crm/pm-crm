@@ -1,52 +1,71 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useContext } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton } from "@mui/material";
+import { IconButton, Skeleton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import useUpdateFavicon from "../../hooks/useUpdateFavicon";
+import { NotificationContext } from "../../contexts/NotificationContext";
 
 function Notifications() {
-  const [data, setData] = useState([]);
+  const { notifications, setNotifications, loading } =
+    useContext(NotificationContext);
+  const navigate = useNavigate();
+  useUpdateFavicon(notifications);
 
-  async function getData() {
-    try {
-      const res = await axios(
-        `${process.env.REACT_APP_API_STRING}/get-notifications`,
-        { withCredentials: true }
-      );
-      setData(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  const renderSkeleton = (key) => (
+    <div
+      key={key}
+      className="notification-container"
+      style={{ display: "block" }}
+    >
+      <Skeleton width="20%" />
+      <Skeleton />
+      <Skeleton width="60%" />
+    </div>
+  );
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const renderNotificationContent = (item) => (
+    <div style={{ flex: 1 }}>
+      <span>{item.title}</span>
+      <p>{item.message}</p>
+    </div>
+  );
 
-  const deleteNotification = async (_id) => {
-    try {
-      await axios.delete(
-        `${process.env.REACT_APP_API_STRING}/delete-notification/${_id}`,
-        { withCredentials: true }
-      );
-      getData();
-    } catch (err) {
-      console.error(err);
-    }
+  const handleNotificationClick = async (itemTitle) => {
+    const { handleNotificationClick } = await import(
+      "../../utils/notifications/handleNotificationClick"
+    );
+    handleNotificationClick(itemTitle, navigate);
+  };
+
+  const handleDeleteNotification = async (e, notificationId) => {
+    e.stopPropagation();
+    const { deleteNotification } = await import(
+      "../../utils/notifications/deleteNotification"
+    );
+    deleteNotification(notificationId, notifications, setNotifications);
   };
 
   return (
-    <div className="dashboard-container">
-      <h5>
+    <div className="dashboard-container notifications">
+      <h2>
         <strong>Notifications</strong>
-      </h5>
-      {data.length > 0 ? (
-        data.map((item, id) => (
-          <div key={id} className="notification-container" >
-            <div style={{ flex: 1 }}>
-              <span>{item.title}</span>
-              <p>{item.message}</p>
-            </div>
-            <IconButton onClick={() => deleteNotification(item._id)}>
+      </h2>
+      {loading ? (
+        Array(3)
+          .fill(null)
+          .map((_, index) => renderSkeleton(index))
+      ) : notifications.length > 0 ? (
+        notifications.map((item, id) => (
+          <div
+            key={id}
+            className="notification-container"
+            onClick={() => handleNotificationClick(item.title)}
+          >
+            {renderNotificationContent(item)}
+            <IconButton
+              aria-label="delete-notification"
+              onClick={(e) => handleDeleteNotification(e, item._id)}
+            >
               <DeleteIcon sx={{ color: "#F15C6D" }} />
             </IconButton>
           </div>

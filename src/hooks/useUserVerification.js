@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../config/axiosConfig";
 
 const useUserVerification = (setUser) => {
   const navigate = useNavigate();
@@ -9,10 +9,7 @@ const useUserVerification = (setUser) => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await axios(
-          `${process.env.REACT_APP_API_STRING}/verify-user/`,
-          { withCredentials: true }
-        );
+        const res = await apiClient(`/verify-user/`);
 
         if (res.data.user) {
           setUser(res.data.user);

@@ -3,18 +3,16 @@ import { UserContext } from "../../contexts/UserContext";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { Row, Col } from "react-bootstrap";
+import Grid from "@mui/material/Grid2";
 import Switch from "@mui/material/Switch";
-import { initiateWebauthnRegistration } from "../../utils/webAuthn/initiateWebauthnRegistration";
-import { disableWebAuthn } from "../../utils/webAuthn/disableWebAuthn";
-import { enableTwoFactor } from "../../utils/auth/enableTwoFactor";
-import { disableTwoFactor } from "../../utils/auth/disableTwoFactor";
 import Divider from "@mui/material/Divider";
+import { AlertContext } from "../../contexts/AlertContext";
 
 function TwoFactorAuthentication() {
   const { user, setUser } = useContext(UserContext);
   const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
   const [qr, setQr] = useState(null);
+  const { setAlert } = useContext(AlertContext);
 
   useEffect(() => {
     if (user) {
@@ -23,17 +21,23 @@ function TwoFactorAuthentication() {
     }
   }, [user]);
 
-  const handleTwoFASwitchChange = (e) => {
+  const handleTwoFASwitchChange = async (e) => {
     if (e.target.checked) {
+      const { enableTwoFactor } = await import(
+        "../../utils/auth/enableTwoFactor"
+      );
       enableTwoFactor(user, setIsTwoFactorEnabled, setQr, setUser);
     } else {
-      disableTwoFactor(setIsTwoFactorEnabled);
+      const { disableTwoFactor } = await import(
+        "../../utils/auth/disableTwoFactor"
+      );
+      disableTwoFactor(setIsTwoFactorEnabled, setAlert);
     }
   };
 
   return (
-    <Row>
-      <Col>
+    <Grid container>
+      <Grid size={12}>
         <div>
           <div style={{ display: "flex", alignItems: "center" }}>
             <List
@@ -49,14 +53,24 @@ function TwoFactorAuthentication() {
                       <button
                         style={{ marginTop: 0 }}
                         className="btn"
-                        onClick={() => initiateWebauthnRegistration()}
+                        onClick={async () => {
+                          const { initiateWebauthnRegistration } = await import(
+                            "../../utils/webAuthn/initiateWebauthnRegistration"
+                          );
+                          initiateWebauthnRegistration(setAlert);
+                        }}
                       >
                         Enable on this device
                       </button>
                       <button
                         style={{ marginTop: 0, marginLeft: "10px" }}
                         className="btn"
-                        onClick={() => disableWebAuthn()}
+                        onClick={async () => {
+                          const { disableWebAuthn } = await import(
+                            "../../utils/webAuthn/disableWebAuthn"
+                          );
+                          disableWebAuthn(setAlert);
+                        }}
                       >
                         Disable
                       </button>
@@ -88,8 +102,8 @@ function TwoFactorAuthentication() {
             </List>
           </div>
         </div>
-      </Col>
-    </Row>
+      </Grid>
+    </Grid>
   );
 }
 

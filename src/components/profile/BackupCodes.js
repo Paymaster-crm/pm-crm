@@ -1,117 +1,105 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import axios from "axios";
+import { AlertContext } from "../../contexts/AlertContext";
+import { Tooltip, IconButton } from "@mui/material";
 import "../../styles/backup-codes.scss";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import Divider from "@mui/material/Divider";
-import { Row, Col } from "react-bootstrap";
+import { Divider } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MailIcon from "@mui/icons-material/Mail";
 
 function BackupCodes() {
   const { user, setUser } = useContext(UserContext);
+  const { setAlert } = useContext(AlertContext);
 
-  // Helper to split the backup codes into pairs
-  const splitCodesIntoPairs = (codes) => {
-    const pairs = [];
-    for (let i = 0; i < codes?.length; i += 2) {
-      pairs.push(codes.slice(i, i + 2));
-    }
-    return pairs;
-  };
+  const splitCodesIntoPairs = (codes) =>
+    codes?.reduce((acc, curr, idx) => {
+      if (idx % 2 === 0) acc.push([curr]);
+      else acc[acc.length - 1].push(curr);
+      return acc;
+    }, []);
 
   const codePairs = splitCodesIntoPairs(user.backupCodes);
 
-  const requestNewCodes = async () => {
+  const handleAction = async (action, ...args) => {
     try {
-      const res = await axios(
-        `${process.env.REACT_APP_API_STRING}/request-new-backup-codes`,
-        { withCredentials: true }
-      );
-
-      setUser({ ...user, backupCodes: res.data.backupCodes });
-    } catch (error) {
-      console.error("Error occurred while requesting new backup codes:", error);
-    }
-  };
-
-  const deleteCodes = async () => {
-    try {
-      const res = await axios.delete(
-        `${process.env.REACT_APP_API_STRING}/delete-backup-codes`,
-        { withCredentials: true }
-      );
-
-      if (res.data.message === "Backup codes deleted") {
-        setUser({ ...user, backupCodes: [] });
-      } else {
-        alert(res.data.message);
+      switch (action) {
+        case "requestNewCodes": {
+          const { requestNewCodes } = await import(
+            "../../utils/profile/requestNewCodes"
+          );
+          requestNewCodes(...args);
+          break;
+        }
+        case "deleteCodes": {
+          const { deleteCodes } = await import(
+            "../../utils/profile/deleteCodes"
+          );
+          deleteCodes(...args);
+          break;
+        }
+        case "sendEmail": {
+          const { sendEmail } = await import(
+            "../../utils/profile/sendBackupCodeEmail"
+          );
+          sendEmail(...args);
+          break;
+        }
+        default:
+          throw new Error("Invalid action type");
       }
     } catch (error) {
-      alert("An error occurred while deleting backup codes.");
-      console.error("Error deleting backup codes:", error);
+      console.error("Failed to perform action:", error);
     }
   };
 
-  const sendEmail = async () => {
-    try {
-      const res = await axios(
-        `${process.env.REACT_APP_API_STRING}/send-backup-codes-email`,
-        { withCredentials: true }
-      );
-      alert(res.data.message);
-    } catch (error) {
-      console.error("Error sending email:", error);
-      alert("Failed to send email.");
-    }
-  };
+  function ActionButton({ title, icon: Icon, onClick }) {
+    return (
+      <Tooltip title={title}>
+        <IconButton onClick={onClick}>
+          <Icon />
+        </IconButton>
+      </Tooltip>
+    );
+  }
 
   return (
-    <div
-      className="backup-codes"
-      style={{ backgroundColor: "white", padding: "20px" }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+    <div className="backup-codes profile-container">
+      <div style={{ display: "flex", alignItems: "center" }}>
         <div style={{ flex: 1 }}>
           <h5>Your Backup Codes</h5>
           <p>{user.backupCodes?.length} backup codes remaining</p>
         </div>
-        <div>
-          <Tooltip title="Request new backup codes">
-            <IconButton onClick={requestNewCodes}>
-              <ReplayRoundedIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete backup codes">
-            <IconButton onClick={deleteCodes}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Email backup codes">
-            <IconButton onClick={sendEmail}>
-              <MailIcon />
-            </IconButton>
-          </Tooltip>
+        <div className="backup-codes-actions">
+          <ActionButton
+            title="Request new backup codes"
+            icon={ReplayRoundedIcon}
+            onClick={() => handleAction("requestNewCodes", user, setUser)}
+          />
+          <ActionButton
+            title="Delete backup codes"
+            icon={DeleteIcon}
+            onClick={() => handleAction("deleteCodes", user, setUser, setAlert)}
+          />
+          <ActionButton
+            title="Email backup codes"
+            icon={MailIcon}
+            onClick={() => handleAction("sendEmail", setAlert)}
+          />
         </div>
       </div>
 
       <Divider variant="fullWidth" sx={{ opacity: 1, margin: "20px 0" }} />
 
-      {codePairs.map((pair, index) => (
-        <Row className="backup-codes-row">
-          <Col xs={6}>
-            <p>{pair[0]}</p>
-          </Col>
-          <Col xs={6}>{pair[1] && <p>{pair[1]}</p>}</Col>
-        </Row>
+      {codePairs?.map((pair, index) => (
+        <Grid container key={index} className="backup-codes-row">
+          {pair.map((code, colIndex) => (
+            <Grid size={6} key={colIndex}>
+              <p>{code}</p>
+            </Grid>
+          ))}
+        </Grid>
       ))}
     </div>
   );

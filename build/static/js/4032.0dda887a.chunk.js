@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[4032],{4032:(e,c,s)=>{s.d(c,{requestNewCodes:()=>a});var r=s(3785);const a=async(e,c)=>{try{const s=await(0,r.A)("/request-new-backup-codes");c({...e,backupCodes:s.data.backupCodes})}catch(s){console.error("Error occurred while requesting new backup codes:",s)}}}}]);

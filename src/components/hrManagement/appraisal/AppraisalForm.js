@@ -1,5 +1,5 @@
-import React from "react";
-import axios from "axios";
+import React, { useContext } from "react";
+import apiClient from "../../../config/axiosConfig";
 import { useFormik } from "formik";
 import Rating from "@mui/material/Rating";
 import CustomButton from "../../customComponents/CustomButton";
@@ -8,9 +8,11 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
 import { validationSchema } from "../../../schemas/hrManagement/appraisalSchema";
 import useUserList from "../../../hooks/useUserList";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 function AppraisalForm() {
   const userList = useUserList();
+  const { setAlert } = useContext(AlertContext);
 
   const formik = useFormik({
     initialValues: {
@@ -24,16 +26,22 @@ function AppraisalForm() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_STRING}/add-appraisal`,
-          values,
-          {
-            withCredentials: true,
-          }
-        );
-        alert(res.data.message);
+        const res = await apiClient.post(`/add-appraisal`, values);
+
+        setAlert({
+          open: true,
+          message: res.data.message,
+          severity: "success",
+        });
       } catch (err) {
-        console.error(err);
+        setAlert({
+          open: true,
+          message:
+            err.message === "Network Error"
+              ? "Network Error, your details will be submitted when you are back online"
+              : err.response.data.message,
+          severity: "error",
+        });
       }
     },
   });
@@ -89,6 +97,7 @@ function AppraisalForm() {
         multiline
         rows={3}
         formik={formik}
+        useSpeech={true}
       />
       <CustomTextField
         id="areasOfImprovement"
@@ -97,6 +106,7 @@ function AppraisalForm() {
         multiline
         rows={3}
         formik={formik}
+        useSpeech={true}
       />
       <CustomTextField
         id="feedback"
@@ -105,6 +115,7 @@ function AppraisalForm() {
         multiline
         rows={3}
         formik={formik}
+        useSpeech={true}
       />
       <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
     </form>

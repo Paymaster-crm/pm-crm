@@ -1,27 +1,37 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React, { useContext, useEffect } from "react";
 import { useFormik } from "formik";
 import { InputOtp } from "primereact/inputotp";
 import { Password } from "primereact/password";
 import { validationSchema } from "../schemas/auth/updatePasswordSchema";
 import CustomButton from "../components/customComponents/CustomButton";
+import { AlertContext } from "../contexts/AlertContext";
+import apiClient from "../config/axiosConfig";
 
 function ForgotPasswordForm(props) {
+  const { setAlert } = useContext(AlertContext);
   useEffect(() => {
     async function sendOtp() {
       try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_STRING}/send-forgot-password-otp`,
-          { username: props.username },
-          { withCredentials: true }
-        );
-        alert(res.data.message);
+        const res = await apiClient.post(`/send-forgot-password-otp`, {
+          username: props.username,
+        });
+
+        setAlert({
+          open: true,
+          message: res.data.message,
+          severity: "success",
+        });
       } catch (err) {
-        alert("Failed to send OTP");
+        setAlert({
+          open: true,
+          message: err.response.data.message,
+          severity: "error",
+        });
       }
     }
 
     sendOtp();
+    // eslint-disable-next-line
   }, [props.username]);
 
   const formik = useFormik({
@@ -33,26 +43,33 @@ function ForgotPasswordForm(props) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const res = await axios.put(
-          `${process.env.REACT_APP_API_STRING}/update-password`,
-          {
-            username: props.username,
-            otp: values.otp,
-            password: values.password,
-          },
-          {
-            withCredentials: true,
-          }
-        );
-        alert(res.data.message);
+        const res = await apiClient.put(`/update-password`, {
+          username: props.username,
+          otp: values.otp,
+          password: values.password,
+        });
+
+        setAlert({
+          open: true,
+          message: res.data.message,
+          severity: "success",
+        });
         if (res.data.message === "Password has been successfully reset") {
           props.setForgotPassword(false);
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          alert(error.response.data.message);
+          setAlert({
+            open: true,
+            message: error.response.data.message,
+            severity: "error",
+          });
         } else {
-          alert("An unexpected error occurred. Please try again later.");
+          setAlert({
+            open: true,
+            message: "An unexpected error occurred. Please try again later.",
+            severity: "error",
+          });
         }
       }
     },
@@ -67,7 +84,7 @@ function ForgotPasswordForm(props) {
         <InputOtp
           placeholder="Enter OTP"
           value={formik.values.otp}
-          onChange={(e) => formik.setFieldValue("otp", e.value)} // Handle value directly
+          onChange={(e) => formik.setFieldValue("otp", e.value)}
           mask
           integerOnly
           length={6}

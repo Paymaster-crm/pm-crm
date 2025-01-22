@@ -1,58 +1,83 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useContext, useEffect } from "react";
+import { IconButton } from "@mui/material";
+import MicIcon from "@mui/icons-material/Mic";
+import SaveIcon from "@mui/icons-material/Save";
 import "../../styles/notes.scss";
+import useSpeechRecognition from "../../hooks/useSpeechRecognition";
+import { useFormik } from "formik";
+import apiClient from "../../config/axiosConfig";
+import { AlertContext } from "../../contexts/AlertContext";
 
 function StickyNotes() {
-  const [content, setContent] = useState(`<h3>Note</h3>`);
+  const { setAlert } = useContext(AlertContext);
+  const formik = useFormik({
+    initialValues: {
+      content: "<h3>Note</h3>",
+    },
+    onSubmit: async (values) => {
+      try {
+        await apiClient.post(`/add-sticky-note`, {
+          note: values.content,
+        });
+      } catch (error) {
+        setAlert({
+          open: true,
+          message:
+            error.message === "Network Error"
+              ? "Network Error, your details will be submitted when you are back online"
+              : error.response.data.message,
+          severity: "error",
+        });
+      }
+    },
+  });
 
+  // Load initial note data on mount
   useEffect(() => {
     async function getNote() {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_STRING}/get-sticky-note`,
-          { withCredentials: true }
+        const response = await apiClient.get(`/get-sticky-note`);
+        formik.setFieldValue(
+          "content",
+          response.data ? response.data : "<h3>Note</h3>"
         );
-
-        setContent(response.data ? response.data : `<h3>Note</h3>`);
       } catch (error) {
-        console.error("Error submitting content:", error);
+        console.error("Error fetching content:", error);
       }
     }
-
     getNote();
+    // eslint-disable-next-line
   }, []);
 
-  // Function to handle API submission
-  const submitContent = async (updatedContent) => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_STRING}/add-sticky-note`,
-        {
-          note: updatedContent,
-        },
-        { withCredentials: true }
-      );
-
-      console.log("Content submitted successfully:", response.data);
-    } catch (error) {
-      console.error("Error submitting content:", error);
-    }
-  };
-
-  const handleBlur = (e) => {
-    const updatedContent = e.target.innerHTML;
-    setContent(updatedContent);
-    submitContent(updatedContent);
-  };
+  // Handle speech recognition input
+  const startSpeechRecognition = useSpeechRecognition(formik);
 
   return (
-    <div
-      className="post-it"
-      contentEditable
-      suppressContentEditableWarning={true}
-      onBlur={handleBlur}
-      dangerouslySetInnerHTML={{ __html: content }}
-    ></div>
+    <div style={{ position: "relative" }}>
+      <form onSubmit={formik.handleSubmit}>
+        <div
+          className="post-it sticky-notes"
+          contentEditable
+          suppressContentEditableWarning={true}
+          dangerouslySetInnerHTML={{ __html: formik.values.content }}
+        ></div>
+        <IconButton
+          aria-label="mic"
+          style={{ position: "absolute", top: "15px", right: "10px" }}
+          onClick={() => startSpeechRecognition("content")}
+        >
+          <MicIcon />
+        </IconButton>
+
+        <IconButton
+          type="submit"
+          aria-label="submit"
+          style={{ position: "absolute", bottom: "15px", right: "10px" }}
+        >
+          <SaveIcon />
+        </IconButton>
+      </form>
+    </div>
   );
 }
 

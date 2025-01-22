@@ -1,17 +1,25 @@
-import axios from "axios";
+import apiClient from "../../config/axiosConfig";
 
-export async function disableTwoFactor(setIsTwoFactorEnabled) {
+export async function disableTwoFactor(setIsTwoFactorEnabled, setAlert) {
   try {
-    const res = await axios.delete(
-      `${process.env.REACT_APP_API_STRING}/disable-two-factor`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.delete(`/disable-two-factor`);
     if (res.data.message === "Two factor authentication disabled") {
       setIsTwoFactorEnabled(false);
     } else {
-      alert(res.data.message);
+      setAlert({
+        open: true,
+        message: res.data.message,
+        severity: "success",
+      });
     }
   } catch (error) {
-    console.error(error);
+    setAlert({
+      open: true,
+      message:
+        error.message === "Network Error"
+          ? "Network Error, your details will be submitted when you are back online"
+          : error.response.data.message,
+      severity: "error",
+    });
   }
 }

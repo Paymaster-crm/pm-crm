@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useFormik } from "formik";
 import { IconButton, TextField } from "@mui/material";
-import { Row, Col } from "react-bootstrap";
-import axios from "axios";
+import Grid from "@mui/material/Grid2";
 import { states } from "../../../assets/data/statesData";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -19,6 +18,8 @@ import { handleAadharNoChange } from "../../../utils/kyc/handleAadharNoChange";
 import { handleInsuranceDetailsChange } from "../../../utils/kyc/handleInsuranceDetailsChange";
 import CustomTextField from "../../customComponents/CustomTextField";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { AlertContext } from "../../../contexts/AlertContext";
+import apiClient from "../../../config/axiosConfig";
 
 function CompleteKYC(props) {
   const [fileSnackbar, setFileSnackbar] = useState(false);
@@ -31,8 +32,10 @@ function CompleteKYC(props) {
     educationCertificates: null,
     experienceCertificate: null,
     electricityBill: null,
+    pcc: null,
     draCertificate: null,
   });
+  const { setAlert } = useContext(AlertContext);
 
   const formik = useFormik({
     initialValues: {
@@ -63,6 +66,7 @@ function CompleteKYC(props) {
       education_certificates: [],
       experience_certificate: "",
       electricity_bill: "",
+      pcc: "",
       dra: false,
       dra_certificate: "",
       pf_no: "",
@@ -75,17 +79,25 @@ function CompleteKYC(props) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_STRING}/complete-kyc`,
-          { ...values, username: props.username },
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await apiClient.post(`/complete-kyc`, {
+          ...values,
+          username: props.username,
+        });
 
-        alert(res.data.message);
+        setAlert({
+          open: true,
+          message: res.data.message,
+          severity: "success",
+        });
       } catch (error) {
-        console.error("Error occurred during KYC submission:", error);
+        setAlert({
+          open: true,
+          message:
+            error.message === "Network Error"
+              ? "Network Error, your details will be submitted when you are back online"
+              : error.response.data.message,
+          severity: "error",
+        });
       }
     },
   });
@@ -94,12 +106,7 @@ function CompleteKYC(props) {
     async function getData() {
       if (username) {
         try {
-          const res = await axios.get(
-            `${process.env.REACT_APP_API_STRING}/get-user-data/${username}`,
-            {
-              withCredentials: true,
-            }
-          );
+          const res = await apiClient(`/get-user-data/${username}`);
           formik.setValues(res.data);
         } catch (error) {
           // Log the error to the console
@@ -114,8 +121,8 @@ function CompleteKYC(props) {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Row>
-        <Col xs={4}>
+      <Grid container spacing={1}>
+        <Grid size={4}>
           <CustomUploadButton
             name={"Photo"}
             onChange={(e) => {
@@ -157,10 +164,10 @@ function CompleteKYC(props) {
           {formik.touched.employee_photo && formik.errors.employee_photo ? (
             <div style={{ color: "red" }}>{formik.errors.employee_photo}</div>
           ) : null}
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={4}>
+        </Grid>
+      </Grid>
+      <Grid container spacing={1}>
+        <Grid size={4}>
           <CustomTextField
             id="dob"
             name="dob"
@@ -168,26 +175,26 @@ function CompleteKYC(props) {
             formik={formik}
             type="date"
           />
-        </Col>
-        <Col xs={4}>
+        </Grid>
+        <Grid size={4}>
           <CustomTextField
             id="email"
             name="email"
             label="Email"
             formik={formik}
           />
-        </Col>
-        <Col xs={4}>
+        </Grid>
+        <Grid size={4}>
           <CustomTextField
             id="official_email"
             name="official_email"
             label="Official Email"
             formik={formik}
           />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={4}>
+        </Grid>
+      </Grid>
+      <Grid container spacing={1}>
+        <Grid size={4}>
           <TextField
             size="small"
             margin="dense"
@@ -213,24 +220,24 @@ function CompleteKYC(props) {
               maxLength: 10,
             }}
           />
-        </Col>
-        <Col xs={4}>
+        </Grid>
+        <Grid size={4}>
           <CustomTextField
             id="blood_group"
             name="blood_group"
             label="Blood Group"
             formik={formik}
           />
-        </Col>
-        <Col xs={4}>
+        </Grid>
+        <Grid size={4}>
           <CustomTextField
             id="qualification"
             name="qualification"
             label="Highest Qualification"
             formik={formik}
           />
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
       <br />
       <h5>Permanent Address</h5>
 
@@ -247,17 +254,17 @@ function CompleteKYC(props) {
         formik={formik}
       />
 
-      <Row>
-        <Col>
+      <Grid container spacing={1}>
+        <Grid size={4}>
           <CustomTextField
             id="permanent_address_city"
             name="permanent_address_city"
             label="City"
             formik={formik}
           />
-        </Col>
+        </Grid>
 
-        <Col>
+        <Grid size={4}>
           <CustomTextField
             id="permanent_address_state"
             name="permanent_address_state"
@@ -268,8 +275,8 @@ function CompleteKYC(props) {
               return { value: state, label: state };
             })}
           />
-        </Col>
-        <Col>
+        </Grid>
+        <Grid size={4}>
           <TextField
             size="small"
             margin="dense"
@@ -293,8 +300,8 @@ function CompleteKYC(props) {
             className="login-input"
             InputLabelProps={{ shrink: true }}
           />
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
       <br />
       <br />
       <h5>Communication Address</h5>
@@ -321,17 +328,17 @@ function CompleteKYC(props) {
         formik={formik}
       />
 
-      <Row>
-        <Col>
+      <Grid container spacing={1}>
+        <Grid size={4}>
           <CustomTextField
             id="communication_address_city"
             name="communication_address_city"
             label="City"
             formik={formik}
           />
-        </Col>
+        </Grid>
 
-        <Col>
+        <Grid size={4}>
           <CustomTextField
             id="communication_address_state"
             name="communication_address_state"
@@ -342,8 +349,8 @@ function CompleteKYC(props) {
               return { value: state, label: state };
             })}
           />
-        </Col>
-        <Col>
+        </Grid>
+        <Grid size={4}>
           <TextField
             size="small"
             margin="dense"
@@ -371,12 +378,12 @@ function CompleteKYC(props) {
             className="login-input"
             InputLabelProps={{ shrink: true }}
           />
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
       <br />
       <h5>Documents</h5>
-      <Row>
-        <Col xs={4}>
+      <Grid container spacing={1}>
+        <Grid size={4}>
           <TextField
             size="small"
             margin="dense"
@@ -397,8 +404,8 @@ function CompleteKYC(props) {
             className="login-input"
             InputLabelProps={{ shrink: true }}
           />
-        </Col>
-        <Col xs={4}>
+        </Grid>
+        <Grid size={4}>
           <CustomUploadButton
             name={"Aadhar Photo Front"}
             onChange={(e) => {
@@ -435,8 +442,8 @@ function CompleteKYC(props) {
               {formik.errors.aadhar_photo_front}
             </div>
           ) : null}
-        </Col>
-        <Col xs={4}>
+        </Grid>
+        <Grid size={4}>
           <CustomUploadButton
             name={"Aadhar Photo Front"}
             onChange={(e) => {
@@ -473,11 +480,11 @@ function CompleteKYC(props) {
               {formik.errors.aadhar_photo_back}
             </div>
           ) : null}
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
 
-      <Row>
-        <Col xs={4}>
+      <Grid container spacing={1}>
+        <Grid size={4}>
           <TextField
             size="small"
             margin="dense"
@@ -501,8 +508,8 @@ function CompleteKYC(props) {
             className="login-input"
             InputLabelProps={{ shrink: true }}
           />
-        </Col>
-        <Col xs={4}>
+        </Grid>
+        <Grid size={4}>
           <CustomUploadButton
             name={"PAN Photo"}
             onChange={(e) => {
@@ -539,11 +546,11 @@ function CompleteKYC(props) {
           {formik.touched.pan_photo && formik.errors.pan_photo ? (
             <div style={{ color: "red" }}>{formik.errors.pan_photo}</div>
           ) : null}
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
 
-      <Row>
-        <Col xs={4}>
+      <Grid container spacing={1}>
+        <Grid size={4}>
           <CustomUploadButton
             name={"Education Certificates"}
             onChange={(e) => {
@@ -594,9 +601,9 @@ function CompleteKYC(props) {
               {formik.errors.education_certificates}
             </div>
           ) : null}
-        </Col>
+        </Grid>
 
-        <Col xs={4}>
+        <Grid size={4}>
           <CustomUploadButton
             name={"Experience Certificate / Relieving Letter"}
             onChange={(e) => {
@@ -636,9 +643,9 @@ function CompleteKYC(props) {
               {formik.errors.experience_certificate}
             </div>
           ) : null}
-        </Col>
+        </Grid>
 
-        <Col xs={4}>
+        <Grid size={4}>
           <CustomUploadButton
             name={"Electricity Bill / Rent Agreement"}
             onChange={(e) => {
@@ -673,11 +680,39 @@ function CompleteKYC(props) {
           {formik.touched.electricity_bill && formik.errors.electricity_bill ? (
             <div style={{ color: "red" }}>{formik.errors.electricity_bill}</div>
           ) : null}
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
 
-      <Row>
-        <Col xs={4}>
+      <Grid container spacing={1}>
+        <Grid size={4}>
+          <CustomUploadButton
+            name={"PCC"}
+            onChange={(e) => {
+              handleFileUpload(e, "pcc", "pcc", formik, setFileSnackbar, false);
+            }}
+            ref={(el) => (fileInputRefs.current.pcc = el)}
+          />
+
+          <br />
+          {formik.values.pcc && (
+            <>
+              <br />
+              <div
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
+                <a href={formik.values.pcc}>View</a>
+                <IconButton onClick={() => formik.setFieldValue("pcc", "")}>
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            </>
+          )}
+          {formik.touched.pcc && formik.errors.pcc ? (
+            <div style={{ color: "red" }}>{formik.errors.pcc}</div>
+          ) : null}
+        </Grid>
+
+        <Grid size={4}>
           <FormGroup row>
             <FormControlLabel
               control={
@@ -691,8 +726,8 @@ function CompleteKYC(props) {
               label="DRA"
             />
           </FormGroup>
-        </Col>
-        <Col xs={4}>
+        </Grid>
+        <Grid size={4}>
           {formik.values.dra && (
             <>
               <CustomUploadButton
@@ -740,8 +775,8 @@ function CompleteKYC(props) {
               ) : null}
             </>
           )}
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
 
       <br />
       <CustomTextField

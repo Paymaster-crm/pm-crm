@@ -1,17 +1,36 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Grid from "@mui/material/Grid";
+import List from "@mui/material/List";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import axios from "axios";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import routesConfig from "../../routes/routesConfig";
 import { UserContext } from "../../contexts/UserContext";
+import apiClient from "../../config/axiosConfig";
+import { AlertContext } from "../../contexts/AlertContext";
+
+function not(a, b) {
+  return a.filter((value) => b.indexOf(value) === -1);
+}
+
+function intersection(a, b) {
+  return a.filter((value) => b.indexOf(value) !== -1);
+}
+
+function union(a, b) {
+  return [...a, ...not(b, a)];
+}
 
 function AssignModule(props) {
-  const [left, setLeft] = useState([]);
+  const [checked, setChecked] = useState([]);
   const [right, setRight] = useState([]);
   const { user } = useContext(UserContext);
+  const { setAlert } = useContext(AlertContext);
   const routes = routesConfig(user);
 
   const excludedModules = routes
@@ -27,18 +46,13 @@ function AssignModule(props) {
     async function getUserModules() {
       if (props.selectedUser) {
         try {
-          const res = await axios(
-            `${process.env.REACT_APP_API_STRING}/get-user-modules/${props.selectedUser}`,
-            {
-              withCredentials: true,
-            }
+          const res = await apiClient(
+            `/get-user-modules/${props.selectedUser}`
           );
 
-          setRight(res.data.modules?.sort());
+          setRight(res.data.modules);
           setLeft(
-            allModules
-              .sort()
-              .filter((module) => !res.data.modules?.includes(module))
+            allModules.filter((module) => !res.data.modules?.includes(module))
           );
         } catch (error) {
           console.error("Error occurred while fetching user modules:", error);
@@ -53,120 +67,161 @@ function AssignModule(props) {
     // eslint-disable-next-line
   }, [props.selectedUser]);
 
-  const handleDragEnd = async (result) => {
-    const { source, destination } = result;
+  const unAssignedModules = allModules
+    .sort()
+    .filter((module) => right?.includes(module));
+  const [left, setLeft] = useState(unAssignedModules);
 
-    // If no destination, exit
-    if (!destination) return;
+  const leftChecked = intersection(checked, left);
+  const rightChecked = intersection(checked, right);
 
-    const sourceList = source.droppableId === "left" ? left : right;
-    const destList = destination.droppableId === "left" ? left : right;
-    const setSourceList = source.droppableId === "left" ? setLeft : setRight;
-    const setDestList = destination.droppableId === "left" ? setLeft : setRight;
+  const handleToggle = (value) => async () => {
+    const { handleToggle } = await import("../../utils/modules/handleToggle");
+    handleToggle(value, checked, setChecked);
+  };
 
-    // Moving within the same list
-    if (source.droppableId === destination.droppableId) {
-      const reorderedList = Array.from(sourceList);
-      const [movedItem] = reorderedList.splice(source.index, 1);
-      reorderedList.splice(destination.index, 0, movedItem);
-      setSourceList(reorderedList);
-    }
-    // Moving between lists
-    else {
-      const newSourceList = Array.from(sourceList);
-      const newDestList = Array.from(destList);
-      const [movedItem] = newSourceList.splice(source.index, 1);
-      newDestList.splice(destination.index, 0, movedItem);
+  const numberOfChecked = (items) => intersection(checked, items)?.length;
 
-      setSourceList(newSourceList);
-      setDestList(newDestList);
+  const handleToggleAll = (items) => async () => {
+    const { handleToggleAll } = await import(
+      "../../utils/modules/handleToggleAll"
+    );
+    handleToggleAll(items, union, numberOfChecked, not, checked, setChecked);
+  };
 
-      // API call for assignment/unassignment
-      const apiEndpoint =
-        destination.droppableId === "right"
-          ? `${process.env.REACT_APP_API_STRING}/assign-modules`
-          : `${process.env.REACT_APP_API_STRING}/unassign-modules`;
-
-      try {
-        await axios.put(
-          apiEndpoint,
-          {
-            modules: [movedItem],
-            username: props.selectedUser,
-          },
-          {
-            withCredentials: true,
-          }
-        );
-      } catch (error) {
-        console.error(
-          destination.droppableId === "right"
-            ? "Error occurred during module assignment:"
-            : "Error occurred during module unassignment:",
-          error
-        );
-      }
+  const handleAssignModule = async () => {
+    const newRight = right.concat(leftChecked).sort();
+    const newLeft = not(left, leftChecked).sort();
+    setRight(newRight);
+    setLeft(newLeft);
+    setChecked(not(checked, leftChecked));
+    try {
+      await apiClient.put(`/assign-modules`, {
+        modules: leftChecked,
+        username: props.selectedUser,
+      });
+    } catch (error) {
+      setAlert({
+        open: true,
+        message:
+          error.message === "Network Error"
+            ? "Network Error, your details will be submitted when you are back online"
+            : error.response.data.message,
+        severity: "error",
+      });
     }
   };
 
-  const renderList = (title, items, droppableId) => (
-    <Card style={{ maxHeight: "80vh" }}>
+  const handleUnassignModule = async () => {
+    const newLeft = left.concat(rightChecked).sort();
+    const newRight = not(right, rightChecked).sort();
+    setLeft(newLeft);
+    setRight(newRight);
+    setChecked(not(checked, rightChecked));
+    try {
+      await apiClient.put(`/unassign-modules`, {
+        modules: rightChecked,
+        username: props.selectedUser,
+      });
+    } catch (error) {
+      console.error("Error occurred while unassigning modules:", error);
+    }
+  };
+
+  const customList = (title, items) => (
+    <Card>
       <CardHeader
         sx={{ px: 2 }}
+        avatar={
+          <Checkbox
+            onClick={handleToggleAll(items)}
+            checked={
+              numberOfChecked(items) === items?.length && items?.length !== 0
+            }
+            indeterminate={
+              numberOfChecked(items) !== items?.length &&
+              numberOfChecked(items) !== 0
+            }
+            disabled={items?.length === 0}
+            inputProps={{
+              "aria-label": "all items selected",
+            }}
+          />
+        }
         title={title}
-        subheader={`${items.length} modules`}
+        subheader={`${numberOfChecked(items)}/${items?.length} selected`}
       />
       <Divider />
-      <Droppable droppableId={droppableId}>
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            style={{
-              minHeight: 600,
-              maxHeight: 600,
-              width: 400,
-              padding: 10,
-              overflowY: "auto",
-            }}
-          >
-            {items.map((item, index) => (
-              <Draggable key={index} draggableId={item} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={{
-                      ...provided.draggableProps.style,
-                      padding: 10,
-                      marginBottom: "12px",
-                      backgroundColor: snapshot.isDragging
-                        ? "#D2E0FB"
-                        : "white",
-                      boxShadow: "2px 2px 50px 10px rgba(0, 0, 0, 0.05)",
-                      borderRadius: 4,
-                    }}
-                  >
-                    {item}
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
+      <List
+        sx={{
+          width: 400,
+          height: 550,
+          bgcolor: "background.paper",
+          overflow: "auto",
+        }}
+        dense
+        component="div"
+        role="list"
+      >
+        {items?.map((value) => {
+          const labelId = `transfer-list-all-item-${value}-label`;
+
+          return (
+            <ListItemButton
+              key={value}
+              role="listitem"
+              onClick={handleToggle(value)}
+            >
+              <ListItemIcon>
+                <Checkbox
+                  sx={{ color: "#000" }}
+                  checked={checked.indexOf(value) !== -1}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{
+                    "aria-labelledby": labelId,
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText id={labelId} primary={value} />
+            </ListItemButton>
+          );
+        })}
+      </List>
     </Card>
   );
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
+    <div>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <Grid item>{renderList("Available Modules", left, "left")}</Grid>
-        <Grid item>{renderList("Assigned Modules", right, "right")}</Grid>
+        <Grid item>{customList("Available Modules", left)}</Grid>
+        <Grid item>
+          <Grid container direction="column" alignItems="center">
+            <Button
+              sx={{ my: 0.5 }}
+              variant="outlined"
+              size="small"
+              onClick={handleAssignModule}
+              disabled={leftChecked?.length === 0}
+              aria-label="move selected right"
+            >
+              &gt;
+            </Button>
+            <Button
+              sx={{ my: 0.5 }}
+              variant="outlined"
+              size="small"
+              onClick={handleUnassignModule}
+              disabled={rightChecked?.length === 0}
+              aria-label="move selected left"
+            >
+              &lt;
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid item>{customList("Assigned Modules", right)}</Grid>
       </Grid>
-    </DragDropContext>
+    </div>
   );
 }
 

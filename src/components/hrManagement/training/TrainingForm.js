@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
 import CustomTextField from "../../customComponents/CustomTextField";
 import CustomButton from "../../customComponents/CustomButton";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
 import useUserList from "../../../hooks/useUserList";
-import axios from "axios";
+import { AlertContext } from "../../../contexts/AlertContext";
+import apiClient from "../../../config/axiosConfig";
 
 function TrainingForm() {
   const userList = useUserList();
+  const { setAlert } = useContext(AlertContext);
 
   const formik = useFormik({
     initialValues: {
@@ -21,16 +23,22 @@ function TrainingForm() {
     },
     onSubmit: async (values) => {
       try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_STRING}/add-training`,
-          values,
-          {
-            withCredentials: true,
-          }
-        );
-        alert(res.data.message);
+        const res = await apiClient.post(`/add-training`, values);
+
+        setAlert({
+          open: true,
+          message: res.data.message,
+          severity: "success",
+        });
       } catch (err) {
-        console.error(err);
+        setAlert({
+          open: true,
+          message:
+            err.message === "Network Error"
+              ? "Network Error, your details will be submitted when you are back online"
+              : err.response.data.message,
+          severity: "error",
+        });
       }
     },
   });
@@ -64,6 +72,7 @@ function TrainingForm() {
         name="trainingProgram"
         label="Training Program"
         formik={formik}
+        useSpeech={true}
       />
 
       <CustomTextField
@@ -80,6 +89,7 @@ function TrainingForm() {
         label="Duration (in hours)"
         type="number"
         formik={formik}
+        useSpeech={true}
       />
 
       <CustomTextField
@@ -87,6 +97,7 @@ function TrainingForm() {
         name="trainingProvider"
         label="Training Provider"
         formik={formik}
+        useSpeech={true}
       />
 
       <CustomTextField
@@ -96,6 +107,7 @@ function TrainingForm() {
         multiline
         rows={4}
         formik={formik}
+        useSpeech={true}
       />
 
       <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />

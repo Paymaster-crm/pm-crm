@@ -1,31 +1,28 @@
-import { useMaterialReactTable } from "material-react-table";
-import { useNavigate } from "react-router-dom";
+import generateSkeletonData from "../utils/generateSkeletonData";
+import { useTheme } from "@mui/material";
 
-function useTableConfig(rows, columns, url) {
-  const navigate = useNavigate();
+function useTableConfig(data, columns, loading) {
+  const theme = useTheme();
+  const baseBackgroundColor =
+    theme.palette.mode === "dark" ? "#1C262B" : "rgb(253, 253, 253);";
 
-  const table = useMaterialReactTable({
+  const table = {
     columns,
-    data: rows,
+    data: loading ? generateSkeletonData(columns) : data,
     enableColumnResizing: true,
     enableColumnOrdering: true,
-    enableDensityToggle: false, // Disable density toggle
     enablePagination: false,
+    enableTopToolbar: true,
     enableBottomToolbar: false,
-    initialState: {
-      density: "compact",
-    }, // Set initial table density to compact
+    enableDensityToggle: false, // Disable density toggle
+    initialState: { density: "compact" }, // Set initial table density to compact
     enableGrouping: true, // Enable row grouping
     enableColumnFilters: false, // Disable column filters
     enableColumnActions: false,
     enableStickyHeader: true, // Enable sticky header
     muiTableContainerProps: {
-      sx: { maxHeight: "650px", overflowY: "auto" },
+      sx: { maxHeight: "590px", overflowY: "auto" },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: () => navigate(`/${url}/${row.original._id}`),
-      style: { cursor: "pointer" }, // Change cursor to pointer on hover
-    }),
     muiTableHeadCellProps: {
       sx: {
         position: "sticky",
@@ -33,7 +30,22 @@ function useTableConfig(rows, columns, url) {
         zIndex: 1,
       },
     },
-  });
+    muiTableBodyProps: {
+      sx: {
+        "& tr:not([data-selected='true']):not([data-pinned='true']) > td": {
+          backgroundColor: baseBackgroundColor, // Consistent background color
+        },
+      },
+    },
+    mrtTheme: () => ({
+      baseBackgroundColor: baseBackgroundColor,
+    }),
+    renderEmptyRowsFallback: () => (
+      <div className="flex-div">
+        <p style={{ width: "100%", textAlign: "center" }}>No records</p>
+      </div>
+    ),
+  };
 
   return table;
 }

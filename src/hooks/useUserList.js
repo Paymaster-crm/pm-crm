@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import apiClient from "../config/axiosConfig";
 
 function useUserList() {
   const [userList, setUserList] = useState([]);
@@ -7,12 +7,7 @@ function useUserList() {
   useEffect(() => {
     async function getUsers() {
       try {
-        const res = await axios(
-          `${process.env.REACT_APP_API_STRING}/get-all-users`,
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await apiClient(`/get-all-users`);
         setUserList(res.data.map((user) => user.username));
       } catch (error) {
         console.error("Error fetching user list:", error);

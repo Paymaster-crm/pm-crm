@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { TextField } from "@mui/material";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
+import useTableConfig from "../../../hooks/useTableConfig";
+import { tableToolbarDate } from "../../../utils/table/tableToolbarDate";
 
 function ViewOwnWeekOffs(props) {
   useEffect(() => {
@@ -13,59 +14,31 @@ function ViewOwnWeekOffs(props) {
 
   const columns = [
     {
-      accessorKey: "date",
+      accessorKey: "from",
       header: "Date",
-      enableSorting: false,
-      size: 200,
       Cell: ({ cell }) => {
-        return (
-          <>
-            {new Date(cell.row.original.date)
-              .toLocaleDateString("en-GB")
-              .replace(/\//g, "-")}
-          </>
-        );
+        const dateValue = cell.row.original?.from; // Safely access the 'from' field
+        if (typeof dateValue === "string") {
+          return <>{dateValue.split("-").reverse().join("-")}</>;
+        } else if (dateValue instanceof Date) {
+          return <>{dateValue.toLocaleDateString("en-GB")}</>; // Format as dd-mm-yyyy
+        } else {
+          return <>N/A</>; // Handle undefined or invalid values
+        }
       },
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
     },
   ];
 
-  const table = useMaterialReactTable({
-    columns,
-    data: props.data,
-    enableColumnResizing: true,
-    enableColumnOrdering: true,
-    enablePagination: false,
-    enableBottomToolbar: false,
-    enableDensityToggle: false, // Disable density toggle
-    initialState: { density: "compact" }, // Set initial table density to compact
-    enableGrouping: true, // Enable row grouping
-    enableColumnFilters: false, // Disable column filters
-    enableColumnActions: false,
-    enableStickyHeader: true, // Enable sticky header
-    muiTableContainerProps: {
-      sx: { maxHeight: "590px", overflowY: "auto" },
-    },
-    muiTableHeadCellProps: {
-      sx: {
-        position: "sticky",
-        top: 0,
-        zIndex: 1,
-      },
-    },
+  const baseConfig = useTableConfig(props.data, columns, props.loading);
+  const customToolbarActions = tableToolbarDate(props.date, props.setDate);
 
-    renderTopToolbarCustomActions: () => (
-      <>
-        <div>
-          <TextField
-            value={props.date}
-            onChange={(e) => props.setDate(e.target.value)}
-            type="month"
-            size="small"
-            sx={{ width: "200px", margin: 0, marginRight: "20px" }}
-          />
-        </div>
-      </>
-    ),
+  const table = useMaterialReactTable({
+    ...baseConfig,
+    ...customToolbarActions,
   });
 
   return (

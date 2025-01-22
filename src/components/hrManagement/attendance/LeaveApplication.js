@@ -1,22 +1,23 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
+import { AlertContext } from "../../../contexts/AlertContext";
 import { useFormik } from "formik";
-import axios from "axios";
 import CustomTextField from "../../customComponents/CustomTextField";
 import CustomButton from "../../customComponents/CustomButton";
 import CustomUploadButton from "../../customComponents/CustomUploadButton";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { handleFileUpload } from "../../../utils/aws/handleFileUpload";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Snackbar from "@mui/material/Snackbar";
 import { validationSchema } from "../../../schemas/hrManagement/attendanceAndLeaves/leaveSchema";
 import ViewOwnLeaves from "./ViewOwnLeaves";
+import apiClient from "../../../config/axiosConfig";
 
 function LeaveApplication() {
   const [fileSnackbar, setFileSnackbar] = useState(false);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [date, setDate] = useState(() => {
     const today = new Date();
     return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
@@ -27,19 +28,19 @@ function LeaveApplication() {
   const fileInputRefs = useRef({
     medicalCertificate: null,
   });
+  const { setAlert } = useContext(AlertContext);
 
   async function getOwnLeaves() {
     try {
-      const [month, year] = date.split("-");
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_STRING}/get-own-leaves/${year}-${month}`,
-        { withCredentials: true }
-      );
+      setLoading(true);
+      const [year, month] = date.split("-");
+      const res = await apiClient(`/get-own-leaves/${year}-${month}`);
 
       setData(res.data);
-      getOwnLeaves();
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -54,13 +55,17 @@ function LeaveApplication() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        await axios.post(
-          `${process.env.REACT_APP_API_STRING}/add-leave`,
-          values,
-          { withCredentials: true }
-        );
+        await apiClient.post(`/add-leave`, values);
+        getOwnLeaves();
       } catch (error) {
-        console.error(error);
+        setAlert({
+          open: true,
+          message:
+            error.message === "Network Error"
+              ? "Network Error, your details will be submitted when you are back online"
+              : error.response.data.message,
+          severity: "error",
+        });
       }
     },
   });
@@ -88,6 +93,7 @@ function LeaveApplication() {
         name="reason"
         label="Reason"
         formik={formik}
+        useSpeech={true}
       />
 
       <FormGroup>
@@ -108,7 +114,10 @@ function LeaveApplication() {
         <>
           <CustomUploadButton
             name={"Medical Certificate"}
-            onChange={(e) => {
+            onChange={async (e) => {
+              const { handleFileUpload } = await import(
+                "../../../utils/aws/handleFileUpload"
+              );
               handleFileUpload(
                 e,
                 "medical_certificate",
@@ -162,6 +171,7 @@ function LeaveApplication() {
         data={data}
         date={date}
         setDate={setDate}
+        loading={loading}
       />
 
       <Snackbar

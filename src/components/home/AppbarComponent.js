@@ -20,38 +20,37 @@ function AppbarComponent(props) {
           lg: props.showSidebar ? `calc(100% - ${drawerWidth}px)` : "100%",
         },
         ml: { lg: `${drawerWidth}px` },
-        backgroundColor: "rgba(249, 250, 251, 0.3)",
+        backgroundColor: "transparent",
+        backgroundImage: "none",
         backdropFilter: "blur(6px) !important",
         boxShadow: "none",
       }}
     >
       <Toolbar>
         <IconButton
-          color="inherit"
           aria-label="open drawer"
           edge="start"
           onClick={() => props.setMobileOpen(!props.mobileOpen)}
           sx={{ mr: 2, display: { lg: "none" } }}
         >
-          <MenuIcon sx={{ color: "#000" }} />
+          <MenuIcon />
         </IconButton>
 
         {window.location.pathname !== "/" && (
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
+            aria-label="back"
             edge="start"
             onClick={() => navigate(-1)}
             sx={{ mr: 1 }}
           >
-            <ArrowBackIcon sx={{ color: "#000" }} />
+            <ArrowBackIcon />
           </IconButton>
         )}
 
         <div style={{ display: "flex", width: "100%", alignItems: "center" }}>
           <div style={{ flex: 1 }}>
             <img
-              src={require("../../assets/images/logo.webp")}
+              src={"/assets/images/logo.webp"}
               alt="logo"
               onClick={() => navigate("/")}
               style={{ cursor: "pointer", width: "120px", height: "60px" }}
@@ -59,10 +58,14 @@ function AppbarComponent(props) {
           </div>
           <Tooltip title="Show/Hide Sidebar">
             <IconButton
-              aria-label="open drawer"
+              aria-label="sidebar"
               edge="start"
               onClick={() => props.setShowSidebar(!props.showSidebar)}
-              sx={{ height: "50px", width: "50px" }}
+              sx={{
+                height: "50px",
+                width: "50px",
+                display: { sm: "none", lg: "block" },
+              }}
             >
               <MenuIcon />
             </IconButton>

@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
-import { TextField } from "@mui/material";
+import CustomTextField from "../customComponents/CustomTextField";
 import { validationSchema } from "../../schemas/auth/resetPasswordSchema";
-import axios from "axios";
 import CustomButton from "../../components/customComponents/CustomButton";
+import { AlertContext } from "../../contexts/AlertContext";
+import apiClient from "../../config/axiosConfig";
 
 function ResetPassword() {
+  const { setAlert } = useContext(AlertContext);
+
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -15,76 +18,48 @@ function ResetPassword() {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const res = await axios.put(
-          `${process.env.REACT_APP_API_STRING}/reset-password`,
-          values,
-          { withCredentials: true }
-        );
+        const res = await apiClient.put(`/reset-password`, values);
 
-        alert(res.data.message);
+        setAlert({
+          open: true,
+          message: res.data.message,
+          severity: "success",
+        });
         resetForm();
       } catch (error) {
-        console.error("Error occurred while resetting password:", error);
-        alert("An error occurred while resetting password.");
+        setAlert({
+          open: true,
+          message: error.response.data.message,
+          severity: "error",
+        });
       }
     },
   });
 
   return (
-    <form
-      onSubmit={formik.handleSubmit}
-      style={{ backgroundColor: "#fff", padding: "20px" }}
-    >
-      <TextField
-        size="small"
-        type="password"
-        fullWidth
-        margin="dense"
-        variant="filled"
+    <form onSubmit={formik.handleSubmit} className="profile-container">
+      <CustomTextField
         id="password"
         name="password"
         label="Current password"
-        value={formik.values.password}
-        onChange={formik.handleChange}
-        error={formik.touched.password && Boolean(formik.errors.password)}
-        helperText={formik.touched.password && formik.errors.password}
-      />
-      <TextField
-        size="small"
         type="password"
-        fullWidth
-        margin="dense"
-        variant="filled"
+        formik={formik}
+      />
+      <CustomTextField
         id="new_password"
         name="new_password"
         label="New password"
-        value={formik.values.new_password}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.new_password && Boolean(formik.errors.new_password)
-        }
-        helperText={formik.touched.new_password && formik.errors.new_password}
-      />
-
-      <TextField
-        size="small"
         type="password"
-        fullWidth
-        margin="dense"
-        variant="filled"
+        formik={formik}
+      />
+      <CustomTextField
         id="confirm_password"
         name="confirm_password"
         label="Confirm password"
-        value={formik.values.confirm_password}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.confirm_password &&
-          Boolean(formik.errors.confirm_password)
-        }
-        helperText={
-          formik.touched.confirm_password && formik.errors.confirm_password
-        }
+        type="password"
+        formik={formik}
       />
+
       <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
     </form>
   );

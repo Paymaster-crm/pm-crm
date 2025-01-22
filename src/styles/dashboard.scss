@@ -1,28 +1,29 @@
+@import url("./constants.scss");
+
 .dashboard {
   padding-bottom: 20px;
   .dashboard-container {
-    margin: 10px 0;
-    max-height: 600px;
+    margin: 5px 0;
+    max-height: 500px;
+    height: 100%;
     overflow: auto;
-    box-shadow: 2px 2px 50px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--box-shadow);
     padding: 20px;
     border-radius: 10px;
-    background-color: #fff;
+    background-color: var(--card-background);
   }
 
-  #dashboard-personal {
+  .info {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-image: url("../assets/images/personal.png");
     background-repeat: no-repeat !important;
     background-position: right !important;
-    height: 185px;
     padding: 0 25px;
-    background-color: #1abc9c;
+    cursor: pointer;
 
     p {
-      color: #fff;
+      color: var(--text-color);
       font-size: 20px;
     }
     h1 {
@@ -32,6 +33,11 @@
     }
   }
 
+  .dashboard-container h2 {
+    font-size: 20px;
+    color: var(--text-color);
+  }
+
   .attendance-row-1,
   .attendance-row-2 span {
     font-weight: 600;
@@ -39,29 +45,29 @@
   }
 
   .attendance-row-1 span {
-    &.total-leaves {
+    &.working-days {
       color: #6c5efc;
     }
 
-    &.leaves-taken {
-      color: #19bc9b;
+    &.presents {
+      color: #1f6557;
     }
 
-    &.leaves-absent {
-      color: #33b43a;
+    &.leaves {
+      color: #418145;
     }
   }
 
   .attendance-row-2 span {
-    &.pending-approval {
+    &.paid-leaves {
       color: #9746ff;
     }
 
-    &.working-days {
-      color: #80caff;
+    &.unpaid-leaves {
+      color: #2274ae;
     }
 
-    &.loss-of-pay {
+    &.week-offs {
       color: #ff3a29;
     }
   }
@@ -72,13 +78,14 @@
   }
 
   .notification-container {
-    background-color: #efefef;
+    background-color: var(--card-background-secondary);
     padding: 15px;
     margin: 10px 0;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 
     span {
       font-size: 13px;

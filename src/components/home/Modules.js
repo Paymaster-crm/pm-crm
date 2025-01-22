@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext.js";
-import { Row, Col } from "react-bootstrap";
 import "../../styles/modules.scss";
 import { useNavigate } from "react-router-dom";
 import routesConfig from "../../routes/routesConfig.js";
@@ -8,6 +7,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import useTabs from "../../hooks/useTabs.js";
+import Grid from "@mui/material/Grid2";
 import { TabValueContext } from "../../contexts/TabValueContext.js";
 
 function Modules() {
@@ -56,28 +56,24 @@ function Modules() {
             .sort()
             .map((category, idx) => (
               <CustomTabPanel value={tabValue} index={idx} key={idx}>
-                <Row>
+                <Grid container spacing={2} columnSpacing={3}>
                   {categorizedModules[category]
                     .sort((a, b) => a.name.localeCompare(b.name)) // Sort by module name
                     .map(({ name, path }, id) => (
-                      <Col
-                        xs={12}
-                        md={4}
-                        lg={2}
+                      <Grid
+                        size={{ xs: 12, sm: 4, md: 2 }}
                         key={id}
                         className="module-col"
                       >
                         <div
-                          draggable
-                          style={{ backgroundColor: "#FFF" }}
                           className="module-col-inner"
                           onClick={() => path && navigate(path)} // Navigate using path
                         >
                           <p>{name}</p>
                         </div>
-                      </Col>
+                      </Grid>
                     ))}
-                </Row>
+                </Grid>
               </CustomTabPanel>
             ))}
       </Box>

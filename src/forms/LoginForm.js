@@ -1,17 +1,18 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import axios from "axios";
 import { useFormik } from "formik";
 import { UserContext } from "../contexts/UserContext";
 import { validationSchema } from "../schemas/auth/loginSchema";
 import { InputOtp } from "primereact/inputotp";
 import { Password } from "primereact/password";
-import { getGeolocation } from "../utils/auth/getGeolocation";
 import CustomButton from "../components/customComponents/CustomButton";
+import { AlertContext } from "../contexts/AlertContext";
+import apiClient from "../config/axiosConfig";
 
 function LoginForm(props) {
   const { setUser } = useContext(UserContext);
   const [useBackupCode, setUseBackupCode] = useState(false);
   const passwordRef = useRef(null);
+  const { setAlert } = useContext(AlertContext);
 
   const formik = useFormik({
     initialValues: {
@@ -22,36 +23,42 @@ function LoginForm(props) {
     },
     validationSchema: validationSchema(props.isTwoFactorEnabled, useBackupCode),
     onSubmit: async (values) => {
-      const geoLocation = await getGeolocation();
+      const { getGeolocation } = await import("../utils/auth/getGeolocation");
+      const geoLocation = await getGeolocation(setAlert);
+
+      if (!geoLocation) {
+        return;
+      }
 
       try {
-        const loginRes = await axios.post(
-          `${process.env.REACT_APP_API_STRING}/login`,
-          {
-            username: values.username,
-            password: values.password,
-            twoFAToken: useBackupCode ? "" : values.twoFAToken,
-            backupCode: useBackupCode ? values.backupCode : "",
-            userAgent: navigator.userAgent,
-            geolocation: geoLocation,
-            isTwoFactorEnabled: props.isTwoFactorEnabled,
-            useBackupCode: useBackupCode,
-          },
-          {
-            withCredentials: true,
-          }
-        );
+        const loginRes = await apiClient.post(`/login`, {
+          username: values.username,
+          password: values.password,
+          twoFAToken: useBackupCode ? "" : values.twoFAToken,
+          backupCode: useBackupCode ? values.backupCode : "",
+          userAgent: navigator.userAgent,
+          geolocation: geoLocation,
+          isTwoFactorEnabled: props.isTwoFactorEnabled,
+          useBackupCode: useBackupCode,
+        });
 
         if (loginRes.data.message === "Login successful") {
           setUser(loginRes.data.user);
         } else {
-          alert(loginRes.data.message);
+          setAlert({
+            open: true,
+            message: loginRes.data.message,
+            severity: "error",
+          });
           formik.setFieldValue("twoFAToken", "");
           formik.setFieldValue("backupCode", "");
         }
       } catch (error) {
-        console.error(error);
-        alert(error.response.data.message);
+        setAlert({
+          open: true,
+          message: error.response.data.message,
+          severity: "error",
+        });
       }
     },
   });

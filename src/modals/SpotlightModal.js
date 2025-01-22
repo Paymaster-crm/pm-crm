@@ -5,33 +5,38 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import Fuse from "fuse.js";
 import SearchIcon from "@mui/icons-material/Search";
+import MicIcon from "@mui/icons-material/Mic";
 import routesConfig from "../routes/routesConfig";
-
-const style = {
-  position: "absolute",
-  top: "20%",
-  left: "50%",
-  transform: "translateX(-50%)",
-  width: 700,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  borderRadius: 5,
-  outline: 0,
-  padding: "10px",
-};
+import { IconButton } from "@mui/material";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 function SpotlightModal(props) {
   const { user } = React.useContext(UserContext);
+  const { theme } = React.useContext(ThemeContext);
   const inputRef = React.useRef(null);
   const navigate = useNavigate();
   const [inputValue, setInputValue] = React.useState("");
   const [filteredRoutes, setFilteredRoutes] = React.useState([]);
   const [highlightedIndex, setHighlightedIndex] = React.useState(0);
   const suggestionListRef = React.useRef(null);
+  const recognitionRef = React.useRef(null);
   const routes = routesConfig(user);
   const alwaysVisibleRoutes = routes
     .filter((route) => route.allowedModules.length === 0)
     .map((route) => route.path);
+
+  const style = {
+    position: "absolute",
+    top: "20%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: 700,
+    bgcolor: theme === "light" ? "background.paper" : "#efefef",
+    boxShadow: 24,
+    borderRadius: 5,
+    outline: 0,
+    padding: "10px",
+  };
 
   React.useEffect(() => {
     if (props.open && inputRef.current) {
@@ -116,6 +121,33 @@ function SpotlightModal(props) {
   };
 
   React.useEffect(() => {
+    if (inputValue.trim() === "") {
+      setFilteredRoutes([]);
+      return;
+    }
+
+    const fuse = new Fuse(routes, {
+      keys: ["name"],
+      threshold: 0.6,
+      includeScore: true,
+    });
+
+    const filtered = fuse
+      .search(inputValue)
+      .filter((result) => {
+        const route = result.item;
+        const isAlwaysVisible = alwaysVisibleRoutes.includes(route.path);
+        const moduleAllowed = user.modules.includes(route.name);
+        return isAlwaysVisible || moduleAllowed;
+      })
+      .map((result) => result.item);
+
+    setFilteredRoutes(filtered);
+    setHighlightedIndex(0);
+    // eslint-disable-next-line
+  }, [inputValue, user?.modules]);
+
+  React.useEffect(() => {
     if (suggestionListRef.current && highlightedIndex >= 0) {
       const highlightedItem =
         suggestionListRef.current.children[highlightedIndex];
@@ -128,6 +160,40 @@ function SpotlightModal(props) {
     }
   }, [highlightedIndex, filteredRoutes]);
 
+  const handleMicClick = () => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      console.error("Speech Recognition API is not supported in this browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.continuous = true;
+
+    recognition.onresult = (event) => {
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript.trim();
+        setInputValue(transcript); // Set the transcript as input value
+      }
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+    };
+
+    recognition.start();
+    recognitionRef.current = recognition;
+  };
+
+  React.useEffect(() => {
+    if (!props.open && recognitionRef.current) {
+      recognitionRef.current.stop(); // Stop recognition if modal is closed
+    }
+  }, [props.open]);
+
   return (
     <div>
       <Modal
@@ -139,7 +205,7 @@ function SpotlightModal(props) {
       >
         <Box sx={style}>
           <div className="flex-div">
-            <SearchIcon />
+            <SearchIcon sx={{ color: "#000" }} />
             <input
               ref={inputRef}
               style={{
@@ -148,12 +214,16 @@ function SpotlightModal(props) {
                 padding: "10px",
                 outline: 0,
                 borderRadius: 20,
+                backgroundColor: theme === "light" ? "#fff" : "#efefef",
               }}
               placeholder="Search routes..."
               autoFocus
               value={inputValue}
               onChange={handleInputChange}
             />
+            <IconButton onClick={handleMicClick}>
+              <MicIcon sx={{ color: "#000" }} />
+            </IconButton>
           </div>
           <div>
             {filteredRoutes.length > 0 && (
@@ -178,6 +248,7 @@ function SpotlightModal(props) {
                           highlightedIndex === index ? "#C7DAF2" : "#f0f0f0",
                         borderRadius: 5,
                         marginBottom: 5,
+                        color: "#000",
                       }}
                       tabIndex={0}
                     >
@@ -188,7 +259,7 @@ function SpotlightModal(props) {
               </>
             )}
             {filteredRoutes.length === 0 && inputValue && (
-              <div style={{ padding: 10 }}>No results found</div>
+              <div style={{ padding: 10, color: "#000" }}>No results found</div>
             )}
           </div>
         </Box>

@@ -1,67 +1,76 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
+import Grid from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Skeleton } from "@mui/material";
+import apiClient from "../../config/axiosConfig";
 
 function Attendance() {
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function getData() {
       try {
-        const res = await axios(
-          `${process.env.REACT_APP_API_STRING}/get-attendance-summary`,
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await apiClient(`/get-attendance-summary`);
         setData(res.data);
       } catch (error) {
         console.error("Error fetching attendance summary:", error);
+      } finally {
+        setLoading(false);
       }
     }
 
     getData();
   }, []);
 
+  const InfoCol = ({ label, value, className }) => (
+    <Grid size={4} className={className}>
+      {loading ? (
+        <Skeleton variant="text" width="30%" />
+      ) : (
+        <span className={className}>{value}</span>
+      )}
+      <p className={`${className}-label`}>{label}</p>
+    </Grid>
+  );
+
   return (
     <div
       onClick={() => navigate("/attendance")}
       style={{ cursor: "pointer" }}
-      className="dashboard-container"
+      className="dashboard-container attendance"
     >
-      <h5>
+      <h2 className="attendance-title">
         <strong>Attendance and Leaves</strong>
-      </h5>
-      <Row className="attendance-row attendance-row-1">
-        <Col>
-          <span className="leaves-taken">{data?.workingDays}</span>
-          <p>Total Working Days</p>
-        </Col>
-        <Col>
-          <span className="total-leaves">{data?.presentCount}</span>
-          <p>Presents</p>
-        </Col>
-        <Col>
-          <span className="leaves-absent">{data?.totalLeaves}</span>
-          <p>Leaves</p>
-        </Col>
-      </Row>
-      <Row className="attendance-row attendance-row-2">
-        <Col>
-          <span className="pending-approval">{data?.paidLeaves}</span>
-          <p>Paid Leaves</p>
-        </Col>
-        <Col>
-          <span className="working-days">{data?.unpaidLeaves}</span>
-          <p>Unpaid Leaves</p>
-        </Col>
-        <Col>
-          <span className="loss-of-pay">{data?.weekOffsCount}</span>
-          <p>Week Offs</p>
-        </Col>
-      </Row>
+      </h2>
+
+      <Grid container className="attendance-row attendance-row-1">
+        <InfoCol
+          label="Working Days"
+          value={data?.workingDays}
+          className="working-days"
+        />
+        <InfoCol label="Presents" value={data?.presents} className="presents" />
+        <InfoCol label="Leaves" value={data?.leaves} className="leaves" />
+      </Grid>
+      <Grid container className="attendance-row attendance-row-2">
+        <InfoCol
+          label="Paid Leaves"
+          value={data?.paidLeaves}
+          className="paid-leaves"
+        />
+        <InfoCol
+          label="Unpaid Leaves"
+          value={data?.unpaidLeaves}
+          className="unpaid-leaves"
+        />
+        <InfoCol
+          label="Week Offs"
+          value={data?.weekOffs}
+          className="week-offs"
+        />
+      </Grid>
     </div>
   );
 }

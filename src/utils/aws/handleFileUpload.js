@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "../../config/axiosConfig";
 
 export const handleFileUpload = async (
   e,
@@ -29,19 +29,16 @@ export const handleFileUpload = async (
       }
 
       // Step 1: Request a pre-signed URL from the server for each file
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_STRING}/generate-presigned-url`,
-        {
-          fileName: file.name,
-          folderName: folderName,
-          fileType: file.type,
-        }
-      );
+      const response = await apiClient.post(`/generate-presigned-url`, {
+        fileName: file.name,
+        folderName: folderName,
+        fileType: file.type,
+      });
 
       const { url } = response.data;
 
       // Step 2: Upload the file directly to S3 using the pre-signed URL
-      await axios.put(url, file, {
+      await apiClient.put(url, file, {
         headers: {
           "Content-Type": file.type,
         },

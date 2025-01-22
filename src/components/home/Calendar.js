@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
+import "../../styles/calendar.scss";
+import React, { useState, useEffect, Suspense, useContext } from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ChevronLefttIcon from "@mui/icons-material/ChevronLeft";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import AddIcon from "@mui/icons-material/Add";
 import { IconButton } from "@mui/material";
-import { Row, Col } from "react-bootstrap";
-import axios from "axios";
-import AddEventModal from "../../modals/AddEventModal";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { months } from "../../assets/data/months";
 import { weekdays } from "../../assets/data/weekdays";
 import { calculateMonthDetails } from "../../utils/calculateMonthDetails";
-import { handleCalendarNavigation } from "../../utils/handleCalendarNavigation";
-import EventPopover from "./EventPopover";
+import apiClient from "../../config/axiosConfig";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import Grid from "@mui/material/Grid2";
+const AddEventModal = React.lazy(() => import("../../modals/AddEventModal"));
+const EventPopover = React.lazy(() => import("./EventPopover"));
 
 const CustomCalendar = () => {
   const [daysInMonth, setDaysInMonth] = useState([]);
@@ -22,6 +23,7 @@ const CustomCalendar = () => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const { theme } = useContext(ThemeContext);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -34,10 +36,7 @@ const CustomCalendar = () => {
 
   async function getEvents() {
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_STRING}/get-calendar-events`,
-        { withCredentials: true }
-      );
+      const res = await apiClient(`/get-calendar-events`);
 
       const now = new Date();
       const todayUTC = new Date(
@@ -94,46 +93,60 @@ const CustomCalendar = () => {
   const openPopover = Boolean(popoverAnchorEl);
 
   return (
-    <Row>
-      <Col xs={3}>
+    <Grid container spacing={2} style={{ marginTop: "20px" }}>
+      <Grid size={{ md: 3, xs: 12 }}>
         <div className="upcoming-events">
           <h5>Upcoming Events</h5>
-          {upcomingEvents.map((event, id) => {
-            return (
-              <div className="upcoming-event" key={id}>
-                <p>{event.title}</p>
-                <span>
-                  <CalendarMonthIcon
-                    style={{
-                      color: "#6C5DFC",
-                      fontSize: "18px",
-                      marginRight: "5px",
-                    }}
-                  />
-                  {event.date}
-                </span>
-              </div>
-            );
-          })}
+          {upcomingEvents.length > 0 ? (
+            upcomingEvents.map((event, id) => {
+              return (
+                <div className="upcoming-event" key={id}>
+                  <p>{event.title}</p>
+                  <span>
+                    <CalendarMonthIcon
+                      style={{
+                        color: "#6C5DFC",
+                        fontSize: "18px",
+                        marginRight: "5px",
+                      }}
+                    />
+                    {event.date}
+                  </span>
+                </div>
+              );
+            })
+          ) : (
+            <div className="upcoming-event">
+              <p>No upcoming events</p>
+            </div>
+          )}
         </div>
-      </Col>
+      </Grid>
 
-      <Col>
+      <Grid size={{ md: 9, xs: 12 }}>
         <div className="calendar-container">
           <header className="calendar-header">
             <p className="calendar-current-date">{`${months[month]} ${year}`}</p>
             <div className="calendar-navigation">
               <IconButton
-                onClick={() =>
-                  handleCalendarNavigation(-1, month, year, setMonth, setYear)
-                }
+                aria-label="previous month"
+                onClick={async () => {
+                  const { handleCalendarNavigation } = await import(
+                    "../../utils/handleCalendarNavigation"
+                  );
+                  handleCalendarNavigation(-1, month, year, setMonth, setYear);
+                }}
               >
-                <ChevronLefttIcon />
+                <ChevronLeftIcon />
               </IconButton>
               <IconButton
-                onClick={() =>
-                  handleCalendarNavigation(1, month, year, setMonth, setYear)
-                }
+                aria-label="next month"
+                onClick={async () => {
+                  const { handleCalendarNavigation } = await import(
+                    "../../utils/handleCalendarNavigation"
+                  );
+                  handleCalendarNavigation(1, month, year, setMonth, setYear);
+                }}
               >
                 <ChevronRightIcon />
               </IconButton>
@@ -156,7 +169,10 @@ const CustomCalendar = () => {
                   <li
                     key={index}
                     style={{
-                      border: "1px solid #E5E7EB",
+                      border:
+                        theme === "light"
+                          ? "1px solid #E5E7EB"
+                          : "1px solid #141d23",
                       margin: 0,
                       padding: "25px 5px",
                     }}
@@ -189,25 +205,29 @@ const CustomCalendar = () => {
             </ul>
           </div>
         </div>
-      </Col>
+      </Grid>
 
-      <AddEventModal
-        open={open}
-        handleClose={handleClose}
-        getEvents={getEvents}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <AddEventModal
+          open={open}
+          handleClose={handleClose}
+          getEvents={getEvents}
+        />
+      </Suspense>
 
       {/* Popover for event details */}
-      <EventPopover
-        openPopover={openPopover}
-        popoverAnchorEl={popoverAnchorEl}
-        handlePopoverClose={handlePopoverClose}
-        selectedEvent={selectedEvent}
-        events={events}
-        setEvents={setEvents}
-        getEvents={getEvents}
-      />
-    </Row>
+      <Suspense fallback={<div>Loading...</div>}>
+        <EventPopover
+          openPopover={openPopover}
+          popoverAnchorEl={popoverAnchorEl}
+          handlePopoverClose={handlePopoverClose}
+          selectedEvent={selectedEvent}
+          events={events}
+          setEvents={setEvents}
+          getEvents={getEvents}
+        />
+      </Suspense>
+    </Grid>
   );
 };
 

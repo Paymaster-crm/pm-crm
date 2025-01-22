@@ -1,13 +1,11 @@
-import axios from "axios";
+import apiClient from "../../config/axiosConfig";
 
 // Step 1: Check if WebAuthn credentials exist
 export async function checkCredentials(username) {
   try {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_STRING}/webauthn-credential-check`,
-      { username },
-      { withCredentials: true }
-    );
+    const response = await apiClient.post(`/webauthn-credential-check`, {
+      username,
+    });
 
     return response.data;
   } catch (error) {

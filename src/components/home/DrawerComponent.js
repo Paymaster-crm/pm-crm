@@ -1,15 +1,14 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import { SwipeableDrawer } from "@mui/material";
-import Sidebar from "./Sidebar";
-import sidebarBg from "../../assets/images/sidebar-bg.webp";
+const Sidebar = React.lazy(() => import("./Sidebar"));
 
 const drawerWidth = 60;
 
 const drawerPaperStyles = {
   backgroundColor: "#111b21",
-  backgroundImage: `url(${sidebarBg})`,
+  backgroundImage: `url(/assets/images/sidebar-bg.webp)`,
   backgroundAttachment: "fixed",
   backgroundPosition: "left 0 bottom 0 !important",
   backgroundSize: "250px !important",
@@ -45,7 +44,9 @@ function DrawerComponent(props) {
         }}
         sx={{ ...drawerStyles, display: { xs: "block", lg: "none" } }}
       >
-        <Sidebar />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Sidebar />
+        </Suspense>
       </SwipeableDrawer>
 
       {/* Drawer desktop */}
@@ -60,7 +61,7 @@ function DrawerComponent(props) {
         }}
         open
       >
-        <Sidebar />
+        <Sidebar setRun={props.setRun} />
       </Drawer>
     </Box>
   );

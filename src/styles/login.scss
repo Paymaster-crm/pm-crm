@@ -1,6 +1,8 @@
+@import url("./constants.scss");
+
 .login-form {
   span {
-    color: #0060ae;
+    color: var(--link-color);
     font-weight: 800;
     font-size: 14px;
     margin: 16px 0;
@@ -12,13 +14,8 @@
   height: 100%;
 }
 
-.login-left-col {
-  background-image: url("../assets/images/login-bg.jpg");
-  background-size: cover;
-}
-
 .login-right-col {
-  background: #fff;
+  background: var(--card-background-secondary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,7 +27,7 @@
   width: 50%;
 
   p {
-    color: #035fad;
+    color: var(--link-color);
     cursor: pointer;
     font-weight: 600;
   }
@@ -39,14 +36,8 @@
 .span-text {
   margin-top: 50px;
   cursor: pointer;
-  color: #035fad;
+  color: var(--link-color);
   font-weight: 600;
-}
-
-.login-input {
-  .MuiInputBase-root {
-    background-color: #fff !important;
-  }
 }
 
 @media screen and (max-width: 992px) {

@@ -1,15 +1,12 @@
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Popover, Box } from "@mui/material";
-import axios from "axios";
+import apiClient from "../../config/axiosConfig";
 
 function EventPopover(props) {
   const deleteEvent = async (_id) => {
     try {
-      await axios.delete(
-        `${process.env.REACT_APP_API_STRING}/delete-calendar-event/${_id}`,
-        { withCredentials: true }
-      );
+      await apiClient.delete(`/delete-calendar-event/${_id}`);
       props.setEvents(props.events.filter((event) => event._id !== _id));
       props.getEvents();
       props.handlePopoverClose();

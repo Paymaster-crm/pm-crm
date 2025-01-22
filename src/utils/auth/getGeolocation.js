@@ -1,19 +1,45 @@
-export const getGeolocation = async () => {
+export const getGeolocation = async (setAlert) => {
   try {
-    // Fetch the public IP address
-    const ipResponse = await fetch("https://api.ipify.org?format=json");
-    const ipData = await ipResponse.json();
-    const ipAddress = ipData.ip;
+    // Get geolocation
+    const position = await new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => resolve(position),
+          (error) => reject(error),
+          {
+            timeout: 30000, // 30 seconds
+            maximumAge: 0, // Don't use cached location
+          }
+        );
+      } else {
+        reject(new Error("Geolocation is not supported by this browser."));
+      }
+    });
 
-    // Fetch geolocation data using the public IP
-    const geoResponse = await fetch(`https://ipapi.co/${ipAddress}/json/`);
-    const geoData = await geoResponse.json();
     return {
-      latitude: geoData.latitude,
-      longitude: geoData.longitude,
-      ipAddress,
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
     };
   } catch (error) {
-    console.error("Error fetching data:", error);
+    let errorMessage;
+    if (error.code === 1) {
+      errorMessage =
+        "Location permission is denied. Please enable location access.";
+    } else if (error.message === "User denied Geolocation") {
+      errorMessage =
+        "Location permission denied. Please enable location permission to log in.";
+    } else if (error.message) {
+      errorMessage = error.message;
+    } else {
+      errorMessage = "An unknown error occurred.";
+    }
+
+    setAlert({
+      open: true,
+      message: errorMessage,
+      severity: "error",
+    });
+    console.error("Error fetching geolocation:", error);
+    return null; // Return null on error
   }
 };

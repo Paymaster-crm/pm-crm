@@ -1,20 +1,24 @@
-import axios from "axios";
+import apiClient from "../../config/axiosConfig";
 
-export const logOutFromAllSessions = async (setUser, navigate) => {
+export const logOutFromAllSessions = async (setUser, navigate, setAlert) => {
   try {
-    const res = await axios(
-      `${process.env.REACT_APP_API_STRING}/logout-from-all-sessions`,
-      { withCredentials: true }
-    );
+    const res = await apiClient(`/logout-from-all-sessions`);
 
     if (res.data.message === "Success") {
       setUser(null);
       navigate("/");
     } else {
-      alert(res.data.message);
+      setAlert({
+        open: true,
+        message: res.data.message,
+        severity: "success",
+      });
     }
   } catch (error) {
-    console.error("Error occurred while logging out from all sessions:", error);
-    alert("An error occurred while logging out from all sessions.");
+    setAlert({
+      open: true,
+      message: error.response.data.message,
+      severity: "error",
+    });
   }
 };

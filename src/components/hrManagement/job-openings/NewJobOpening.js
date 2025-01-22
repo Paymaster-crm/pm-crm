@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
-import axios from "axios";
-import { validationSchema } from "../../../schemas/hrManagement/jobOpening";
+import { validationSchema } from "../../../schemas/hrManagement/jobOpenings/jobOpening";
 import CustomButton from "../../customComponents/CustomButton";
 import CustomTextField from "../../customComponents/CustomTextField";
 import Slider from "@mui/material/Slider";
+import { AlertContext } from "../../../contexts/AlertContext";
+import apiClient from "../../../config/axiosConfig";
 
 function valuetext(value) {
   return `${value} LPA`;
@@ -22,6 +23,7 @@ const marks = [
 ];
 
 function NewJobOpenings() {
+  const { setAlert } = useContext(AlertContext);
   const formik = useFormik({
     initialValues: {
       jobTitle: "",
@@ -38,14 +40,21 @@ function NewJobOpenings() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_STRING}/add-job-opening`,
-          values,
-          { withCredentials: true }
-        );
-        alert(res.data.message);
+        const res = await apiClient.post(`/add-job-opening`, values);
+        setAlert({
+          open: true,
+          message: res.data.message,
+          severity: "success",
+        });
       } catch (error) {
-        console.error(error);
+        setAlert({
+          open: true,
+          message:
+            error.message === "Network Error"
+              ? "Network Error, your details will be submitted when you are back online"
+              : error.response.data.message,
+          severity: "error",
+        });
       }
     },
   });
@@ -98,6 +107,7 @@ function NewJobOpenings() {
         name="numberOfVacancies"
         label="Number of Vacancies"
         formik={formik}
+        useSpeech={true}
       />
 
       <CustomTextField
@@ -121,6 +131,7 @@ function NewJobOpenings() {
         name="jobDescription"
         label="Job Description"
         formik={formik}
+        useSpeech={true}
       />
 
       <CustomTextField
@@ -128,6 +139,7 @@ function NewJobOpenings() {
         name="requiredSkills"
         label="Required Skills"
         formik={formik}
+        useSpeech={true}
       />
 
       <CustomTextField
@@ -135,6 +147,7 @@ function NewJobOpenings() {
         name="experience"
         label="Experience (in years)"
         formik={formik}
+        useSpeech={true}
       />
 
       <CustomTextField
@@ -142,6 +155,7 @@ function NewJobOpenings() {
         name="location"
         label="Location"
         formik={formik}
+        useSpeech={true}
       />
 
       <br />
@@ -171,6 +185,7 @@ function NewJobOpenings() {
         name="hiringManager"
         label="Hiring Manager"
         formik={formik}
+        useSpeech={true}
       />
 
       <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />

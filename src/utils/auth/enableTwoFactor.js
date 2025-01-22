@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "../../config/axiosConfig";
 
 export async function enableTwoFactor(
   user,
@@ -7,10 +7,7 @@ export async function enableTwoFactor(
   setUser
 ) {
   try {
-    const res = await axios(
-      `${process.env.REACT_APP_API_STRING}/enable-two-factor`,
-      { withCredentials: true }
-    );
+    const res = await apiClient(`/enable-two-factor`);
     setQr(res.data.qrCodeImage);
     setIsTwoFactorEnabled(true);
     setUser({

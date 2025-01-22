@@ -1,22 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 function Info(props) {
   const navigate = useNavigate();
+  const { theme } = useContext(ThemeContext);
   return (
     <div
       onClick={() => navigate("/profile")}
-      style={{ cursor: "pointer" }}
-      id="dashboard-personal"
-      className="dashboard-container"
+      className="dashboard-container info"
+      style={{
+        background: "url(/assets/images/personal.webp)",
+        backgroundColor: theme === "light" ? "#1abc9c" : "#212e35",
+      }}
     >
       <p>Welcome back,</p>
       <br />
-      <h1>
-        {[props.user.first_name, props.user.middle_name, props.user.last_name]
-          .filter(Boolean)
-          .join(" ")}
-      </h1>
+      <h1>{props.user.fullName}</h1>
     </div>
   );
 }

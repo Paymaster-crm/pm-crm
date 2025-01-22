@@ -5,16 +5,17 @@ import Profile from "../components/profile/Profile.js";
 import Help from "../components/home/Help.js";
 import Dashboard from "../components/dashboard/Dashboard.js";
 import Calendar from "../components/home/Calendar.js";
+import Analytics from "../components/analytics/Analytics.js";
 // Employee KYC
 import EmployeeKYC from "../components/hrManagement/employeeKyc/EmployeeKYC.js";
 import ViewIndividualKyc from "../components/hrManagement/employeeKyc/ViewIndividualKyc.js";
 import EditEmployeeKyc from "../components/hrManagement/employeeKyc/EditEmployeeKyc.js";
-// Employee Onboarding
-import EmployeeOnboarding from "../components/hrManagement/employeeOnboarding/EmployeeOnboarding.js";
+// Job Openings
 import JobOpenings from "../components/hrManagement/job-openings/JobOpenings.js";
 import ViewIndividualJob from "../components/hrManagement/job-openings/ViewIndividualJob.js";
-import ExitFeedback from "../components/hrManagement/exitFeedback/ExitFeedback.js";
+// Appraisal
 import Appraisal from "../components/hrManagement/appraisal/Appraisal.js";
+// Training and Development
 import TrainingAndDevelopment from "../components/hrManagement/training/TrainingAndDevelopment.js";
 // Announcements
 import HrActivities from "../components/hrManagement/hrActivities/HrActivities.js";
@@ -56,6 +57,14 @@ const routesConfig = (user) => {
       element: <Modules />,
       allowedModules: [],
       name: "Modules",
+      category: null,
+      canBeAssigned: false,
+    },
+    {
+      path: "/analytics",
+      element: <Analytics />,
+      allowedModules: [],
+      name: "Analytics",
       category: null,
       canBeAssigned: false,
     },
@@ -121,14 +130,6 @@ const routesConfig = (user) => {
       canBeAssigned: false,
     },
     {
-      path: "/employee-onboarding",
-      element: <EmployeeOnboarding />,
-      allowedModules: ["Employee Onboarding"],
-      name: "Employee Onboarding",
-      category: "HR & Management",
-      canBeAssigned: true,
-    },
-    {
       path: "/job-openings",
       element: <JobOpenings />,
       allowedModules: ["Job Openings"],
@@ -143,14 +144,6 @@ const routesConfig = (user) => {
       name: "View Job",
       category: "HR & Management",
       canBeAssigned: false,
-    },
-    {
-      path: "/exit-feedback",
-      element: <ExitFeedback />,
-      allowedModules: ["Exit Feedback"],
-      name: "Exit Feedback",
-      category: "HR & Management",
-      canBeAssigned: true,
     },
     {
       path: "/performance-appraisal",

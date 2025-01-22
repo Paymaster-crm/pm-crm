@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import AssignModule from "./AssignModule";
 import useUserList from "../../hooks/useUserList";
+const AssignModule = React.lazy(() => import("./AssignModule"));
 
 function Assign() {
   const userList = useUserList();
@@ -25,7 +25,9 @@ function Assign() {
         />
       </div>
 
-      <AssignModule selectedUser={selectedUser} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <AssignModule selectedUser={selectedUser} />
+      </Suspense>
     </>
   );
 }

@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
-import axios from "axios";
 import CustomTextField from "../../customComponents/CustomTextField";
 import CustomButton from "../../customComponents/CustomButton";
 import { validationSchema } from "../../../schemas/hrManagement/attendanceAndLeaves/weekOffSchema";
 import ViewOwnWeekOffs from "./ViewOwnWeekOffs";
+import { AlertContext } from "../../../contexts/AlertContext";
+import apiClient from "../../../config/axiosConfig";
 
 function WeekOffForm() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [date, setDate] = useState(() => {
     const today = new Date();
     return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
@@ -15,18 +17,19 @@ function WeekOffForm() {
       "0"
     )}`;
   });
+  const { setAlert } = useContext(AlertContext);
 
   async function getWeekOffs() {
     try {
-      const [month, year] = date.split("-");
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_STRING}/get-own-week-offs/${year}-${month}`,
-        { withCredentials: true }
-      );
+      setLoading(true);
+      const [year, month] = date.split("-");
+      const res = await apiClient(`/get-own-week-offs/${year}-${month}`);
 
       setData(res.data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -37,15 +40,17 @@ function WeekOffForm() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        await axios.put(
-          `${process.env.REACT_APP_API_STRING}/add-week-off`,
-          values,
-          { withCredentials: true }
-        );
+        await apiClient.put(`/add-week-off`, values);
         getWeekOffs();
       } catch (error) {
-        console.log(error);
-        alert(error.response.data.message);
+        setAlert({
+          open: true,
+          message:
+            error.message === "Network Error"
+              ? "Network Error, your details will be submitted when you are back online"
+              : error.response.data.message,
+          severity: "error",
+        });
       }
     },
   });
@@ -69,6 +74,7 @@ function WeekOffForm() {
         date={date}
         setDate={setDate}
         data={data}
+        loading={loading}
       />
     </form>
   );

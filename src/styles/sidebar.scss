@@ -3,6 +3,10 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 30px 0;
+
+  .MuiButtonBase-root:hover {
+    background-color: transparent !important;
+  }
 }
 
 .appbar-links {

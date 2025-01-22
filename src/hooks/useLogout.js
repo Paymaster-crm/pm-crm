@@ -1,21 +1,36 @@
-import { useCallback, useEffect } from "react";
-import axios from "axios";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../config/axiosConfig";
 
-function useLogout(setUser) {
+function useLogout(user, setUser) {
   const navigate = useNavigate();
-  const handleLogout = useCallback(async () => {
+  // eslint-disable-next-line
+  const handleLogout = async () => {
     try {
-      await axios(`${process.env.REACT_APP_API_STRING}/logout`, {
-        withCredentials: true,
+      // Send logout request to the server
+      await apiClient.post(`/logout`, {
+        token: user?.sessionID,
+        username: user?.username,
       });
-      setUser(null);
+
+      // Preserve the theme before clearing localStorage
+      const theme = localStorage.getItem("theme");
+
+      // Clear all localStorage data
       localStorage.clear();
+
+      // Restore the theme
+      if (theme) {
+        localStorage.setItem("theme", theme);
+      }
+
+      // Reset user state and navigate
+      setUser(null);
       navigate("/");
     } catch (error) {
       console.error("Failed to log out:", error);
     }
-  }, [navigate, setUser]);
+  };
 
   useEffect(() => {
     const handleKeyDown = (event) => {

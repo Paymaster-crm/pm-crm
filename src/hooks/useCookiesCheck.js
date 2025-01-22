@@ -1,12 +1,16 @@
-// hooks/useCookiesCheck.js
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { AlertContext } from "../contexts/AlertContext";
 
 const useCookiesCheck = () => {
+  const { setAert } = useContext(AlertContext);
   useEffect(() => {
     if (!navigator.cookieEnabled) {
-      alert(
-        "Cookies are disabled in your browser. Please enable cookies to use this application."
-      );
+      setAert({
+        open: true,
+        message:
+          "Cookies are disabled in your browser. Please enable cookies to use this application.",
+        severity: "error",
+      });
     }
   }, []);
 };

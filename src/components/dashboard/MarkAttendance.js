@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Container, Row, Col } from "react-bootstrap";
-import CustomCalendar from "../customComponents/Calendar";
+import React, { Suspense, useContext, useEffect, useState } from "react";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { AlertContext } from "../../contexts/AlertContext";
+import { Skeleton } from "@mui/material";
+import apiClient from "../../config/axiosConfig";
+import Grid from "@mui/material/Grid2";
+const CustomCalendar = React.lazy(() => import("../customComponents/Calendar"));
 
 function MarkAttendance() {
   const [attendances, setAttendances] = useState([]);
@@ -10,156 +12,105 @@ function MarkAttendance() {
     timeIn: false,
     timeOut: false,
   });
-  const [todayTimeIn, setTodayTimeIn] = useState(""); // State for today's timeIn
-  const [todayTimeOut, setTodayTimeOut] = useState(""); // State for today's timeOut
+  const [todayTimeIn, setTodayTimeIn] = useState("");
+  const [todayTimeOut, setTodayTimeOut] = useState("");
+  const [loading, setLoading] = useState(true); // Loading state
   const currentDate = new Date();
   const [month, setMonth] = useState(currentDate.getMonth());
   const [year, setYear] = useState(currentDate.getFullYear());
+  const { setAlert } = useContext(AlertContext);
 
   async function getAttendances() {
+    setLoading(true);
     try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_STRING}/get-attendances/${
-          month + 1
-        }/${year}`,
-        { withCredentials: true }
-      );
+      const res = await apiClient.get(`/get-attendances/${month + 1}/${year}`);
       setAttendances(res.data);
 
-      // Get the current date in ISO format (start of the day)
       const currentDate = new Date().setHours(0, 0, 0, 0);
 
-      // Find attendance for today
-      const todayAttendance = res.data.find((attendance) => {
+      const todayAttendance = res.data?.find((attendance) => {
         const attendanceDate = new Date(attendance.date).setHours(0, 0, 0, 0);
         return attendanceDate === currentDate;
       });
 
       if (todayAttendance) {
-        // Function to convert UTC time to readable format
-        const convertToReadableTime = (time) => {
-          if (!time) return "";
-          const date = new Date(time);
-          return date.toLocaleTimeString("en-US", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          }); // Format as HH:mm
-        };
+        setTodayTimeIn(todayAttendance.timeIn);
+        setTodayTimeOut(todayAttendance.timeOut);
 
-        // Update today's timeIn and timeOut
-        setTodayTimeIn(convertToReadableTime(todayAttendance.timeIn));
-        setTodayTimeOut(convertToReadableTime(todayAttendance.timeOut));
-
-        // Update disableFields based on today's attendance data
         setDisableFields({
-          timeIn: !!todayAttendance.timeIn, // Disable timeIn if present
-          timeOut: !!todayAttendance.timeOut, // Disable timeOut if present
+          timeIn: !!todayAttendance.timeIn,
+          timeOut: !!todayAttendance.timeOut,
         });
       }
     } catch (error) {
-      console.log(error.response.data.message);
+      console.log(error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
     }
   }
 
   useEffect(() => {
     getAttendances();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [month, year]);
 
   const addAttendance = async (field) => {
-    try {
-      // Get the current position (coordinates)
-      const position = await new Promise((resolve, reject) => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => resolve(position),
-            (error) => reject(error),
-            {
-              enableHighAccuracy: true,
-              timeout: 10000, // Timeout for location retrieval
-              maximumAge: 0, // Don't use cached location
-            }
-          );
-        } else {
-          reject(new Error("Geolocation is not supported by this browser."));
-        }
-      });
-
-      const { latitude, longitude } = position.coords; // Extract coordinates
-
-      // Make the POST request to add attendance
-      await axios.post(
-        `${process.env.REACT_APP_API_STRING}/add-attendance`,
-        { field, latitude, longitude }, // Send coordinates with the field
-        { withCredentials: true }
-      );
-
-      // Refresh attendance data after adding
-      getAttendances();
-    } catch (error) {
-      // Handle errors
-      if (error.response) {
-        alert(error.response.data.message); // Handle backend errors
-      } else if (error.message === "User denied Geolocation") {
-        alert(
-          "Location permission denied. Please enable location permission to punch in."
-        );
-      } else if (error.code === error.PERMISSION_DENIED) {
-        alert("Location permission is denied. Please enable location access.");
-      } else if (error.message) {
-        alert(error.message);
-      } else {
-        alert("An unknown error occurred.");
-      }
-    }
+    const { addAttendance } = await import("../../utils/addAttendance");
+    addAttendance(field, setAlert, getAttendances);
   };
 
   return (
-    <Container className="dashboard-container">
-      <h5>
-        <strong>My Attendances</strong>
-      </h5>
-      <Row>
-        <Col sx={5}>
-          {!disableFields.timeIn && (
-            <>
-              <button
-                onClick={() => addAttendance("timeIn")}
-                className="btn"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <AccessTimeIcon sx={{ fontSize: "20px", marginRight: "5px" }} />
-                Punch In
-              </button>
-              <br />
-              <br />
-            </>
-          )}
-          {disableFields.timeIn && !disableFields.timeOut && (
-            <>
-              <button onClick={() => addAttendance("timeOut")} className="btn">
-                <AccessTimeIcon sx={{ fontSize: "20px", marginRight: "5px" }} />
-                Punch Out
-              </button>
-              <br />
-              <br />
-            </>
-          )}
+    <Grid container className="dashboard-container mark-attendance">
+      <Grid size={{ xs: 12, md: 5 }}>
+        <h2>
+          <strong>My Attendances</strong>
+        </h2>
+        <br />
+        {!disableFields.timeIn && (
+          <>
+            <button
+              onClick={() => addAttendance("timeIn")}
+              className="btn"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <AccessTimeIcon sx={{ fontSize: "20px", marginRight: "5px" }} />
+              Punch In
+            </button>
+            <br />
+          </>
+        )}
+        {disableFields.timeIn && !disableFields.timeOut && (
+          <>
+            <button onClick={() => addAttendance("timeOut")} className="btn">
+              <AccessTimeIcon sx={{ fontSize: "20px", marginRight: "5px" }} />
+              Punch Out
+            </button>
+            <br />
+          </>
+        )}
 
+        {loading ? (
+          <Skeleton variant="text" width={100} />
+        ) : (
           <p>
             <strong>Time In:</strong> {todayTimeIn || "Not recorded yet"}
           </p>
+        )}
+        {loading ? (
+          <Skeleton variant="text" width={100} />
+        ) : (
           <p>
             <strong>Time Out:</strong> {todayTimeOut || "Not recorded yet"}
           </p>
-        </Col>
+        )}
+      </Grid>
 
-        <Col xs={7}>
+      <Grid size={{ xs: 12, md: 7 }}>
+        <Suspense fallback={<div>Loading...</div>}>
           <CustomCalendar
             attendances={attendances}
             month={month}
@@ -168,9 +119,9 @@ function MarkAttendance() {
             setYear={setYear}
             currentDate={currentDate}
           />
-        </Col>
-      </Row>
-    </Container>
+        </Suspense>
+      </Grid>
+    </Grid>
   );
 }
 

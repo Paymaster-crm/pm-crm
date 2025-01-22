@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import Grid from "@mui/material/Grid2";
 import "../styles/login.scss";
-import LoginForm from "../forms/LoginForm";
-import ForgotPasswordForm from "../forms/ForgotPasswordForm.js";
-import WebAuthnLoginForm from "../forms/WebAuthnLoginForm.js";
+const LoginForm = React.lazy(() => import("../forms/LoginForm"));
+const ForgotPasswordForm = React.lazy(() =>
+  import("../forms/ForgotPasswordForm.js")
+);
+const WebAuthnLoginForm = React.lazy(() =>
+  import("../forms/WebAuthnLoginForm.js")
+);
 
 function LoginPage() {
   const [forgotPassword, setForgotPassword] = useState(false);
@@ -12,63 +16,61 @@ function LoginPage() {
   const [useWebAuthn, setUseWebAuthn] = useState(true);
 
   return (
-    <Container fluid className="login-container" style={{ height: "100vh" }}>
-      <Row className="login-row">
-        <Col className="login-left-col"></Col>
-        <Col className="login-right-col">
-          <div className="login-right-col-inner-container">
-            <img
-              src={require("../assets/images/logo.webp")}
-              alt="logo"
-              width="100%"
-            />
+    <Grid container className="login-container" style={{ height: "100vh" }}>
+      <Grid
+        size={6}
+        className="login-left-col"
+        style={{
+          background: "url(/assets/images/login-bg.webp",
+          backgroundSize: "cover",
+        }}
+      ></Grid>
+      <Grid size={6} className="login-right-col">
+        <div className="login-right-col-inner-container">
+          <img src={"/assets/images/logo.webp"} alt="logo" width="100%" />
 
-            {!forgotPassword ? (
-              <>
-                {useWebAuthn ? (
-                  <WebAuthnLoginForm
-                    setUseWebAuthn={setUseWebAuthn}
-                    username={username}
-                    setUsername={setUsername}
-                    setIsTwoFactorEnabled={setIsTwoFactorEnabled}
-                  />
-                ) : (
-                  <LoginForm
-                    username={username}
-                    isTwoFactorEnabled={isTwoFactorEnabled}
-                  />
-                )}
-              </>
-            ) : (
-              <>
-                <ForgotPasswordForm
+          {!forgotPassword ? (
+            <>
+              {useWebAuthn ? (
+                <WebAuthnLoginForm
+                  setUseWebAuthn={setUseWebAuthn}
                   username={username}
-                  setForgotPassword={setForgotPassword}
+                  setUsername={setUsername}
+                  setIsTwoFactorEnabled={setIsTwoFactorEnabled}
                 />
-              </>
-            )}
-          </div>
+              ) : (
+                <LoginForm
+                  username={username}
+                  isTwoFactorEnabled={isTwoFactorEnabled}
+                />
+              )}
+            </>
+          ) : (
+            <>
+              <ForgotPasswordForm
+                username={username}
+                setForgotPassword={setForgotPassword}
+              />
+            </>
+          )}
+        </div>
 
-          {/* Conditionally render "Forgot Password" and "Login Instead" */}
-          {!useWebAuthn &&
-            (!forgotPassword ? (
-              <span
-                className="span-text"
-                onClick={() => setForgotPassword(true)}
-              >
-                Forgot Password
-              </span>
-            ) : (
-              <span
-                className="span-text"
-                onClick={() => setForgotPassword(false)}
-              >
-                Login Instead
-              </span>
-            ))}
-        </Col>
-      </Row>
-    </Container>
+        {/* Conditionally render "Forgot Password" and "Login Instead" */}
+        {!useWebAuthn &&
+          (!forgotPassword ? (
+            <span className="span-text" onClick={() => setForgotPassword(true)}>
+              Forgot Password
+            </span>
+          ) : (
+            <span
+              className="span-text"
+              onClick={() => setForgotPassword(false)}
+            >
+              Login Instead
+            </span>
+          ))}
+      </Grid>
+    </Grid>
   );
 }
 

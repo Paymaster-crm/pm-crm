@@ -1,16 +1,23 @@
-import axios from "axios";
+import apiClient from "../../config/axiosConfig";
 
 // Save FCM token
-export const saveToken = async (token) => {
+export const saveToken = async (token, setAlert) => {
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_API_STRING}/save-fcm-token`,
-      { fcmToken: token },
-      { withCredentials: true }
-    );
+    const res = await apiClient.put(`/save-fcm-token`, { fcmToken: token });
 
-    alert(res.data.message);
+    setAlert({
+      open: true,
+      message: res.data.message,
+      severity: "success",
+    });
   } catch (error) {
-    console.error("Error saving token:", error);
+    setAlert({
+      open: true,
+      message:
+        error.message === "Network Error"
+          ? "Network Error, your details will be submitted when you are back online"
+          : error.response.data.message,
+      severity: "error",
+    });
   }
 };

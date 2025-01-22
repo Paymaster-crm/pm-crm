@@ -1,14 +1,14 @@
-import axios from "axios";
+import apiClient from "../../config/axiosConfig";
 
-export const getSessionData = async (setGeolocation) => {
+export const getSessionData = async (setGeolocation, setLoading) => {
+  setLoading(true);
   try {
-    const res = await axios.get(
-      `${process.env.REACT_APP_API_STRING}/get-session-data`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/get-session-data`);
     setGeolocation(res.data || []);
   } catch (error) {
     console.error("Error fetching geolocation", error);
     setGeolocation([]);
+  } finally {
+    setLoading(false);
   }
 };

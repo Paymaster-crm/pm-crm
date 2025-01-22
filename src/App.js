@@ -1,84 +1,117 @@
 import "./App.scss";
-import { UserContext } from "./contexts/UserContext";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, Suspense } from "react";
+import { ThemeContext } from "./contexts/ThemeContext.js";
+import { AlertContext } from "./contexts/AlertContext.js";
+import { UserContext } from "./contexts/UserContext.js";
+import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
-import useInactivityTimeout from "./hooks/useInactivityTimeout";
 import useUserVerification from "./hooks/useUserVerification";
-import useOnlineStatus from "./hooks/useOnlineStatus";
 import useLogout from "./hooks/useLogout";
-import SpotlightModal from "./modals/SpotlightModal";
 import useSpotlightModal from "./hooks/useSpotlightModal";
 import useNavigateWithKeyboard from "./hooks/useNavigateWithKeyboard";
 import useFullScreen from "./hooks/useFullScreen.js";
 import useModuleAssignedAlert from "./hooks/useModuleAssignedAlert.js";
-import OfflineModal from "./modals/OfflineModal.js";
-import BroadcastModal from "./modals/BroadcastModal.js";
 import useToggleSidebar from "./hooks/useToggleSidebar.js";
 import useBroadcastApi from "./hooks/useBroadcastApi.js";
-import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/HomePage";
+import { ThemeProvider } from "@mui/material/styles";
+import useTheme from "./hooks/useTheme.js";
+import useMuiTheme from "./hooks/useMuiTheme.js";
+const HomePage = React.lazy(() => import("./pages/HomePage"));
+const LoginPage = React.lazy(() => import("./pages/LoginPage"));
+const SpotlightModal = React.lazy(() => import("./modals/SpotlightModal"));
+const BroadcastModal = React.lazy(() => import("./modals/BroadcastModal"));
 
 function App() {
   const [user, setUser] = useState();
-  const [offline, setOffline] = useState(false);
-  const handleLogout = useLogout(setUser);
+  const { theme, toggleTheme } = useTheme();
+  const muiTheme = useMuiTheme(theme);
+  const [alert, setAlert] = React.useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  const handleLogout = useLogout(user, setUser);
   const [showSidebar, setShowSidebar] = useState(true);
   const [broadcastModal, setBroadcastModal] = useState(false);
   const channel = useMemo(() => new BroadcastChannel("app-tabs"), []);
   const { open, handleOpen, handleClose } = useSpotlightModal(user);
   const loading = useUserVerification(setUser);
-  useInactivityTimeout(handleLogout);
-  useModuleAssignedAlert(user, setUser);
-  useOnlineStatus(setOffline);
+  useModuleAssignedAlert(user, setUser, setAlert);
   useNavigateWithKeyboard();
   useFullScreen();
   useToggleSidebar(setShowSidebar);
   const handleUseInThisTab = useBroadcastApi(channel, setBroadcastModal);
 
-  return (
-    <UserContext.Provider value={{ user, setUser, handleLogout }}>
-      <div className="App">
-        {loading ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <CircularProgress />
-          </div>
-        ) : user ? (
-          <HomePage showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-        ) : (
-          <LoginPage />
-        )}
-      </div>
+  useEffect(() => {
+    if (alert.open) {
+      const timer = setTimeout(() => {
+        setAlert({ ...alert, open: false });
+      }, 2000);
 
-      <SpotlightModal
-        open={open}
-        handleOpen={handleOpen}
-        handleClose={handleClose}
-      />
-      <OfflineModal
-        open={offline}
-        handleClose={(event, reason) => {
-          if (reason !== "backdropClick") {
-            setOffline(false);
-          }
-        }}
-      />
-      <BroadcastModal
-        open={broadcastModal}
-        handleUseInThisTab={handleUseInThisTab}
-        handleClose={(event, reason) => {
-          if (reason !== "backdropClick") {
-            setBroadcastModal(false);
-          }
-        }}
-      />
-    </UserContext.Provider>
+      return () => clearTimeout(timer); // Cleanup on component unmount
+    }
+  }, [alert]);
+
+  console.log(3 > 2 > 1);
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <ThemeProvider theme={muiTheme}>
+        <UserContext.Provider value={{ user, setUser, handleLogout }}>
+          <AlertContext.Provider value={{ alert, setAlert }}>
+            <div className="App" id={theme}>
+              {loading ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              ) : user ? (
+                <Suspense fallback={<CircularProgress />}>
+                  <HomePage
+                    showSidebar={showSidebar}
+                    setShowSidebar={setShowSidebar}
+                  />
+                </Suspense>
+              ) : (
+                <Suspense fallback={<CircularProgress />}>
+                  <LoginPage />
+                </Suspense>
+              )}
+            </div>
+
+            <Suspense fallback={<CircularProgress />}>
+              <SpotlightModal
+                open={open}
+                handleOpen={handleOpen}
+                handleClose={handleClose}
+              />
+            </Suspense>
+
+            <Suspense fallback={<CircularProgress />}>
+              <BroadcastModal
+                open={broadcastModal}
+                handleUseInThisTab={handleUseInThisTab}
+                handleClose={(event, reason) => {
+                  if (reason !== "backdropClick") {
+                    setBroadcastModal(false);
+                  }
+                }}
+              />
+            </Suspense>
+
+            {alert.open && (
+              <Alert severity={alert.severity}>{alert.message}</Alert>
+            )}
+          </AlertContext.Provider>
+        </UserContext.Provider>
+      </ThemeProvider>
+    </ThemeContext.Provider>
   );
 }
 

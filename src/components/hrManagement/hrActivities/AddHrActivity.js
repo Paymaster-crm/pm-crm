@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
 import CustomTextField from "../../customComponents/CustomTextField";
 import CustomButton from "../../customComponents/CustomButton";
 import { validationSchema } from "../../../schemas/hrManagement/hrActivitiesSchema";
-import axios from "axios";
+import { AlertContext } from "../../../contexts/AlertContext";
+import apiClient from "../../../config/axiosConfig";
 
 function AddHrActivity() {
+  const { setAlert } = useContext(AlertContext);
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -16,27 +19,37 @@ function AddHrActivity() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_STRING}/add-hr-activity`,
-          values,
-          { withCredentials: true }
-        );
-        alert(res.data.message);
+        const res = await apiClient.post(`/add-hr-activity`, values);
+        setAlert({
+          open: true,
+          message: res.data.message,
+          severity: "success",
+        });
       } catch (err) {
-        console.error(err);
+        setAlert({
+          open: true,
+          message:
+            err.message === "Network Error"
+              ? "Network Error, your details will be submitted when you are back online"
+              : err.response.data.message,
+          severity: "error",
+        });
       }
     },
   });
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <CustomTextField
-        id="title"
-        name="title"
-        label="Title"
-        type="text"
-        formik={formik}
-      />
+      <div className="flex-div">
+        <CustomTextField
+          id="title"
+          name="title"
+          label="Title"
+          type="text"
+          formik={formik}
+          useSpeech={true}
+        />
+      </div>
 
       <CustomTextField
         id="description"
@@ -44,6 +57,7 @@ function AddHrActivity() {
         label="Description"
         type="text"
         formik={formik}
+        useSpeech={true}
       />
 
       <CustomTextField

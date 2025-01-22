@@ -1,23 +1,29 @@
 import * as React from "react";
+import "../../styles/profile.scss";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import useTabs from "../../hooks/useTabs";
 import { getSessionData } from "../../utils/auth/getSessionData";
-import { logOutFromAllSessions } from "../../utils/auth/logOutFromAllSessions";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import LoggedInDevices from "./LoggedInDevices";
-import BasicInfo from "./BasicInfo";
-import ResetPassword from "./ResetPassword";
-import BackupCodes from "./BackupCodes";
-import TwoFactorAuthentication from "./TwoFactorAuthentication";
-import PushNotifications from "./PushNotifications";
+import { AlertContext } from "../../contexts/AlertContext";
+const BasicInfo = React.lazy(() => import("./BasicInfo"));
+const LoggedInDevices = React.lazy(() => import("./LoggedInDevices"));
+const ResetPassword = React.lazy(() => import("./ResetPassword"));
+const BackupCodes = React.lazy(() => import("./BackupCodes"));
+const TwoFactorAuthentication = React.lazy(() =>
+  import("./TwoFactorAuthentication")
+);
+const PushNotifications = React.lazy(() => import("./PushNotifications"));
 
 function Profile() {
   const [value, setValue] = React.useState(0);
-  const [geolocation, setGeolocation] = React.useState({});
+  const [geolocation, setGeolocation] = React.useState([]);
   const { setUser, user } = React.useContext(UserContext);
+  const [loading, setLoading] = React.useState(false);
+
+  const { setAlert } = React.useContext(AlertContext);
   const navigate = useNavigate();
 
   const { a11yProps, CustomTabPanel } = useTabs();
@@ -33,7 +39,7 @@ function Profile() {
 
   // Initial fetch of geolocation data when the component mounts
   React.useEffect(() => {
-    getSessionData(setGeolocation);
+    getSessionData(setGeolocation, setLoading);
   }, []);
 
   return (
@@ -50,13 +56,18 @@ function Profile() {
 
       <Box>
         <CustomTabPanel value={value} index={0}>
-          <BasicInfo user={user} />
+          <React.Suspense fallback={"Loading..."}>
+            <BasicInfo user={user} />
+          </React.Suspense>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <LoggedInDevices
-            geolocation={geolocation}
-            setGeolocation={setGeolocation}
-          />
+          <React.Suspense fallback={"Loading..."}>
+            <LoggedInDevices
+              geolocation={geolocation}
+              setGeolocation={setGeolocation}
+              loading={loading}
+            />
+          </React.Suspense>
           <div
             style={{
               display: "flex",
@@ -69,23 +80,34 @@ function Profile() {
               style={{
                 marginTop: "20px",
               }}
-              onClick={() => logOutFromAllSessions(setUser, navigate)}
+              onClick={async () => {
+                const { logOutFromAllSessions } = await import(
+                  "../../utils/auth/logOutFromAllSessions"
+                );
+                logOutFromAllSessions(setUser, navigate, setAlert);
+              }}
             >
               Log out from all devices
             </button>
           </div>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
-          <div style={{ backgroundColor: "#fff", padding: "20px" }}>
-            <TwoFactorAuthentication />
-            <PushNotifications />
+          <div className="profile-container">
+            <React.Suspense fallback={"Loading..."}>
+              <TwoFactorAuthentication />
+              <PushNotifications />
+            </React.Suspense>
           </div>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={3}>
-          <ResetPassword />
+          <React.Suspense fallback={"Loading..."}>
+            <ResetPassword />
+          </React.Suspense>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={4}>
-          <BackupCodes />
+          <React.Suspense fallback={"Loading..."}>
+            <BackupCodes />
+          </React.Suspense>
         </CustomTabPanel>
       </Box>
     </Box>

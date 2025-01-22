@@ -5,10 +5,12 @@ import { style } from "../utils/modalStyle";
 import CustomTextField from "../components/customComponents/CustomTextField";
 import CustomButton from "../components/customComponents/CustomButton";
 import { useFormik } from "formik";
-import axios from "axios";
 import { validationSchema } from "../schemas/addEventSchema";
+import apiClient from "../config/axiosConfig";
+import { AlertContext } from "../contexts/AlertContext";
 
 function AddEventModal(props) {
+  const { setAlert } = React.useContext(AlertContext);
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -20,15 +22,18 @@ function AddEventModal(props) {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        await axios.post(
-          `${process.env.REACT_APP_API_STRING}/add-event`,
-          values,
-          { withCredentials: true }
-        );
+        await apiClient.post(`/add-event`, values);
         props.handleClose();
         props.getEvents();
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        setAlert({
+          open: true,
+          message:
+            error.message === "Network Error"
+              ? "Network Error, your details will be submitted when you are back online"
+              : error.response.data.message,
+          severity: "error",
+        });
       }
     },
   });
